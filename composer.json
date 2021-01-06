@@ -16,11 +16,13 @@
         "symfony/intl": "5.0.*",
         "symfony/maker-bundle": "^1.14",
         "symfony/orm-pack": "^1.0",
+        "symfony/security-bundle": "5.0.*",
         "symfony/serializer": "5.0.*",
         "symfony/var-dumper": "5.0.*",
         "symfony/yaml": "5.0.*"
     },
     "require-dev": {
+        "deployer/deployer": "^6.8"
     },
     "config": {
         "preferred-install": {
