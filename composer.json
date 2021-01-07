@@ -5,6 +5,7 @@
         "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "lexik/jwt-authentication-bundle": "^2.10",
         "nelmio/cors-bundle": "^2.0",
         "rteeom/isoflags": "dev-master",
         "sensio/framework-extra-bundle": "^5.5",
