@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\DTO\ScoreDTO;
 use App\Entity\Flag;
+use App\Entity\Score;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class TestController extends AbstractController
 {
@@ -75,8 +78,9 @@ class TestController extends AbstractController
      * @return Response
      * @Route("/flags/correct/{flags}", name="correct", methods={"POST"})
      * @Entity("flag", expr="repository.findOneByCode(flags)")
-     * @Security("is_granted('ROLE_USER')")
      */
+
+//* @Security("is_granted('ROLE_USER')")
     public function correct(Flag $flag): Response
     {
         $flag->setCorrectGuesses($flag->getCorrectGuesses()+1);
@@ -158,16 +162,16 @@ class TestController extends AbstractController
     /**
      * @return Response
      * @Route("/flags/scores", name="update scores", methods={"POST"})
-     
+     * @Entity("score")
      */
     public function postScore(Request $request): Response
     {
-        $score = json_decode($request->getContent(), true)['score'];
-        if ($this->getUser()->getHighScore() < $score) {
-            $user = $this->getUser();
-            $user->setHighScore($score);
-            $this->getDoctrine()->getManager()->flush();
-        }
+        $scoreDTO = new ScoreDTO(json_decode($request->getContent(), true));
+        $score = (new Score())->fromDTO($scoreDTO); ;
+        /** @var User $user */
+        $user = $this->getUser();
+        $user->finalizeGame($score);
+        $this->getDoctrine()->getManager()->flush();
         
         return new Response(null, Response::HTTP_OK);
     }

@@ -46,6 +46,16 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      */
     private int $highScore = 0;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $gamesTotal = 0;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $bestTime = 0;
 
     public function getId(): ?int
     {
@@ -146,5 +156,49 @@ class User implements UserInterface
     {
         $this->highScore = $score;   
     }
+    
+    /**
+     * @return int
+     */
+    public function getGamesTotal(): int
+    {
+        return $this->gamesTotal;
+    }
+    
+    /**
+     * @param int $gamesTotal
+     */
+    public function setGamesTotal(int $gamesTotal): void
+    {
+        $this->gamesTotal = $gamesTotal;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getBestTime(): int
+    {
+        return $this->bestTime;
+    }
+    
+    /**
+     * @param int $bestTime
+     */
+    public function setBestTime(int $bestTime): void
+    {
+        $this->bestTime = $bestTime;
+    }
+    
+    public function finalizeGame(Score $score): void
+    {
+        ++$this->gamesTotal;
+        if ($this->highScore <= $score->getScore()) {
+            $this->highScore = $score->getScore();
+            if ($this->bestTime < $score->getSessionTimer()) {
+                $this->bestTime  = $score->getSessionTimer();
+            }
+        }
+    }
+    
 }
 
