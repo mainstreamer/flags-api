@@ -177,7 +177,12 @@ class TestController extends AbstractController
      */
     public function testFlags(string $flag)
     {
-        $flag = (new FlagsGenerator())->getEmojiFlag($flag);
+        try {
+            $flag = (new FlagsGenerator())->getEmojiFlag($flag);    
+        } catch (\Throwable $e) {
+            $flag = 'invalid code';
+        }
+        
         return new Response($flag);
     }
 }
