@@ -171,4 +171,13 @@ class TestController extends AbstractController
         
         return new Response(null, Response::HTTP_OK);
     }
+    
+    /**
+     * @Route("/test/{flag}", name="test-flag", methods={"GET"})
+     */
+    public function testFlags(string $flag)
+    {
+        $flag = (new FlagsGenerator())->getEmojiFlag($flag);
+        return new Response($flag);
+    }
 }

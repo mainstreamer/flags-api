@@ -2024,12 +2024,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mainstreamer/isoflags.git",
-                "reference": "719efa187947c02aad5dc25fb9aa977ccff36acc"
+                "reference": "19bc5a8a1cceb615e537b04250d255e607893a80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mainstreamer/isoflags/zipball/719efa187947c02aad5dc25fb9aa977ccff36acc",
-                "reference": "719efa187947c02aad5dc25fb9aa977ccff36acc",
+                "url": "https://api.github.com/repos/mainstreamer/isoflags/zipball/19bc5a8a1cceb615e537b04250d255e607893a80",
+                "reference": "19bc5a8a1cceb615e537b04250d255e607893a80",
                 "shasum": ""
             },
             "require": {
@@ -2052,7 +2052,7 @@
                 }
             ],
             "description": "library for easy emoji flags generation from iso country codes",
-            "time": "2020-03-21T21:35:49+00:00"
+            "time": "2021-01-09T01:09:50+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
