@@ -25,6 +25,8 @@ class UserRepository extends ServiceEntityRepository
             ->select('u.firstName')
             ->addSelect('u.highScore')
             ->addSelect('u.bestTime')
+            ->addSelect('u.timeTotal')
+            ->addSelect('u.gamesTotal')
             ->orderBy('u.highScore', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
