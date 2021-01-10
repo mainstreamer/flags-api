@@ -27,6 +27,7 @@ class TestController extends AbstractController
      */
     public function index()
     {
+        return new Response();
         for ($flags = [];;) {
             try {
                 $flag = (new FlagsGenerator())->getEmojiFlag($code = chr(rand(97,122)).chr(rand(97,122)));
@@ -79,6 +80,7 @@ class TestController extends AbstractController
      * @return Response
      * @Route("/flags/correct/{flags}", name="correct", methods={"POST"})
      * @Entity("flag", expr="repository.findOneByCode(flags)")
+     * @Security("is_granted('ROLE_USER')")
      */
 
 //* @Security("is_granted('ROLE_USER')")
@@ -164,8 +166,9 @@ class TestController extends AbstractController
      * @return Response
      * @Route("/flags/scores", name="update scores", methods={"POST"})
      * @Entity("score")
+     * @Security("is_granted('ROLE_USER')")
      */
-    //* @Security("is_granted('ROLE_USER')")
+    
     public function postScore(Request $request): Response
     {
         $requestArray = json_decode($request->getContent(), true);
@@ -173,10 +176,12 @@ class TestController extends AbstractController
         $score = (new Score())->fromDTO($scoreDTO);
     
         $answers = [];
-        foreach ($requestArray['answers'] as $answer) {
-            $item = (new Answer())->fromArray($answer);
-            $answers[] = $item;
-        } 
+        if (isset($requestArray['answers'])) {
+            foreach ($requestArray['answers'] as $answer) {
+                $item = (new Answer())->fromArray($answer);
+                $answers[] = $item;
+            }    
+        }
         
 //        return new Response($request->getContent(), 200);
         /** @var User $user */
