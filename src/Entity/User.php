@@ -227,7 +227,7 @@ class User implements UserInterface
         $this->timeTotal += $score->getSessionTimer();
         if ($this->highScore <= $score->getScore()) {
             $this->highScore = $score->getScore();
-            if ($this->bestTime < $score->getSessionTimer()) {
+            if ($this->bestTime > $score->getSessionTimer()) {
                 $this->bestTime  = $score->getSessionTimer();
             }
         }
