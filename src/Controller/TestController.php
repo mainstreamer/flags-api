@@ -166,9 +166,9 @@ class TestController extends AbstractController
      * @return Response
      * @Route("/flags/scores", name="update scores", methods={"POST"})
      * @Entity("score")
-     * @Security("is_granted('ROLE_USER')")
+     
      */
-    
+//* @Security("is_granted('ROLE_USER')")
     public function postScore(Request $request): Response
     {
         $requestArray = json_decode($request->getContent(), true);

@@ -41,7 +41,7 @@ class Answer
     /**
      * @ORM\Column(type="datetime")
      */
-    protected \DateTimeImmutable $date;
+    protected \DateTime $date;
     
     /**
      * Many features have one product. This is the owning side.
@@ -51,7 +51,7 @@ class Answer
     
     public function __construct()
     {
-        $this->date = new \DateTimeImmutable();
+        $this->date = new \DateTime();
     }
     
     /**
@@ -119,17 +119,17 @@ class Answer
     }
     
     /**
-     * @return \DateTimeImmutable
+     * @return \DateTime
      */
-    public function getDate(): \DateTimeImmutable
+    public function getDate(): \DateTime
     {
         return $this->date;
     }
     
     /**
-     * @param \DateTimeImmutable $date
+     * @param \DateTime $date
      */
-    public function setDate(\DateTimeImmutable $date): void
+    public function setDate(\DateTime $date): void
     {
         $this->date = $date;
     }

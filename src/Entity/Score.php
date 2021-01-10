@@ -30,11 +30,11 @@ class Score
     /**
      * @ORM\Column(type="datetime")
      */
-    protected \DateTimeImmutable $date;
+    protected \DateTime $date;
     
     public function __construct()
     {
-        $this->date = new \DateTimeImmutable();
+        $this->date = new \DateTime();
     }
     
     /**
