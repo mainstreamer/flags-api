@@ -2,8 +2,13 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\JoinColumn;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -15,32 +20,32 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private string $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $telegramId;
+    private string $telegramId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $firstName;
+    private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $lastName;
+    private string $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $telegramUsername;
+    private string $telegramUsername;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $telegramPhotoUrl;
+    private string $telegramPhotoUrl;
     
     /**
      * @ORM\Column(type="integer")
@@ -56,7 +61,22 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      */
     private int $bestTime = 0;
-
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $timeTotal = 0;
+    
+    /**
+     * @OneToMany(targetEntity="Answer", mappedBy="user", cascade={"persist"})
+     */
+    private ?Collection $answers;
+    
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -189,16 +209,52 @@ class User implements UserInterface
         $this->bestTime = $bestTime;
     }
     
-    public function finalizeGame(Score $score): void
+    /**
+     * @return int
+     */
+    public function getTimeTotal(): int
+    {
+        return $this->timeTotal;
+    }
+    
+    /**
+     * @param Score $score
+     * @param array[App\Entity\Answer] $answers
+     */
+    public function finalizeGame(Score $score, array $answers): void
     {
         ++$this->gamesTotal;
+        $this->timeTotal += $score->getSessionTimer();
         if ($this->highScore <= $score->getScore()) {
             $this->highScore = $score->getScore();
             if ($this->bestTime < $score->getSessionTimer()) {
                 $this->bestTime  = $score->getSessionTimer();
             }
         }
+        
+        foreach ($answers as $item) {
+            $this->addAnswer($item);
+        }
+    }
+    
+    public function addAnswer(Answer $answer): void
+    {
+        $answer->setUser($this);
+        $this->answers[] = $answer;
+    }
+    
+    public function removeAnswer(Answer $answer): void
+    {
+        $answer->setUser(null);
+        $this->answers->removeElement($answer);
+    }
+    
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getAnswers(): ?Collection
+    {
+        return $this->answers;
     }
     
 }
-

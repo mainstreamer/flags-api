@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\ScoreDTO;
+use App\Entity\Answer;
 use App\Entity\Flag;
 use App\Entity\Score;
 use App\Entity\User;
@@ -164,13 +165,23 @@ class TestController extends AbstractController
      * @Route("/flags/scores", name="update scores", methods={"POST"})
      * @Entity("score")
      */
+    //* @Security("is_granted('ROLE_USER')")
     public function postScore(Request $request): Response
     {
-        $scoreDTO = new ScoreDTO(json_decode($request->getContent(), true));
-        $score = (new Score())->fromDTO($scoreDTO); ;
+        $requestArray = json_decode($request->getContent(), true);
+        $scoreDTO = new ScoreDTO($requestArray);
+        $score = (new Score())->fromDTO($scoreDTO);
+    
+        $answers = [];
+        foreach ($requestArray['answers'] as $answer) {
+            $item = (new Answer())->fromArray($answer);
+            $answers[] = $item;
+        } 
+        
+//        return new Response($request->getContent(), 200);
         /** @var User $user */
         $user = $this->getUser();
-        $user->finalizeGame($score);
+        $user->finalizeGame($score, $answers);
         $this->getDoctrine()->getManager()->flush();
         
         return new Response(null, Response::HTTP_OK);
