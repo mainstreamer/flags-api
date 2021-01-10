@@ -22,10 +22,13 @@ class UserRepository extends ServiceEntityRepository
     public function getHighScores()
     {
         return $this->createQueryBuilder('u')
+            ->select('u.firstName')
+            ->addSelect('u.highScore')
+            ->addSelect('u.bestTime')
             ->orderBy('u.highScore', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
-            ->getResult()
+            ->getScalarResult()
         ;
     }
     

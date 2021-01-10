@@ -27,7 +27,6 @@ class TestController extends AbstractController
      */
     public function index()
     {
-        return new Response();
         for ($flags = [];;) {
             try {
                 $flag = (new FlagsGenerator())->getEmojiFlag($code = chr(rand(97,122)).chr(rand(97,122)));
@@ -71,7 +70,7 @@ class TestController extends AbstractController
             'ques' => Countries::getName(strtoupper(array_keys($flags)[$number])),
             'answer' => $flags[array_keys($flags)[$number]],
             'answerCode' => array_keys($flags)[$number],
-            'highScores' => $this->getDoctrine()->getManager()->getRepository(User::class)->getHighScores()
+//            'highScores' => $this->getDoctrine()->getManager()->getRepository(User::class)->getHighScores()
         ]);
     }
 

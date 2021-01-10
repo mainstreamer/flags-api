@@ -89,7 +89,7 @@ class Answer
     /**
      * @return array
      */
-    public function getAnswerOptions(): array
+    public function getAnswerOptions(): string
     {
         return $this->answerOptions;
     }
