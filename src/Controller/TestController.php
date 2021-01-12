@@ -19,9 +19,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 class TestController extends AbstractController
 {
+    protected $v;
+    public function __construct(ValidatorInterface $validator)
+    {
+        $this->v = $validator;
+    }
     /**
      * @Route("/test", name="test")
      */
@@ -182,7 +189,6 @@ class TestController extends AbstractController
             }    
         }
         
-//        return new Response($request->getContent(), 200);
         /** @var User $user */
         $user = $this->getUser();
         $user->finalizeGame($score, $answers);
@@ -203,5 +209,40 @@ class TestController extends AbstractController
         }
         
         return new Response($flag);
+    }
+    
+    
+//    /**
+//     * @Route("/param", name="param-conv-test", methods={"POST"})
+//     */
+//    public function postParam(Score $score)
+//    {
+////        dump('1123');
+//        $e = $this->v->validate($score);
+////        $score->setScore(300);
+//        dd($e);
+//        try {
+//            
+//            $flag = (new FlagsGenerator())->getEmojiFlag($flag);
+//        } catch (\Throwable $e) {
+//            $flag = 'invalid code';
+//        }
+//        
+//        return new Response($flag);
+//    }
+    
+    /**
+     * @Route("/token", name="test-token", methods={"get"})
+     */
+    public function getToken(JWTEncoderInterface $encoder)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneById(1);
+        $token = $encoder
+            ->encode([
+                'username' => $user->getTelegramId(),
+                'exp' => 999999999
+            ]);
+    
+        return new JsonResponse(['token' => $token]);
     }
 }
