@@ -107,7 +107,7 @@ class TestController extends AbstractController
 
         sort($data_check_arr);
         $data_check_string = implode("\n", $data_check_arr);
-        $bot_token = '890560780:AAHeK8h5BQntCH_9j4bIcnsqsThXDLxOrRs';
+        $bot_token = '';
         $check_hash = $hash;
         $secret_key = hash('sha256', $bot_token, true);
         $hash = hash_hmac('sha256', $data_check_string, $secret_key);
@@ -203,5 +203,20 @@ class TestController extends AbstractController
         }
         
         return new Response($flag);
+    }
+    
+    /**
+     * @Route("/token", name="test-token", methods={"get"})
+     */
+    public function getToken(JWTEncoderInterface $encoder)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneById(1);
+        $token = $encoder
+            ->encode([
+                'username' => $user->getTelegramId(),
+                'exp' => time() + 6000000
+            ]);
+    
+        return new JsonResponse(['token' => $token]);
     }
 }
