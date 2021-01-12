@@ -8,6 +8,8 @@ use App\Entity\Flag;
 use App\Entity\Score;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\LazyCriteriaCollection;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Rteeom\FlagsGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -236,11 +238,13 @@ class TestController extends AbstractController
      */
     public function getToken(JWTEncoderInterface $encoder)
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneById(1);
+        $user = $this->getDoctrine()->getRepository(User::class)->matching( 
+             ($criteria = new Criteria())->where($criteria->expr()->gt('id', 0))->setMaxResults(1))->get(0);
+        
         $token = $encoder
             ->encode([
                 'username' => $user->getTelegramId(),
-                'exp' => 999999999
+                'exp' => time() + 36000
             ]);
     
         return new JsonResponse(['token' => $token]);
