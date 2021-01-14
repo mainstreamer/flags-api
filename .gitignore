@@ -15,6 +15,6 @@
 ###< lexik/jwt-authentication-bundle ###
 .idea
 @auto-scripts
-.env
+
 
 deploy.php
