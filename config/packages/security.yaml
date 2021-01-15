@@ -1,0 +1,123 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        database_provider:
+            entity:
+                class: App:User
+                property: telegramId
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: lazy
+            guard:
+                provider: database_provider
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+#         - { path: ^/protected, roles: ROLE_USER }
+        # - { path: ^/profile, roles: ROLE_USER }
+#security:
+#    encoders:
+#        App\Entity\User:
+#            algorithm: bcrypt
+#    providers:
+#        database_provider:
+#            entity:
+#                class: App:User
+#                property: email
+#    firewalls:
+#        #disables authentication for assets and the profiler, adapt it according to your needs
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
+#        login:
+#            pattern:  (/api/v1/sign-in|/api/login_check|^/api/v1/users/tokens|account/confirm$)
+#            stateless: true
+#            anonymous: true
+#            json_login:
+#                check_path: /api/login_check
+#                success_handler: lexik_jwt_authentication.handler.authentication_success
+#                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+#        apidoc:
+#            anonymous: true
+#            pattern: /api/doc
+#            security: false
+#            stateless: true
+#        getUserByToken:
+#            anonymous: true
+#            pattern: ^/api/v1/users/tokens
+#            security: false
+#            stateless: true
+#        confirmAccount:
+#            anonymous: true
+#            pattern: ^\/api\/v1\/((\bpatients\b)|(\btherapists\b))\/.*\/account\/confirm$
+#            security: false
+#            stateless: true
+#        resetPassword:
+#            anonymous: true
+#            pattern: ^/api/v1/users/password-reset
+#            security: false
+#            stateless: true
+#        webhooks:
+#            anonymous: true
+#            pattern: /api/v1/webhooks/stripe
+#            security: false
+#            stateless: true
+#        api:
+#            pattern: ^/api
+#            security: true
+#            stateless: true
+#            guard:
+#                provider: database_provider
+#                authenticators:
+#                    - lexik_jwt_authentication.jwt_token_authenticator
+#    #        main:
+#    #            pattern: ^/
+#    #            form_login:
+#    #                login_path: login
+#    #                check_path: login
+#    #                csrf_token_generator: security.csrf.token_manager
+#    #            provider: database_provider
+#    #            logout:
+#    #                path: logout
+#    #                target: homepage
+#    #            anonymous: true
+#
+#    access_control:
+#        - { path: ^/api/v1/payments/card, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/v1/users/tokens, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: account/confirm$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/v1/pay4, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/v1/pay3, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/v1/pay2, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/v1/reports/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/v1/files, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: /api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: /api/v1/sign-in, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/v[0-9]+/sign-in, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/profile, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/confirm, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/reset, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/v1, roles: [ROLE_THERAPIST, ROLE_PATIENT] }
+#    role_hierarchy:
+#        ROLE_THERAPIST: ROLE_THERAPIST
+#        ROLE_PATIENT: ROLE_PATIENT
+#        ROLE_SUPER_ADMIN: [ROLE_THERAPIST, ROLE_PATIENT]
