@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Intl;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -212,8 +213,7 @@ class TestController extends AbstractController
         
         return new Response($flag);
     }
-    
-    
+
 //    /**
 //     * @Route("/param", name="param-conv-test", methods={"POST"})
 //     */
@@ -248,5 +248,37 @@ class TestController extends AbstractController
             ]);
     
         return new JsonResponse(['token' => $token]);
+    }
+    
+    /**
+     * @Route("/incorrect", name="incorrect", methods={"get"})
+     */
+    public function getStat()
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneById(6);
+        $result = $this->getDoctrine()->getRepository(Answer::class)->findIncorrectGuesses($user->getId());
+        
+        foreach ($result as $key => $item) {
+            $result[$key]['flag'] = $flag = (new FlagsGenerator())->getEmojiFlag($item['flagCode']);
+            $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+        }
+        
+        return new JsonResponse($result);
+    }
+    
+    /**
+     * @Route("/correct", name="correct", methods={"get"})
+     */
+    public function getRight()
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneById(6);
+        $result = $this->getDoctrine()->getRepository(Answer::class)->findCorrectGuesses($user->getId());
+        
+        foreach ($result as $key => $item) {
+            
+            $result[$key]['flag'] = $flag = (new FlagsGenerator())->getEmojiFlag($item['flagCode']);
+            $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+        }
+        return new JsonResponse($result);
     }
 }
