@@ -252,10 +252,11 @@ class TestController extends AbstractController
     
     /**
      * @Route("/incorrect", name="incorrect", methods={"get"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function getStat()
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneById(6);
+        $user = $this->getUser();
         $result = $this->getDoctrine()->getRepository(Answer::class)->findIncorrectGuesses($user->getId());
         
         foreach ($result as $key => $item) {
@@ -268,10 +269,11 @@ class TestController extends AbstractController
     
     /**
      * @Route("/correct", name="correct", methods={"get"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function getRight()
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneById(6);
+        $user = $this->getUser();
         $result = $this->getDoctrine()->getRepository(Answer::class)->findCorrectGuesses($user->getId());
         
         foreach ($result as $key => $item) {
