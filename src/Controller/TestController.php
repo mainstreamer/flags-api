@@ -87,7 +87,7 @@ class TestController extends AbstractController
     /**
      * @param Flag $flag
      * @return Response
-     * @Route("/flags/correct/{flags}", name="correct", methods={"POST"})
+     * @Route("/flags/correct/{flags}", name="submit correct", methods={"POST"})
      * @Entity("flag", expr="repository.findOneByCode(flags)")
      * @Security("is_granted('ROLE_USER')")
      */
