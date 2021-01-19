@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\DTO\ScoreDTO;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
-//use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AnswerRepository")
@@ -47,6 +47,7 @@ class Answer
     /**
      * Many features have one product. This is the owning side.
      * @ManyToOne(targetEntity="User", inversedBy="answers")
+     * @Ignore
      */
     protected ?User $user;
     

@@ -23,7 +23,7 @@
         "symfony/intl": "*",
         "symfony/proxy-manager-bridge": "*",
         "symfony/security-bundle": "*",
-        "symfony/serializer": "*",
+        "symfony/serializer": "5.*",
         "symfony/validator": "*",
         "symfony/yaml": "*"
     },
