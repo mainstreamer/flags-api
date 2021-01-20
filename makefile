@@ -14,4 +14,4 @@ composer:
 make deploy:
 	./vendor/bin/dep deploy production
 make psalm:
-	./vendor/bin/psalm   
+	./vendor/bin/psalm
