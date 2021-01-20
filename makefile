@@ -11,3 +11,7 @@ import-db:
 	bin/console d:d:i flags.sql
 composer:
 	composer install
+make deploy:
+	./vendor/bin/dep deploy production
+make psalm:
+	./vendor/bin/psalm   
