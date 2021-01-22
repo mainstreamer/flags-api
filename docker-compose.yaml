@@ -1,0 +1,55 @@
+version: "3.8"
+services:
+  php:
+    container_name: "php-${PROJECT_NAME}"
+    environment:
+      APP_ENV: "dev"
+      PROJECT_NAME: ${PROJECT_NAME}
+      SYMFONY_DEPRECATIONS_HELPER: "disabled"
+    build:
+      context: .
+      dockerfile: .docker/php-fpm/Dockerfile
+    depends_on:
+      - db
+    networks:
+      - backend
+    volumes:
+      - .:/var/www/webapp:rw
+  db: 
+    build:
+      context: .
+      dockerfile: .docker/mysql/Dockerfile
+    container_name: "db-${PROJECT_NAME}"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "flags"
+      MYSQL_USER: "dbuser"
+      MYSQL_PASSWORD: "root"
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: always
+    networks:
+      - backend
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+  nginx:
+    container_name: "nginx-${PROJECT_NAME}"
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    expose:
+      - 80
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    depends_on:
+      - php
+    networks:
+      - backend
+networks:
+    backend:
+volumes:
+    db-data: ~
