@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\JoinColumn;
-//use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -69,6 +69,7 @@ class User implements UserInterface
     
     /**
      * @OneToMany(targetEntity="Answer", mappedBy="user", cascade={"persist"})
+     * @Ignore
      */
     private ?Collection $answers;
     

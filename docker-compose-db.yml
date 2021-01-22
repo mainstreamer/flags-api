@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+    db:
+        build:
+            context: .
+            dockerfile: .docker/mysql/Dockerfile
+        container_name: "db-${PROJECT_NAME}"
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_DATABASE: "flags"
+            MYSQL_USER: "dbuser"
+            MYSQL_PASSWORD: "root"
+        volumes:
+            - db-data:/var/lib/mysql
+        restart: always
+        networks:
+            - backend
+        ports:
+            - "3306:3306"
+        expose:
+            - 3306
+networks:
+    backend:
+volumes:
+    db-data: ~

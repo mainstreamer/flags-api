@@ -90,7 +90,7 @@ class TestController extends AbstractController
     /**
      * @param Flag $flag
      * @return Response
-     * @Route("/flags/correct/{flags}", name="correct", methods={"POST"})
+     * @Route("/flags/correct/{flags}", name="submit correct", methods={"POST"})
      * @Entity("flag", expr="repository.findOneByCode(flags)")
      * @Security("is_granted('ROLE_USER')")
      */
@@ -252,5 +252,39 @@ class TestController extends AbstractController
             ]);
     
         return new JsonResponse(['token' => $token]);
+    }
+    
+    /**
+     * @Route("/incorrect", name="incorrect", methods={"get"})
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function getStat()
+    {
+        $user = $this->getUser();
+        $result = $this->getDoctrine()->getRepository(Answer::class)->findIncorrectGuesses($user->getId());
+        
+        foreach ($result as $key => $item) {
+            $result[$key]['flag'] = $flag = (new FlagsGenerator())->getEmojiFlag($item['flagCode']);
+            $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+        }
+        
+        return new JsonResponse($result);
+    }
+    
+    /**
+     * @Route("/correct", name="correct", methods={"get"})
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function getRight()
+    {
+        $user = $this->getUser();
+        $result = $this->getDoctrine()->getRepository(Answer::class)->findCorrectGuesses($user->getId());
+        
+        foreach ($result as $key => $item) {
+            
+            $result[$key]['flag'] = $flag = (new FlagsGenerator())->getEmojiFlag($item['flagCode']);
+            $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+        }
+        return new JsonResponse($result);
     }
 }
