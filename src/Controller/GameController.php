@@ -24,89 +24,52 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
-class TestController extends AbstractController
+class GameController extends AbstractController
 {
-    protected $v;
-    
-    protected $botToken;
-    
-    public function __construct(ValidatorInterface $validator, string $botToken)
-    {
-        $this->v = $validator;
-        $this->botToken = $botToken;
-    }
-    /**
-     * @Route("/test", name="test")
-     */
-    public function index()
-    {
-        for ($flags = [];;) {
-            try {
-                $flag = (new FlagsGenerator())->getEmojiFlag($code = chr(rand(97,122)).chr(rand(97,122)));
-            } catch (\Throwable $e) {
-                $flag = '❌';
-            }
+    public function __construct(
+        protected ValidatorInterface $validator, 
+        protected string $botToken,
+    ) {}
 
-            if ('❌' !== $flag
-                // = (new FlagsGenerator())->getEmojiFlag($code = chr(rand(97,122)).chr(rand(97,122)))
-            ) {
-                $flags[$code] = $flag;
-            }
+    #[Route('/test', name: 'test', methods: ['GET'])]
+    public function getQuestion(): JsonResponse
+    {
+        $flagsGenerator = new FlagsGenerator();
+        $flags = [];
 
-            if (count($flags) === 4) {
-                break;
+        while (count($flags) < 4) {
+            $countryCode = chr(rand(97,122)).chr(rand(97,122));
+            $flag = $flagsGenerator->getEmojiFlagOrNull($countryCode);
+            if ($flag) {
+                $flags[$countryCode] = $flag;
             }
         }
 
-        $repo = $this->getDoctrine()->getManager()->getRepository(Flag::class);
-
-        foreach ($flags as $code => $flag) {
-            $item = $repo->findOneByCode($code);
-            if (!$item) {
-                $item = new Flag();
-                $item->setCode($code);
-                $this->getDoctrine()->getManager()->persist($item);
-                $this->getDoctrine()->getManager()->flush();
-            }
-        }
-
-        $number = rand(0,3);
-        $answerCode = array_keys($flags)[$number];
-        $item = $repo->findOneByCode($answerCode);
-        $item->setShows($item->getShows()+1);
-        $this->getDoctrine()->getManager()->flush();
-        
+        $number = rand(0, 3);
 
         return $this->json([
-//            'message' => (new \DateTime())->format('d-m-Y h:i:s'),
             'flags' => $flags,
+            // questionText
             'ques' => Countries::getName(strtoupper(array_keys($flags)[$number])),
             'answer' => $flags[array_keys($flags)[$number]],
             'answerCode' => array_keys($flags)[$number],
-//            'highScores' => $this->getDoctrine()->getManager()->getRepository(User::class)->getHighScores()
         ]);
     }
 
     /**
-     * @param Flag $flag
-     * @return Response
-     * @Route("/flags/correct/{flags}", name="submit correct", methods={"POST"})
      * @Entity("flag", expr="repository.findOneByCode(flags)")
      * @Security("is_granted('ROLE_USER')")
      */
-
-//* @Security("is_granted('ROLE_USER')")
+    #[Route('/flags/correct/{flags}', name: 'submit_correct', methods: ['POST'])]
     public function correct(Flag $flag): Response
     {
-        $flag->setCorrectGuesses($flag->getCorrectGuesses()+1);
+        $flag->setCorrectGuesses($flag->getCorrectGuesses() + 1);
         $this->getDoctrine()->getManager()->flush();
 
         return new JsonResponse(null, Response::HTTP_OK);
     }
 
-    /**
-     * @Route("/api/login", name="login", methods={"POST"})
-     */
+    #[Route('/api/login', name: 'telegramLogin', methods: ['POST'])]
     public function authAction(Request $request, JWTEncoderInterface $encoder): Response
     {
         $data = json_decode($request->getContent(), true);
@@ -156,31 +119,25 @@ class TestController extends AbstractController
     }
 
     /**
-     * @return Response
-     * @Route("/protected", name="protected", methods={"GET"}, defaults={"_format": "json"})
      * @Security("is_granted('ROLE_USER')")
      */
-    public function protected(): Response
+    #[Route('/protected', name: 'get_profile', methods: ['GET'])]
+    public function getProfile(): Response
     {
         return $this->json($this->getUser());
     }
-    
-    /**
-     * @return Response
-     * @Route("/flags/scores", name="get scores", methods={"GET"})
-     */
+
+    #[Route('/flags/scores', name: 'get_high_scores', methods: ['GET'])]
     public function getHighScores(): Response
     {
         return $this->json($this->getDoctrine()->getManager()->getRepository(User::class)->getHighScores());
     }
-    
+
     /**
-     * @return Response
-     * @Route("/flags/scores", name="update scores", methods={"POST"})
      * @Entity("score")
      * @Security("is_granted('ROLE_USER')") 
      */
-
+    #[Route('/flags/scores', name: 'submit_game_results', methods: ['POST'])]
     public function postScore(Request $request): Response
     {
         $requestArray = json_decode($request->getContent(), true);
@@ -194,7 +151,7 @@ class TestController extends AbstractController
                 $answers[] = $item;
             }    
         }
-        
+
         /** @var User $user */
         $user = $this->getUser();
         $user->finalizeGame($score, $answers);
@@ -202,48 +159,21 @@ class TestController extends AbstractController
         
         return new Response(null, Response::HTTP_OK);
     }
-    
-    /**
-     * @Route("/test/{flag}", name="test-flag", methods={"GET"})
-     */
-    public function testFlags(string $flag)
+
+    #[Route('/test/{flag}', name: 'test_flag', methods: ['GET'])]
+    public function getEmoji(string $flag): Response
     {
-        try {
-            $flag = (new FlagsGenerator())->getEmojiFlag($flag);    
-        } catch (\Throwable $e) {
-            $flag = 'invalid code';
-        }
-        
+        $flag = (new FlagsGenerator())->getEmojiFlagOrNull($flag) ?? 'invalid code';     
+
         return new Response($flag);
     }
-    
-    
-//    /**
-//     * @Route("/param", name="param-conv-test", methods={"POST"})
-//     */
-//    public function postParam(Score $score)
-//    {
-////        dump('1123');
-//        $e = $this->v->validate($score);
-////        $score->setScore(300);
-//        dd($e);
-//        try {
-//            
-//            $flag = (new FlagsGenerator())->getEmojiFlag($flag);
-//        } catch (\Throwable $e) {
-//            $flag = 'invalid code';
-//        }
-//        
-//        return new Response($flag);
-//    }
-    
-    /**
-     * @Route("/token", name="test-token", methods={"get"})
-     */
-    public function getToken(JWTEncoderInterface $encoder)
+
+    #[Route('/token', name: 'test_token', methods: ['GET'])]
+    public function getToken(JWTEncoderInterface $encoder): Response
     {
         $user = $this->getDoctrine()->getRepository(User::class)->matching( 
-             ($criteria = new Criteria())->where($criteria->expr()->gt('id', 0))->setMaxResults(1))->get(0);
+             ($criteria = new Criteria())->where($criteria->expr()->gt('id', 0))->setMaxResults(1)
+        )->get(0);
         
         $token = $encoder
             ->encode([
@@ -254,11 +184,9 @@ class TestController extends AbstractController
         return new JsonResponse(['token' => $token]);
     }
     
-    /**
-     * @Route("/incorrect", name="incorrect", methods={"get"})
-     * @Security("is_granted('ROLE_USER')")
-     */
-    public function getStat()
+    /** @Security("is_granted('ROLE_USER')") */
+    #[Route('/incorrect', name: 'incorrect', methods: ['GET'])]
+    public function getStat(): Response
     {
         $user = $this->getUser();
         $result = $this->getDoctrine()->getRepository(Answer::class)->findIncorrectGuesses($user->getId());
@@ -271,20 +199,18 @@ class TestController extends AbstractController
         return new JsonResponse($result);
     }
     
-    /**
-     * @Route("/correct", name="correct", methods={"get"})
-     * @Security("is_granted('ROLE_USER')")
-     */
-    public function getRight()
+    /** @Security("is_granted('ROLE_USER')") */
+    #[Route('/correct', name: 'correct', methods: ['GET'])]
+    public function getRight(): Response
     {
         $user = $this->getUser();
         $result = $this->getDoctrine()->getRepository(Answer::class)->findCorrectGuesses($user->getId());
         
         foreach ($result as $key => $item) {
-            
             $result[$key]['flag'] = $flag = (new FlagsGenerator())->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
         }
+
         return new JsonResponse($result);
     }
 }

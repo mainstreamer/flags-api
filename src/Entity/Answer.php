@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\DTO\ScoreDTO;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Serializer\Annotation\Ignore;
