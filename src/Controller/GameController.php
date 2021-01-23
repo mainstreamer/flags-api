@@ -7,9 +7,7 @@ use App\Entity\Answer;
 use App\Entity\Flag;
 use App\Entity\Score;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\LazyCriteriaCollection;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Rteeom\FlagsGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -20,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
