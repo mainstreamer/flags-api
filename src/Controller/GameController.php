@@ -58,7 +58,6 @@ class GameController extends AbstractController
 
     /**
      * @Entity("flag", expr="repository.findOneByCode(flags)")
-     * @Security("is_granted('ROLE_USER')")
      */
     #[Route('/flags/correct/{flags}', name: 'submit_correct', methods: ['POST'])]
     public function correct(Flag $flag): Response
@@ -118,9 +117,7 @@ class GameController extends AbstractController
         return new JsonResponse(['token' => $token]);
     }
 
-    /**
-     * @Security("is_granted('ROLE_USER')")
-     */
+    /** @Security("is_granted('ROLE_USER')") */
     #[Route('/protected', name: 'get_profile', methods: ['GET'])]
     public function getProfile(): Response
     {
@@ -133,10 +130,7 @@ class GameController extends AbstractController
         return $this->json($this->getDoctrine()->getManager()->getRepository(User::class)->getHighScores());
     }
 
-    /**
-     * @Entity("score")
-     * @Security("is_granted('ROLE_USER')") 
-     */
+    /** @Security("is_granted('ROLE_USER')") */
     #[Route('/flags/scores', name: 'submit_game_results', methods: ['POST'])]
     public function postScore(Request $request): Response
     {
