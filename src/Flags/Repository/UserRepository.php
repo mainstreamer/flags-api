@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Repository;
+namespace App\Flags\Repository;
 
-use App\Entity\User;
+use App\Flags\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -32,6 +33,18 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getScalarResult()
         ;
+    }
+    
+    public function getAnyUser(): User
+    {
+        return $this->matching(
+            ($criteria = new Criteria())
+                ->where(
+                    $criteria
+                        ->expr()
+                        ->gt('id', 0))
+                ->setMaxResults(1)
+        )->get(0);
     }
     
     // /**

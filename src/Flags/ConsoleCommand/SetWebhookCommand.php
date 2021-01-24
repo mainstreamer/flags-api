@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ConsoleCommand;
+namespace App\Flags\ConsoleCommand;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

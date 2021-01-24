@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Serializer;
+namespace App\Flags\Serializer;
 
-use App\Entity\User;
+use App\Flags\Entity\User;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Flags\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\GameRepository")
+ * @ORM\Entity(repositoryClass="App\Flags\Repository\GameRepository")
  */
 class Game
 {

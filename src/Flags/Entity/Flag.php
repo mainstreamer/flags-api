@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Flags\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\FlagRepository")
+ * @ORM\Entity(repositoryClass="App\Flags\Repository\FlagRepository")
  */
 class Flag
 {
@@ -72,12 +72,10 @@ class Flag
     {
         return $this->correctGuesses;
     }
+    
 
-    /**
-     * @param mixed $correctGuesses
-     */
-    public function setCorrectGuesses($correctGuesses): void
+    public function incrementCorrectAnswersCounter(): void
     {
-        $this->correctGuesses = $correctGuesses;
+        ++$this->correctGuesses;
     }
 }

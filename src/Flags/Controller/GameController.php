@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Controller;
+namespace App\Flags\Controller;
 
-use App\DTO\ScoreDTO;
-use App\Entity\Answer;
-use App\Entity\Flag;
-use App\Entity\Score;
-use App\Entity\User;
-use Doctrine\Common\Collections\Criteria;
+use App\Flags\DTO\ScoreDTO;
+use App\Flags\Entity\Answer;
+use App\Flags\Entity\Flag;
+use App\Flags\Entity\Score;
+use App\Flags\Entity\User;
+use App\Flags\Repository\AnswerRepository;
+use App\Flags\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Rteeom\FlagsGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -18,25 +20,28 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 
 class GameController extends AbstractController
 {
+    protected FlagsGenerator $flagsGenerator;
+
     public function __construct(
         protected ValidatorInterface $validator, 
         protected string $botToken,
-    ) {}
+    ) {
+        $this->flagsGenerator = new FlagsGenerator();
+    }
 
     #[Route('/test', name: 'test', methods: ['GET'])]
     public function getQuestion(): JsonResponse
     {
-        $flagsGenerator = new FlagsGenerator();
         $flags = [];
 
         while (count($flags) < 4) {
             $countryCode = chr(rand(97,122)).chr(rand(97,122));
-            $flag = $flagsGenerator->getEmojiFlagOrNull($countryCode);
+            $flag = $this->flagsGenerator->getEmojiFlagOrNull($countryCode);
             if ($flag) {
                 $flags[$countryCode] = $flag;
             }
@@ -57,10 +62,10 @@ class GameController extends AbstractController
      * @Entity("flag", expr="repository.findOneByCode(flags)")
      */
     #[Route('/flags/correct/{flags}', name: 'submit_correct', methods: ['POST'])]
-    public function correct(Flag $flag): Response
+    public function correct(Flag $flag, EntityManagerInterface $entityManager): Response
     {
-        $flag->setCorrectGuesses($flag->getCorrectGuesses() + 1);
-        $this->getDoctrine()->getManager()->flush();
+        $flag->incrementCorrectAnswersCounter();
+        $entityManager->flush();
 
         return new JsonResponse(null, Response::HTTP_OK);
     }
@@ -122,14 +127,14 @@ class GameController extends AbstractController
     }
 
     #[Route('/flags/scores', name: 'get_high_scores', methods: ['GET'])]
-    public function getHighScores(): Response
+    public function getHighScores(UserRepository $repository): Response
     {
-        return $this->json($this->getDoctrine()->getManager()->getRepository(User::class)->getHighScores());
+        return $this->json($repository->getHighScores());
     }
 
     /** @Security("is_granted('ROLE_USER')") */
     #[Route('/flags/scores', name: 'submit_game_results', methods: ['POST'])]
-    public function postScore(Request $request): Response
+    public function postScore(Request $request, EntityManagerInterface $entityManager, #[CurrentUser] $user): Response
     {
         $requestArray = json_decode($request->getContent(), true);
         $scoreDTO = new ScoreDTO($requestArray);
@@ -144,9 +149,8 @@ class GameController extends AbstractController
         }
 
         /** @var User $user */
-        $user = $this->getUser();
         $user->finalizeGame($score, $answers);
-        $this->getDoctrine()->getManager()->flush();
+        $entityManager->flush();
         
         return new Response(null, Response::HTTP_OK);
     }
@@ -154,54 +158,47 @@ class GameController extends AbstractController
     #[Route('/test/{flag}', name: 'test_flag', methods: ['GET'])]
     public function getEmoji(string $flag): Response
     {
-        $flag = (new FlagsGenerator())->getEmojiFlagOrNull($flag) ?? 'invalid code';     
+        $flag = $this->flagsGenerator->getEmojiFlagOrNull($flag) ?? 'invalid code';     
 
         return new Response($flag);
     }
 
     #[Route('/token', name: 'test_token', methods: ['GET'])]
-    public function getToken(JWTEncoderInterface $encoder): Response
+    public function getToken(JWTEncoderInterface $encoder, UserRepository $repository): Response
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->matching( 
-             ($criteria = new Criteria())->where($criteria->expr()->gt('id', 0))->setMaxResults(1)
-        )->get(0);
-        
+        $user = $repository->getAnyUser();
         $token = $encoder
             ->encode([
                 'username' => $user->getTelegramId(),
                 'exp' => time() + 36000
             ]);
     
-        return new JsonResponse(['token' => $token]);
+        return $this->json(['token' => $token]);
     }
     
     /** @Security("is_granted('ROLE_USER')") */
     #[Route('/incorrect', name: 'incorrect', methods: ['GET'])]
-    public function getStat(): Response
+    public function getStat(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
-        $user = $this->getUser();
-        $result = $this->getDoctrine()->getRepository(Answer::class)->findIncorrectGuesses($user->getId());
-        
+        $result = $repository->findIncorrectGuesses($user->getId());
         foreach ($result as $key => $item) {
-            $result[$key]['flag'] = $flag = (new FlagsGenerator())->getEmojiFlag($item['flagCode']);
-            $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
-        }
-        
-        return new JsonResponse($result);
-    }
-    
-    /** @Security("is_granted('ROLE_USER')") */
-    #[Route('/correct', name: 'correct', methods: ['GET'])]
-    public function getRight(): Response
-    {
-        $user = $this->getUser();
-        $result = $this->getDoctrine()->getRepository(Answer::class)->findCorrectGuesses($user->getId());
-        
-        foreach ($result as $key => $item) {
-            $result[$key]['flag'] = $flag = (new FlagsGenerator())->getEmojiFlag($item['flagCode']);
+            $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
         }
 
-        return new JsonResponse($result);
+        return $this->json($result);
+    }
+
+    /** @Security("is_granted('ROLE_USER')") */
+    #[Route('/correct', name: 'correct', methods: ['GET'])]
+    public function getRight(#[CurrentUser] $user, AnswerRepository $repository): Response
+    {
+        $result = $repository->findCorrectGuesses($user->getId());
+        foreach ($result as $key => $item) {
+            $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
+            $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+        }
+
+        return $this->json($result);
     }
 }

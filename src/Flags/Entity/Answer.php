@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Flags\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AnswerRepository")
+ * @ORM\Entity(repositoryClass="App\Flags\Repository\AnswerRepository")
  */
 class Answer
 {

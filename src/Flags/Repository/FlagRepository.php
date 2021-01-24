@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Flags\Repository;
 
-use App\Entity\Flag;
+use App\Flags\Entity\Flag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

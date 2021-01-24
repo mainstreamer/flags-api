@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Flags\Entity;
 
-use App\DTO\ScoreDTO;
+use App\Flags\DTO\ScoreDTO;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ScoreRepository")
+ * @ORM\Entity(repositoryClass="App\Flags\Repository\ScoreRepository")
  */
 class Score
 {

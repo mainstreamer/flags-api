@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application;
+namespace App\Flags\Application;
 
 use App\Entity\Score;
 use Doctrine\Persistence\ManagerRegistry;
