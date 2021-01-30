@@ -104,8 +104,8 @@ class GameController extends AbstractController
             $user->setTelegramId($data['id']);
             $user->setFirstName($data['first_name']);
             $user->setLastName($data['last_name']);
-            $user->setTelegramUsername($data['username']);
-            $user->setTelegramPhotoUrl($data['photo_url']);
+            $user->setTelegramUsername($data['username'] ?? null);
+            $user->setTelegramPhotoUrl($data['photo_url'] ?? null);
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
         }
