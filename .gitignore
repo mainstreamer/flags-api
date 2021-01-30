@@ -15,8 +15,4 @@
 ###< lexik/jwt-authentication-bundle ###
 .idea
 @auto-scripts
-
-
-deploy.php
-
 *.decrypt.*.php
