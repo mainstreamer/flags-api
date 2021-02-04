@@ -192,7 +192,7 @@ class GameController extends AbstractController
                     $shown =  (int) $value['times'] + (int)$result[$key]['times'];
                     $guessed = (int) $value['times'];
                     $res = $shown - $guessed;
-                    $result[$key]['rate'] = round($res / $shown, 2) * 100 ;
+                    $result[$key]['rate'] =  (int) (round($res / $shown, 2) * 100) ;
                     $result[$key]['times'] = ($shown - $guessed)."/$shown";   
                        
                     break;
@@ -225,7 +225,7 @@ class GameController extends AbstractController
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
                     $shown =  (int) $value['times'] + (int)$result[$key]['times'];
                     $guessed = (int) $value['times'];
-                    $result[$key]['rate'] = round(($guessed/$shown), 2) * 100 ;
+                    $result[$key]['rate'] = (int) (round(($guessed/$shown), 2) * 100) ;
                     $result[$key]['times'] = "$guessed/$shown";
                 
                     break;
