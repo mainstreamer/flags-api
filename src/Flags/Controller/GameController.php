@@ -190,9 +190,9 @@ class GameController extends AbstractController
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
                     $shown =  (int) $value['times'] + (int)$result[$key]['times'];
-                    $guessed = $value['times'];
+                    $guessed = (int) $value['times'];
                     $result[$key]['rate'] = round(($shown - $guessed) / $shown, 2) * 100 ;
-                    $result[$key]['times'] = ($shown - $guessed)."/$shown" ;   
+                    $result[$key]['times'] = ($shown - $guessed)."/$shown";   
                        
                     break;
                 } 
@@ -223,9 +223,9 @@ class GameController extends AbstractController
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
                     $shown =  (int) $value['times'] + (int)$result[$key]['times'];
-                    $guessed = $value['times'];
-                    $result[$key]['rate'] = round($guessed / $shown, 2) * 100 ;
-                    $result[$key]['times'] = "$guessed/$shown" ;
+                    $guessed = (int) $value['times'];
+                    $result[$key]['rate'] = round(($guessed/$shown), 2) * 100 ;
+                    $result[$key]['times'] = "$guessed/$shown";
                 
                     break;
                 }
