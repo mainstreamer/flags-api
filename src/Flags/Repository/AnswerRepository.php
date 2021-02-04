@@ -58,6 +58,23 @@ class AnswerRepository extends ServiceEntityRepository
         ;
     }
     
+    public function findAllGuesses(string $userId): array
+    {
+//        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0 
+//GROUP BY answer.flag_code ORDER BY incorrect DESC;
+        
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a.flagCode) as times')
+            ->addSelect('a.flagCode')
+            ->where('a.user = :userId')
+            ->groupBy('a.flagCode')
+            ->orderBy('times', 'DESC')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+    }
+    
     // /**
     //  * @return Flag[] Returns an array of Flag objects
     //  */

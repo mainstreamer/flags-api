@@ -181,19 +181,18 @@ class GameController extends AbstractController
     public function getStat(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
         $correctResults = $repository->findCorrectGuesses($user->getId());
-        $incorrectResults = $repository->findIncorrectGuesses($user->getId());
-        $result = $incorrectResults;
+        $result = $repository->findAllGuesses($user->getId());
         //TODO move this logic to service
         foreach ($result as $key => $item) {
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
-                    $shown =  (int) $value['times'] + (int)$result[$key]['times'];
+                    $shown = (int) $result[$key]['times'];
                     $guessed = (int) $value['times'];
                     $res = $shown - $guessed;
                     $result[$key]['rate'] =  (int) (round($res / $shown, 2) * 100) ;
-                    $result[$key]['times'] = ($shown - $guessed)."/$shown";   
+                    $result[$key]['times'] = $res."/$shown";   
                        
                     break;
                 } 
@@ -215,18 +214,17 @@ class GameController extends AbstractController
     public function getRight(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
         $correctResults = $repository->findCorrectGuesses($user->getId());
-        $incorrectResults = $repository->findIncorrectGuesses($user->getId());
-        $result = $incorrectResults;
+        $result = $repository->findAllGuesses($user->getId());
         //TODO move this logic to service
         foreach ($result as $key => $item) {
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
-                    $shown =  (int) $value['times'] + (int)$result[$key]['times'];
-                    $guessed = (int) $value['times'];
-                    $result[$key]['rate'] = (int) (round(($guessed/$shown), 2) * 100) ;
-                    $result[$key]['times'] = "$guessed/$shown";
+                    $shown =  (int) $result[$key]['times'];
+                    $errors = (int) $value['times'];
+                    $result[$key]['rate'] = (int) (round($errors/$shown, 2) * 100) ;
+                    $result[$key]['times'] = "$errors/$shown";
                 
                     break;
                 }
