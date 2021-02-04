@@ -180,11 +180,31 @@ class GameController extends AbstractController
     #[Route('/incorrect', name: 'incorrect', methods: ['GET'])]
     public function getStat(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
-        $result = $repository->findIncorrectGuesses($user->getId());
+        $correctResults = $repository->findCorrectGuesses($user->getId());
+        $incorrectResults = $repository->findIncorrectGuesses($user->getId());
+        $result = $incorrectResults;
+        //TODO move this logic to service
         foreach ($result as $key => $item) {
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+            foreach ($correctResults as $value) {
+                if ($value['flagCode'] === $result[$key]['flagCode']) {
+                    $shown =  (int) $value['times'] + (int)$result[$key]['times'];
+                    $guessed = $value['times'];
+                    $result[$key]['rate'] = round(($shown - $guessed) / $shown, 2) * 100 ;
+                    $result[$key]['times'] = ($shown - $guessed)."/$shown" ;   
+                       
+                    break;
+                } 
+            }
+            
+            if (!isset($result[$key]['rate'])) {
+                $result[$key]['rate'] = 100;
+                $result[$key]['times'] = $result[$key]['times'].'/'.$result[$key]['times'];
+            }
         }
+        
+        array_multisort($result, SORT_DESC, SORT_NUMERIC, array_column($result, 'rate'), SORT_DESC, SORT_NUMERIC);
 
         return $this->json($result);
     }
@@ -193,12 +213,32 @@ class GameController extends AbstractController
     #[Route('/correct', name: 'correct', methods: ['GET'])]
     public function getRight(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
-        $result = $repository->findCorrectGuesses($user->getId());
+        $correctResults = $repository->findCorrectGuesses($user->getId());
+        $incorrectResults = $repository->findIncorrectGuesses($user->getId());
+        $result = $incorrectResults;
+        //TODO move this logic to service
         foreach ($result as $key => $item) {
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+            foreach ($correctResults as $value) {
+                if ($value['flagCode'] === $result[$key]['flagCode']) {
+                    $shown =  (int) $value['times'] + (int)$result[$key]['times'];
+                    $guessed = $value['times'];
+                    $result[$key]['rate'] = round($guessed / $shown, 2) * 100 ;
+                    $result[$key]['times'] = "$guessed/$shown" ;
+                
+                    break;
+                }
+            }
+        
+            if (!isset($result[$key]['rate'])) {
+                $result[$key]['rate'] = 0;
+                $result[$key]['times'] = $result[$key]['times'].'/'.$result[$key]['times'];
+            }
         }
-
+    
+        array_multisort($result, SORT_DESC, SORT_NUMERIC, array_column($result, 'rate'), SORT_DESC, SORT_NUMERIC);
+        
         return $this->json($result);
     }
 }

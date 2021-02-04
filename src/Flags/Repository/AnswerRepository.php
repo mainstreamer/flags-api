@@ -38,7 +38,7 @@ class AnswerRepository extends ServiceEntityRepository
             ->getArrayResult()
         ;
     }
-    
+
     public function findCorrectGuesses(string $userId): array
     {
         //        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0 

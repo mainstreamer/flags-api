@@ -49,12 +49,7 @@ class Answer
      * @Ignore
      */
     protected ?User $user;
-    
-    public function __construct()
-    {
-        $this->date = new \DateTime();
-    }
-    
+
     /**
      * @return int
      */
@@ -150,6 +145,7 @@ class Answer
         $item->setFlagCode($array['answerCode']);
         $item->setTimer($array['time']);
         $item->setCorrect($array['correct']);
+        $item->setDate((new \DateTime())->setTimestamp(round($array['answerDateTime']/1000)));
         
         return $item;
     }
