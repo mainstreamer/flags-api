@@ -200,7 +200,7 @@ class GameController extends AbstractController
             
             if (!isset($result[$key]['rate'])) {
                 $result[$key]['rate'] = 100;
-                $result[$key]['times'] = $result[$key]['times'].'/'.$result[$key]['times'];
+                $result[$key]['times'] = round((int) $result[$key]['times'].'/'.(int) $result[$key]['times']);
             }
         }
         
@@ -216,7 +216,7 @@ class GameController extends AbstractController
         $correctResults = $repository->findCorrectGuesses($user->getId());
         $incorrectResults = $repository->findIncorrectGuesses($user->getId());
         $result = $incorrectResults;
-        //TODO move this logic to service
+        //TODO move this logic to service + remove duplication
         foreach ($result as $key => $item) {
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
@@ -233,7 +233,7 @@ class GameController extends AbstractController
         
             if (!isset($result[$key]['rate'])) {
                 $result[$key]['rate'] = 0;
-                $result[$key]['times'] = $result[$key]['times'].'/'.$result[$key]['times'];
+                $result[$key]['times'] = round((int) $result[$key]['times'].'/'.(int) $result[$key]['times']);
             }
         }
     
