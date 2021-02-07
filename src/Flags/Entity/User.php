@@ -29,22 +29,22 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $firstName;
+    private ?string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $lastName;
+    private ?string $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $telegramUsername;
+    private ?string $telegramUsername;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $telegramPhotoUrl;
+    private ?string $telegramPhotoUrl;
     
     /**
      * @ORM\Column(type="integer")
