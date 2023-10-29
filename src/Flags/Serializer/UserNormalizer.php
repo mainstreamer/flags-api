@@ -16,15 +16,15 @@ class UserNormalizer implements ContextAwareNormalizerInterface
     }
 
     /**
-     * @param mixed $user
+     * @param mixed $object
      * @param string|null $format
      * @param array $context
      * @return array|\ArrayObject|bool|float|int|mixed|string|null
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
-    public function normalize($user, $format = null, array $context = [])
+    public function normalize(mixed $object, $format = null, array $context = [])
     {
-        $data = $this->normalizer->normalize($user, $format, $context);
+        $data = $this->normalizer->normalize($object, $format, $context);
         unset($data['password']);
         unset($data['salt']);
 

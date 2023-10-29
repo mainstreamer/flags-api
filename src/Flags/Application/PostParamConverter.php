@@ -2,7 +2,7 @@
 
 namespace App\Flags\Application;
 
-use App\Entity\Score;
+use App\Flags\Entity\Score;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityManagerInterface;
