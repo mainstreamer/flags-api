@@ -34,6 +34,11 @@ class GameController extends AbstractController
         $this->flagsGenerator = new FlagsGenerator();
     }
 
+    #[Route('/check', name: 'checkaaaa', methods: ['GET'])]
+    public function check(): JsonResponse
+    {
+        return $this->json(['ok']);
+    }
     #[Route('/test', name: 'test', methods: ['GET'])]
     public function getQuestion(): JsonResponse
     {

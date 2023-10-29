@@ -2,11 +2,10 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "*",
-        "deployer/deployer": "dev-master",
         "doctrine/annotations": "*",
         "doctrine/doctrine-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "*",
@@ -21,10 +20,10 @@
         "symfony/flex": "*",
         "symfony/framework-bundle": "*",
         "symfony/http-client": "*",
-        "symfony/intl": "*",
+        "symfony/intl": "6.*",
         "symfony/proxy-manager-bridge": "*",
         "symfony/security-bundle": "*",
-        "symfony/serializer": "5.*",
+        "symfony/serializer": "*",
         "symfony/validator": "*",
         "symfony/yaml": "*"
     },
@@ -32,7 +31,10 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -71,10 +73,11 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "5.*"
+            "require": "6.*"
         }
     },
     "require-dev": {
+        "symfony/contracts": "*",
         "vimeo/psalm": "^4.4"
     }
 }

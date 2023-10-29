@@ -256,4 +256,9 @@ class User implements UserInterface
     {
         return $this->answers;
     }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->id;
+    }
 }

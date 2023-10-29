@@ -1,0 +1,25 @@
+version: "3.6"
+services:
+    php:
+        extends:
+            file: docker-compose.yml
+            service: php
+        image: ${IMAGE}:php-latest
+
+    nginx:
+        extends:
+            file: docker-compose.yml
+            service: nginx
+        image: ${IMAGE}:nginx-latest
+        container_name: "nginx-${PROJECT_NAME}"
+
+    db:
+        extends:
+            file: docker-compose.yml
+            service: db
+        image: ${IMAGE}:db-latest
+
+networks:
+    backend-flags:
+volumes:
+    db-data-flags: ~
