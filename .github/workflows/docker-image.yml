@@ -27,11 +27,16 @@ jobs:
           echo "${DD_CERT}" | base64 --decode > ${HOME}/cert.pem
           cd ${HOME} && ls -la
           docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=${HOME}/ca.pem,cert=${HOME}/cert.pem,key=${HOME}/key.pem"
-          rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
+      - name: Check context
+        run: docker context list
+      - name: Use context
+        run: docker context use icu
       - name: FOLDER
         run: ls -la
       - name: location
         run: pwd
+      - name: Remove keys
+        run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
 
 
 ## docker hub key
