@@ -44,7 +44,7 @@ jobs:
       - name: Use context
         run: docker context use icu
       - name: Deploy Images
-        run: docker compose -f docker-compose-prod up -d
+        run: docker compose -f docker-compose-prod.yml up -d
       - name: Prune Images
         run: docker image prune --force
       - name: FOLDER
