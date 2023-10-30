@@ -15,8 +15,10 @@
 ###< lexik/jwt-authentication-bundle ###
 .idea
 @auto-scripts
-
+*.decrypt.*.php
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
 
 deploy.php
-
-.phpunit.result.cache
