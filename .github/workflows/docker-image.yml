@@ -1,0 +1,48 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "docker" ]
+  pull_request:
+    branches: [ "docker" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker compose build
+      - name: FOLDER
+        env:
+          DD_KEY: ${{ secrets.DD_KEY }}
+          DD_CA: ${{ secrets.DD_CA }}
+          DD_CERT: ${{ secrets.DD_CERT }}
+        run: |
+          echo "${DD_KEY}" | base64 --decode > ${HOME}/key.pem
+          echo "${DD_CA}" | base64 --decode > ${HOME}/ca.pem
+          echo "${DD_CERT}" | base64 --decode > ${HOME}/cert.pem
+          cd ${HOME} && ls -la
+          docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=${HOME}/ca.pem,cert=${HOME}/cert.pem,key=${HOME}/key.pem"
+          rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
+      - name: FOLDER
+        run: ls -la
+      - name: location
+        run: pwd
+
+
+## docker hub key
+## cert.key ca.key ...
+##
+#      - name: Write key file
+#        env:
+#          DH_KEY: ${{ secrets.DH_KEY }}
+#          DH_LOGIN: ${{ secrets.DH_LOGIN }}
+#        run: |
+#               docker login -u ${DH_LOGIN} -p ${DH_KEY}
+#               echo "$AUTH" | base64 --decode > ${HOME}/key.json
+#          # Authenticate to service...
+#               rm ${HOME/key.json}

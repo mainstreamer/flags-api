@@ -18,3 +18,5 @@
 
 
 deploy.php
+
+.phpunit.result.cache
