@@ -12,7 +12,9 @@ services:
             service: nginx
         image: ${IMAGE}:nginx-latest
         container_name: "nginx-${PROJECT_NAME}"
-
+        ports:
+            - "8080:80"
+            - "4443:443"
     db:
         extends:
             file: docker-compose.yml

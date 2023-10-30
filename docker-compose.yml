@@ -15,11 +15,8 @@ services:
         build:
             context: .
             dockerfile: .docker/nginx/Dockerfile
-        expose:
-            - 80
-        ports:
-            - "80:80"
-            - "443:443"
+#        expose:
+#            - 80
         restart: always
         networks:
             - backend-flags
@@ -38,10 +35,9 @@ services:
         restart: always
         networks:
             - backend-flags
-        ports:
-            - "3306:3306"
-        expose:
-            - 3306
+
+#        expose:
+#            - 3306
 
 networks:
     backend-flags:
