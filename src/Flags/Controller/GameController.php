@@ -56,6 +56,7 @@ class GameController extends AbstractController
 
         return $this->json([
             'xaxa' => 'lalka',
+            'version' => getenv('VERSION_HASH'),
             'flags' => $flags,
             // questionText
             'ques' => Countries::getName(strtoupper(array_keys($flags)[$number])),
