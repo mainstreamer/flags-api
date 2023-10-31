@@ -3,14 +3,8 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Symfony-Tests
-
-on:
-  push:
-#    branches: [ "master" ]
-  pull_request:
-#    branches: [ "master" ]
-
+name: TEST-DEPLOY
+on: [push, pull_request]
 permissions:
   contents: read
 
