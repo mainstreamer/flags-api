@@ -3,15 +3,11 @@ name: Docker Image CI
 on:
   push:
     branches: [ "master" ]
-#  pull_request:
-#    branches: [ "docker" ]
 
 jobs:
-
   deploy:
     needs: symfony-tests
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
