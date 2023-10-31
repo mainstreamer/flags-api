@@ -1,58 +1,58 @@
-name: Docker Deploy Image CI
-
+#name: Docker Deploy Image CI
+#
+##on:
+##  workflow_run:
+##    workflows: ["Symfony-Tests"]
+##    types:
+##      - completed
 #on:
-#  workflow_run:
-#    workflows: ["Symfony-Tests"]
-#    types:
-#      - completed
-on:
-  push:
-    branches: [ "lalka" ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build the Docker image
-        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master'
-        run: docker compose build
-      - name: Tag Docker image
-        run: |
-          docker tag flags-api-php swiftcode/flags:php-latest
-          docker tag flags-api-nginx swiftcode/flags:nginx-latest
-          docker tag flags-api-db swiftcode/flags:db-latest
-      - name: Login to DockerHub
-        env:
-          DH_KEY: ${{ secrets.DH_KEY }}
-          DH_LOGIN: ${{ secrets.DH_LOGIN }}
-        run: docker login -u ${DH_LOGIN} -p ${DH_KEY}
-      - name: Push Images
-        run: docker push swiftcode/flags --all-tags
-      - name: Write Secrets
-        env:
-          DD_KEY: ${{ secrets.DD_KEY }}
-          DD_CA: ${{ secrets.DD_CA }}
-          DD_CERT: ${{ secrets.DD_CERT }}
-        run: |
-          echo "${DD_KEY}" | base64 --decode > ${HOME}/key.pem
-          echo "${DD_CA}" | base64 --decode > ${HOME}/ca.pem
-          echo "${DD_CERT}" | base64 --decode > ${HOME}/cert.pem
-          cd ${HOME} && ls -la
-          docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=${HOME}/ca.pem,cert=${HOME}/cert.pem,key=${HOME}/key.pem"
-      - name: Check context
-        run: docker context list
-      - name: Use context
-        run: docker context use icu
-      - name: Pull Images
-        run: docker compose -f docker-compose-prod.yml pull
-      - name: Deploy Images
-        run: docker compose -f docker-compose-prod.yml up -d
-      - name: Prune Images
-        run: docker image prune --force
-      - name: FOLDER
-        run: ls -la
-      - name: location
-        run: pwd
-      - name: Remove keys
-        run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
+#  push:
+#    branches: [ "lalka" ]
+#
+#jobs:
+#  deploy:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Build the Docker image
+#        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master'
+#        run: docker compose build
+#      - name: Tag Docker image
+#        run: |
+#          docker tag flags-api-php swiftcode/flags:php-latest
+#          docker tag flags-api-nginx swiftcode/flags:nginx-latest
+#          docker tag flags-api-db swiftcode/flags:db-latest
+#      - name: Login to DockerHub
+#        env:
+#          DH_KEY: ${{ secrets.DH_KEY }}
+#          DH_LOGIN: ${{ secrets.DH_LOGIN }}
+#        run: docker login -u ${DH_LOGIN} -p ${DH_KEY}
+#      - name: Push Images
+#        run: docker push swiftcode/flags --all-tags
+#      - name: Write Secrets
+#        env:
+#          DD_KEY: ${{ secrets.DD_KEY }}
+#          DD_CA: ${{ secrets.DD_CA }}
+#          DD_CERT: ${{ secrets.DD_CERT }}
+#        run: |
+#          echo "${DD_KEY}" | base64 --decode > ${HOME}/key.pem
+#          echo "${DD_CA}" | base64 --decode > ${HOME}/ca.pem
+#          echo "${DD_CERT}" | base64 --decode > ${HOME}/cert.pem
+#          cd ${HOME} && ls -la
+#          docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=${HOME}/ca.pem,cert=${HOME}/cert.pem,key=${HOME}/key.pem"
+#      - name: Check context
+#        run: docker context list
+#      - name: Use context
+#        run: docker context use icu
+#      - name: Pull Images
+#        run: docker compose -f docker-compose-prod.yml pull
+#      - name: Deploy Images
+#        run: docker compose -f docker-compose-prod.yml up -d
+#      - name: Prune Images
+#        run: docker image prune --force
+#      - name: FOLDER
+#        run: ls -la
+#      - name: location
+#        run: pwd
+#      - name: Remove keys
+#        run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
