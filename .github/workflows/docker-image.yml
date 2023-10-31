@@ -13,9 +13,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master'
       - uses: actions/checkout@v3
       - name: Build the Docker image
+        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master'
         run: docker compose build
       - name: Tag Docker image
         run: |
