@@ -55,6 +55,7 @@ class GameController extends AbstractController
         $number = rand(0, 3);
 
         return $this->json([
+            'xaxa' => 'lalka',
             'flags' => $flags,
             // questionText
             'ques' => Countries::getName(strtoupper(array_keys($flags)[$number])),
