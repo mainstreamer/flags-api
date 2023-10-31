@@ -2,14 +2,14 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "docker" ]
-  pull_request:
-    branches: [ "docker" ]
+    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "docker" ]
 
 jobs:
 
-  build:
-
+  deploy:
+    needs: symfony-tests
     runs-on: ubuntu-latest
 
     steps:
@@ -55,17 +55,3 @@ jobs:
         run: pwd
       - name: Remove keys
         run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
-
-
-## docker hub key
-## cert.key ca.key ...
-##
-#      - name: Write key file
-#        env:
-#          DH_KEY: ${{ secrets.DH_KEY }}
-#          DH_LOGIN: ${{ secrets.DH_LOGIN }}
-#        run: |
-#               docker login -u ${DH_LOGIN} -p ${DH_KEY}
-#               echo "$AUTH" | base64 --decode > ${HOME}/key.json
-#          # Authenticate to service...
-#               rm ${HOME/key.json}
