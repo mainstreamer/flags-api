@@ -5,7 +5,9 @@ services:
         container_name: "php-${PROJECT_NAME}"
         build:
             context: .
-            dockerfile: .docker/php-fpm2/Dockerfile-base
+            dockerfile: .docker/php-fpm2/Dockerfile
+            args:
+                - KEY=${GITH_KEY}
         depends_on:
             - nginx
         networks:

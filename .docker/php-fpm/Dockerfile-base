@@ -1,0 +1,57 @@
+FROM php:8.2.1-fpm-alpine3.17
+
+RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories; \
+    echo http://dl-2.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories; \
+    echo http://dl-3.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories; \
+    echo http://dl-4.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories; \
+    echo http://dl-5.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories
+
+RUN apk add --update \
+     acl \
+     sudo \
+     bash \
+     shadow \
+     postgresql-dev \
+     mc \
+     openssl \
+     mysql-client \
+     libpng-dev \
+     grep \
+     git \
+     tcpdump \
+     libzip-dev \
+     openrc  \
+     openssh
+
+RUN docker-php-ext-configure pcntl --enable-pcntl
+
+RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql \
+    calendar \
+    zip \
+    intl
+
+RUN apk add --no-cache $PHPIZE_DEPS \
+   && apk del --purge autoconf g++ make \
+   && apk add --no-cache --update rabbitmq-c-dev \
+    && apk add --no-cache --update --virtual .phpize-deps $PHPIZE_DEPS \
+    && pecl install -o -f amqp \
+    && docker-php-ext-enable amqp \
+    && apk del .phpize-deps
+
+RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
+        && pecl install redis \
+        && docker-php-ext-enable redis.so
+
+RUN rm -rf /var/cache/apk/* && rm -rf /tmp/*
+COPY .docker/php-fpm/php.ini /usr/local/etc/php/php.ini
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+RUN groupmod -g 1000 www-data
+RUN usermod -u 1000 www-data
+RUN mkdir -p /var/www/webapp
+RUN chown -R 1000:1000 /var/www/webapp
+RUN mkdir -p /home/www-data/.ssh \
+    && chmod 0700 /home/www-data/.ssh
+RUN chown -R www-data:www-data /home/www-data
+RUN useradd -g root www-data & groups
+
+EXPOSE 9000
