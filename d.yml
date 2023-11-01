@@ -1,0 +1,13 @@
+version: "3.6"
+
+services:
+    php:
+        container_name: "php-${PROJECT_NAME}"
+        build:
+            context: .
+            dockerfile: .docker/php-fpm2/Dockerfile-base
+        networks:
+            - backend-flags2
+
+networks:
+    backend-flags2:

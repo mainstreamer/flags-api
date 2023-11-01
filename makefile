@@ -17,5 +17,7 @@ psalm:
 	@./vendor/bin/psalm
 sh:
 	@docker compose exec php sh
-@:
-
+hi:
+	@echo hello there
+%:
+	@

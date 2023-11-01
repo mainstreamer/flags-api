@@ -1,0 +1,46 @@
+version: "3.6"
+
+services:
+    php:
+        container_name: "php-${PROJECT_NAME}"
+        build:
+            context: .
+            dockerfile: .docker/php-fpm2/Dockerfile-base
+        depends_on:
+            - nginx
+        networks:
+            - backend-flags2
+    nginx:
+        container_name: "nginx-${PROJECT_NAME}"
+        build:
+            context: .
+            dockerfile: .docker/nginx/Dockerfile
+        ports:
+            - "80:80"
+            - "443:443"
+        restart: always
+        networks:
+            - backend-flags2
+    db:
+        build:
+            context: .
+            dockerfile: .docker/mysql/Dockerfile
+        container_name: "db-${PROJECT_NAME}"
+        environment:
+            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+            MYSQL_DATABASE: "${MYSQL_DATABASE}"
+            MYSQL_USER: "${MYSQL_USER}"
+            MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+        volumes:
+            - db-data-flags2:/var/lib/mysql
+        restart: always
+        networks:
+            - backend-flags2
+
+#        expose:
+#            - 3306
+
+networks:
+    backend-flags2:
+volumes:
+    db-data-flags2: ~

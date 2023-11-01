@@ -18,9 +18,9 @@ ADD .docker/nginx/host.conf /etc/nginx/conf.d/
 ADD .docker/nginx/cert.crt /etc/ssl/cert.crt
 ADD .docker/nginx/cert.key /etc/ssl/cert.key
 
-RUN mkdir -p /var/www/webapp
-#RUN mkdir -p $PROJECT_PATH
-ADD public /var/www/webapp/public
+#RUN mkdir -p /var/www/webapp
+##RUN mkdir -p $PROJECT_PATH
+##ADD public /var/www/webapp/public
 #ADD public $PROJECT_PATH/public
 
 RUN rm /etc/nginx/conf.d/default.conf
