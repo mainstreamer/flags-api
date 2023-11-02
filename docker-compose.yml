@@ -4,6 +4,8 @@ services:
     php:
         container_name: "php-${PROJECT_NAME}"
         build:
+            args:
+                - KEY=${GITH_KEY}
             context: .
             dockerfile: .docker/php-fpm/Dockerfile
         depends_on:
@@ -15,8 +17,6 @@ services:
         build:
             context: .
             dockerfile: .docker/nginx/Dockerfile
-#        expose:
-#            - 80
         restart: always
         networks:
             - backend-flags
@@ -35,10 +35,6 @@ services:
         restart: always
         networks:
             - backend-flags
-
-#        expose:
-#            - 3306
-
 networks:
     backend-flags:
 volumes:

@@ -1,9 +1,6 @@
 version: "3.6"
 services:
     php:
-        build:
-            args:
-                - KEY=${GITH_KEY}
         environment:
             VERSION_HASH: "${GITHUB_SHA:-none}"
         extends:

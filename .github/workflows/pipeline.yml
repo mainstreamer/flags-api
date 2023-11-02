@@ -99,8 +99,7 @@ jobs:
       - name: Build the Docker image
         env:
           GITH_KEY: ${{ secrets.GITH_KEY }}
-          KEY: ${{ secrets.GITH_KEY }}
-        run: docker compose build php
+        run: docker compose -f docker-compose-prod.yml build php
       - name: Tag Docker image
         run: |
           docker tag flags-api-php swiftcode/flags:php-latest
