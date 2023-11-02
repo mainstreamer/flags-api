@@ -3,11 +3,11 @@ services:
     php:
         environment:
             VERSION_HASH: "${GITHUB_SHA:-none}"
+            SYMFONY_DECRYPTION_SECRET: "${SYMFONY_DECRYPTION_SECRET}"
         extends:
             file: docker-compose.yml
             service: php
         image: ${IMAGE}:php-latest
-
     nginx:
         extends:
             file: docker-compose.yml

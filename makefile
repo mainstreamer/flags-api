@@ -13,11 +13,19 @@ composer:
 	@docker compose exec php composer install
 deploy:
 	@./vendor/bin/dep deploy production
+welcome:
+	@echo hi
+test:
+	@docker compose exec php vendor/bin/phpunit
 psalm:
-	@./vendor/bin/psalm
+	@docker compose exec php vendor/bin/psalm --no-cache
+fix:
+	@docker compose exec php vendor/bin/php-cs-fixer fix
+--:
+	@docker compose exec php sh -c "$(filter-out $@,$(MAKECMDGOALS) $(MAKEFLAGS))"
 sh:
 	@docker compose exec php sh
-hi:
-	@echo hello there
+dumper:
+	@docker compose exec php vendor/bin/var-dump-server
 %:
 	@

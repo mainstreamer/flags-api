@@ -42,3 +42,28 @@ fi
 }
 
 alias 'cdc'='change_docker_context'
+
+
+################################
+DOCKER CONTAINERS 
+
+PHP - There are 3 stages:
+1. All environments use base image (with all heavy things that need to be compiled) Docker-base 
+2. Local dev environment mounts image to sync local files
+3. For prod build base image is taken gthub project pulled and composer install run
+
+Note! - docker-compose-prod.yml is only used to create containers, but never to build images!
+
+####################
+Env files
+.env should only contain list of required vars (Problem is that docker build by default uses .env)
+Local dev .env uses env.local
+Prod uses .env.prod
+Test uses .env.test
+
+#####################
+Secretes (overriden by env vars)
+
+APP_RUNTIME_ENV=prod php bin/console secrets:set DATABASE_URL
+APP_RUNTIME_ENV=prod php bin/console secrets:list --reveal
+Decryption key needs to be added to CI as SYMFONY_DECRYPTION_SECRET in base64 

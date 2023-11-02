@@ -55,6 +55,7 @@ class GameController extends AbstractController
         $number = rand(0, 3);
 
         return $this->json([
+            'APP_ENV' => getenv('APP_ENV'),
             'xaxa' => 'lalka',
             'version' => getenv('VERSION_HASH'),
             'flags' => $flags,

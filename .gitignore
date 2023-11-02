@@ -23,3 +23,6 @@
 ###< phpunit/phpunit ###
 
 deploy.php
+.DS_Store
+/.docker/certs/*.pem
+/.docker/certs/*.srl

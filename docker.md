@@ -19,6 +19,10 @@ ExecStart=/usr/bin/dockerd
 "hosts": ["unix:///var/run/docker.sock", "tcp://138.68.184.69:2376"]
 }
 
+scp ca.pem root@138.68.184.69:/var/www/html/ca.pem
+scp server-cert.pem root@138.68.184.69:/var/www/html/server-cert.pem
+scp server-key.pem root@138.68.184.69:/var/www/html/server-key.pem
+ssh root@138.68.184.69
 sudo systemctl restart docker.service
 sudo systemctl daemon-reload
 
@@ -31,6 +35,7 @@ certificates location /var/www/html
 manual check:
 docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=138.68.184.69:2376 ps
 
-create docker context:
+create/update docker context:
 docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=ca.pem,cert=cert.pem,key=key.pem"
+docker context update icu --docker "host=tcp://138.68.184.69:2376,ca=ca.pem,cert=cert.pem,key=key.pem"
 

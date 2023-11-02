@@ -28,7 +28,8 @@ RUN docker-php-ext-configure pcntl --enable-pcntl
 RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql \
     calendar \
     zip \
-    intl
+    intl \
+    sodium
 
 RUN apk add --no-cache $PHPIZE_DEPS \
    && apk del --purge autoconf g++ make \
