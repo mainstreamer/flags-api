@@ -11,16 +11,24 @@ use App\Flags\Repository\AnswerRepository;
 use App\Flags\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
+//use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Rteeom\FlagsGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Controller\ContainerControllerResolver;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GameController extends AbstractController
@@ -30,6 +38,7 @@ class GameController extends AbstractController
     public function __construct(
         protected ValidatorInterface $validator, 
         protected string $botToken,
+
     ) {
         $this->flagsGenerator = new FlagsGenerator();
     }
@@ -172,14 +181,26 @@ class GameController extends AbstractController
     }
 
     #[Route('/token', name: 'test_token', methods: ['GET'])]
-    public function getToken(JWTEncoderInterface $encoder, UserRepository $repository): Response
-    {
+    public function getToken(
+        JWTEncoderInterface $encoder,
+        UserRepository $repository,
+        TokenStorageInterface $storage,
+        JWTTokenManagerInterface $JWTManager,
+        #[Autowire(service: 'lexik_jwt_authentication.handler.authentication_success')]
+        AuthenticationSuccessHandlerInterface $handler
+    ): Response {
         $user = $repository->getAnyUser();
-        $token = $encoder
-            ->encode([
-                'username' => $user->getTelegramId(),
-                'exp' => time() + 36000
-            ]);
+//        $token = $encoder
+//            ->encode([
+//                'username' => $user->getTelegramId(),
+//                'exp' => time() + 36000
+//            ]);
+
+        $token = $JWTManager->create($user);
+//        $handler = $this->container->get('lexik_jwt_authentication.handler.authentication_success');
+        $handler->handleAuthenticationSuccess($user, $token);
+
+//        $storage->setToken($user->getTelegramId(), $token);
     
         return $this->json(['token' => $token]);
     }
