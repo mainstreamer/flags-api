@@ -22,6 +22,8 @@ services:
             file: docker-compose.yml
             service: db
         image: ${IMAGE}:db-latest
+        ports:
+            - "3306:3306"
 
 networks:
     backend-flags:
