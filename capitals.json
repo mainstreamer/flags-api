@@ -1,0 +1,328 @@
+{
+  "countries": [
+    {
+      "name": "Algeria",
+      "capital": "Algiers",
+      "region": "Africa",
+      "isoCode": "DZ"
+    },
+    {
+      "name": "Angola",
+      "capital": "Luanda",
+      "region": "Africa",
+      "isoCode": "AO"
+    },
+    {
+      "name": "Benin",
+      "capital": "Porto-Novo",
+      "region": "Africa",
+      "isoCode": "BJ"
+    },
+    {
+      "name": "Botswana",
+      "capital": "Gaborone",
+      "region": "Africa",
+      "isoCode": "BW"
+    },
+    {
+      "name": "Burkina Faso",
+      "capital": "Ouagadougou",
+      "region": "Africa",
+      "isoCode": "BF"
+    },
+    {
+      "name": "Burundi",
+      "capital": "Bujumbura",
+      "region": "Africa",
+      "isoCode": "BI"
+    },
+    {
+      "name": "Cabo Verde",
+      "capital": "Praia",
+      "region": "Africa",
+      "isoCode": "CV"
+    },
+    {
+      "name": "Cameroon",
+      "capital": "Yaounde",
+      "region": "Africa",
+      "isoCode": "CM"
+    },
+    {
+      "name": "Central African Republic",
+      "capital": "Bangui",
+      "region": "Africa",
+      "isoCode": "CF"
+    },
+    {
+      "name": "Chad",
+      "capital": "N'Djamena",
+      "region": "Africa",
+      "isoCode": "TD"
+    },
+    {
+      "name": "Comoros",
+      "capital": "Moroni",
+      "region": "Africa",
+      "isoCode": "KM"
+    },
+    {
+      "name": "Congo (Congo-Brazzaville)",
+      "capital": "Brazzaville",
+      "region": "Africa",
+      "isoCode": "CG"
+    },
+    {
+      "name": "Congo (Congo-Kinshasa)",
+      "capital": "Kinshasa",
+      "region": "Africa",
+      "isoCode": "CD"
+    },
+    {
+      "name": "Djibouti",
+      "capital": "Djibouti City",
+      "region": "Africa",
+      "isoCode": "DJ"
+    },
+    {
+      "name": "Egypt",
+      "capital": "Cairo",
+      "region": "Africa",
+      "isoCode": "EG"
+    },
+    {
+      "name": "Equatorial Guinea",
+      "capital": "Malabo",
+      "region": "Africa",
+      "isoCode": "GQ"
+    },
+    {
+      "name": "Eritrea",
+      "capital": "Asmara",
+      "region": "Africa",
+      "isoCode": "ER"
+    },
+    {
+      "name": "Eswatini",
+      "capital": "Mbabane",
+      "region": "Africa",
+      "isoCode": "SZ"
+    },
+    {
+      "name": "Ethiopia",
+      "capital": "Addis Ababa",
+      "region": "Africa",
+      "isoCode": "ET"
+    },
+    {
+      "name": "Gabon",
+      "capital": "Libreville",
+      "region": "Africa",
+      "isoCode": "GA"
+    },
+    {
+      "name": "Gambia",
+      "capital": "Banjul",
+      "region": "Africa",
+      "isoCode": "GM"
+    },
+    {
+      "name": "Ghana",
+      "capital": "Accra",
+      "region": "Africa",
+      "isoCode": "GH"
+    },
+    {
+      "name": "Guinea",
+      "capital": "Conakry",
+      "region": "Africa",
+      "isoCode": "GN"
+    },
+    {
+      "name": "Guinea-Bissau",
+      "capital": "Bissau",
+      "region": "Africa",
+      "isoCode": "GW"
+    },
+    {
+      "name": "Ivory Coast",
+      "capital": "Yamoussoukro",
+      "region": "Africa",
+      "isoCode": "CI"
+    },
+    {
+      "name": "Kenya",
+      "capital": "Nairobi",
+      "region": "Africa",
+      "isoCode": "KE"
+    },
+    {
+      "name": "Lesotho",
+      "capital": "Maseru",
+      "region": "Africa",
+      "isoCode": "LS"
+    },
+    {
+      "name": "Liberia",
+      "capital": "Monrovia",
+      "region": "Africa",
+      "isoCode": "LR"
+    },
+    {
+      "name": "Libya",
+      "capital": "Tripoli",
+      "region": "Africa",
+      "isoCode": "LY"
+    },
+    {
+      "name": "Madagascar",
+      "capital": "Antananarivo",
+      "region": "Africa",
+      "isoCode": "MG"
+    },
+    {
+      "name": "Malawi",
+      "capital": "Lilongwe",
+      "region": "Africa",
+      "isoCode": "MW"
+    },
+    {
+      "name": "Mali",
+      "capital": "Bamako",
+      "region": "Africa",
+      "isoCode": "ML"
+    },
+    {
+      "name": "Mauritania",
+      "capital": "Nouakchott",
+      "region": "Africa",
+      "isoCode": "MR"
+    },
+    {
+      "name": "Mauritius",
+      "capital": "Port Louis",
+      "region": "Africa",
+      "isoCode": "MU"
+    },
+    {
+      "name": "Morocco",
+      "capital": "Rabat",
+      "region": "Africa",
+      "isoCode": "MA"
+    },
+    {
+      "name": "Mozambique",
+      "capital": "Maputo",
+      "region": "Africa",
+      "isoCode": "MZ"
+    },
+    {
+      "name": "Namibia",
+      "capital": "Windhoek",
+      "region": "Africa",
+      "isoCode": "NA"
+    },
+    {
+      "name": "Niger",
+      "capital": "Niamey",
+      "region": "Africa",
+      "isoCode": "NE"
+    },
+    {
+      "name": "Nigeria",
+      "capital": "Abuja",
+      "region": "Africa",
+      "isoCode": "NG"
+    },
+    {
+      "name": "Rwanda",
+      "capital": "Kigali",
+      "region": "Africa",
+      "isoCode": "RW"
+    },
+    {
+      "name": "Sao Tome and Principe",
+      "capital": "Sao Tome",
+      "region": "Africa",
+      "isoCode": "ST"
+    },
+    {
+      "name": "Senegal",
+      "capital": "Dakar",
+      "region": "Africa",
+      "isoCode": "SN"
+    },
+    {
+      "name": "Seychelles",
+      "capital": "Victoria",
+      "region": "Africa",
+      "isoCode": "SC"
+    },
+    {
+      "name": "Sierra Leone",
+      "capital": "Freetown",
+      "region": "Africa",
+      "isoCode": "SL"
+    },
+    {
+      "name": "Somalia",
+      "capital": "Mogadishu",
+      "region": "Africa",
+      "isoCode": "SO"
+    },
+    {
+      "name": "South Africa",
+      "capital": "Pretoria",
+      "region": "Africa",
+      "isoCode": "ZA"
+    },
+    {
+      "name": "South Sudan",
+      "capital": "Juba",
+      "region": "Africa",
+      "isoCode": "SS"
+    },
+    {
+      "name": "Sudan",
+      "capital": "Khartoum",
+      "region": "Africa",
+      "isoCode": "SD"
+    },
+    {
+      "name": "Tanzania",
+      "capital": "Dodoma",
+      "region": "Africa",
+      "isoCode": "TZ"
+    },
+    {
+      "name": "Togo",
+      "capital": "Lome",
+      "region": "Africa",
+      "isoCode": "TG"
+    },
+    {
+      "name": "Tunisia",
+      "capital": "Tunis",
+      "region": "Africa",
+      "isoCode": "TN"
+    },
+    {
+      "name": "Uganda",
+      "capital": "Kampala",
+      "region": "Africa",
+      "isoCode": "UG"
+    },
+    {
+      "name": "Zambia",
+      "capital": "Lusaka",
+      "region": "Africa",
+      "isoCode": "ZM"
+    },
+    {
+      "name": "Zimbabwe",
+      "capital": "Harare",
+      "region": "Africa",
+      "isoCode": "ZW"
+    }
+  ]
+}
