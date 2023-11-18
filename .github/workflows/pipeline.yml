@@ -84,11 +84,8 @@ jobs:
         run: docker compose -f docker-compose-prod.yml exec php bin/console d:d:c --if-not-exists
       - name: Deploy jwt keys
         run: |
-          docker compose -f docker-compose-prod.yml exec php ls -la /var/www/webapp/config/jwt
-          docker compose -f docker-compose-prod.yml exec php ls -la /var/www/webapp
-          docker compose -f docker-compose-prod.yml exec php ls -la 
-          docker compose -f docker-compose-prod.yml exec php echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode > /var/www/webapp/config/jwt/private.pem
-          docker compose -f docker-compose-prod.yml exec php echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode > /var/www/webapp/config/jwt/public.pem
+          echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
+          echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/public.pem'
       - name: Run Migrations
         run: docker compose -f docker-compose-prod.yml exec php bin/console d:m:m -n
       - name: Validate Schema
