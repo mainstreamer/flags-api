@@ -48,6 +48,8 @@ class CapitalsController extends AbstractController
     #[Route('/api/tg/login', name: 'telegramLogin2', methods: ['GET'])]
     public function authAction(Request $request, JWTEncoderInterface $encoder): Response
     {
+        try {
+
         $data = $request->query->all();
         $hash = $data['hash'];
         unset($data['hash']);
@@ -90,6 +92,10 @@ class CapitalsController extends AbstractController
                 'username' => $user->getTelegramId(),
                 'exp' => time() + 6000000 + getenv('JWT_TOKEN_TTL')
             ]);
+
+        } catch (\Throwable $exception) {
+            return new JsonResponse(['error' => $exception->getMessage()]);
+        }
 
         return new JsonResponse(['token' => $token]);
     }
