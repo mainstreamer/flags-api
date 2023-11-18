@@ -82,10 +82,11 @@ jobs:
         run: docker compose -f docker-compose-prod.yml --env-file .env.prod up -d
       - name: Create DB (if not exists)
         run: docker compose -f docker-compose-prod.yml exec php bin/console d:d:c --if-not-exists
-      - name: Deploy jwt private key
-        run: docker compose -f docker-compose-prod.yml exec php echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode > config/jwt/private.pem
-      - name: Deploy jwt public key
-        run: docker compose -f docker-compose-prod.yml exec php echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode > config/jwt/public.pem
+      - name: Deploy jwt keys
+        run: |
+          docker compose -f docker-compose-prod.yml exec php echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode > /var/www/webapp/config/jwt/private.pem
+          docker compose -f docker-compose-prod.yml exec php echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode > /var/www/webapp/config/jwt/public.pem
+          docker compose -f docker-compose-prod.yml exec php cd /var/www/webapp/config/jwt && ls -la
       - name: Run Migrations
         run: docker compose -f docker-compose-prod.yml exec php bin/console d:m:m -n
       - name: Validate Schema
