@@ -4,6 +4,7 @@ namespace App\Flags\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
@@ -16,7 +17,7 @@ class Answer
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    protected string $id;
+    protected int $id;
     
     /**
      * @ORM\Column(type="integer")

@@ -11,7 +11,7 @@
         "doctrine/doctrine-migrations-bundle": "*",
         "doctrine/orm": "*",
         "lexik/jwt-authentication-bundle": "*",
-        "nelmio/cors-bundle": "*",
+        "nelmio/cors-bundle": "^2.3",
         "rteeom/isoflags": "^1.1",
         "sensio/framework-extra-bundle": "*",
         "symfony/console": "*",

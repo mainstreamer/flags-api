@@ -16,16 +16,16 @@ class Score
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    protected string $id;
+    protected int $id;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer", length=255)
      */
     protected int $sessionTimer;
     
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Type("string")
+     * @ORM\Column(type="integer", length=255)
+     * @Assert\Type("integer")
      */
     protected int $score;
     

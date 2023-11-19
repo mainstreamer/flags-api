@@ -11,6 +11,8 @@ docker tag flags-api-php swiftcode/flags:php-latest
 docker tag flags-api-nginx swiftcode/flags:nginx-latest
 docker tag flags-api-db swiftcode/flags:db-latest
 
+docker push flags-api-nginx swiftcode/flags:nginx-latest
+
 push images to dockerhub repo swiftcode/flags
 docker push swiftcode/flags --all-tags
 
@@ -66,4 +68,8 @@ Secretes (overriden by env vars)
 
 APP_RUNTIME_ENV=prod php bin/console secrets:set DATABASE_URL
 APP_RUNTIME_ENV=prod php bin/console secrets:list --reveal
-Decryption key needs to be added to CI as SYMFONY_DECRYPTION_SECRET in base64 
+Decryption key needs to be added to CI as SYMFONY_DECRYPTION_SECRET in base64
+
+#########
+To add secret 
+secret - set

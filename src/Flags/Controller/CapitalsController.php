@@ -2,7 +2,10 @@
 
 namespace App\Flags\Controller;
 
+use App\Flags\DTO\CapitalsStatDTO;
+use App\Flags\Entity\CapitalsStat;
 use App\Flags\Entity\User;
+use App\Flags\Repository\CapitalsStatRepository;
 use App\Flags\Service\CapitalsGameService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
@@ -39,9 +42,37 @@ class CapitalsController extends AbstractController
         return $this->json($service->giveAnswer($countryCode, base64_decode($answer)));
     }
 
-    #[Route('/capitals/test', name: 'test_cap', methods: ['GET'])]
-    public function test(): JsonResponse
+    #[Route('/capitals/game-over', name: 'capitals_game_over', methods: ['POST'])]
+    public function gameOver(Request $request, CapitalsGameService $service): JsonResponse
     {
+        try {
+            $entituy = $service->handleGameOver($request);
+           return new JsonResponse($entituy);
+        } catch (\Throwable $e) {
+            return new JsonResponse($e->getMessage());
+        }
+    }
+
+    #[Route('/capitals/high-scores', name: 'capitals_high_scores', methods: ['GET'])]
+    public function highScores(Request $request, CapitalsGameService $service): JsonResponse
+    {
+        try {
+            return new JsonResponse($service->getHighScores());
+        } catch (\Throwable $e) {
+            return new JsonResponse($e->getMessage());
+        }
+    }
+
+    #[Route('/capitals/test', name: 'test_cap', methods: ['GET'])]
+    public function test(CapitalsGameService $service): JsonResponse
+    {
+
+        try {
+            return new JsonResponse($service->getHighScores());
+        } catch (\Throwable $e) {
+            return new JsonResponse($e->getMessage());
+        }
+
         return $this->json($this->flagsGenerator->getEmojiFlagOrNull('ss'));
     }
 
