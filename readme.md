@@ -10,8 +10,9 @@ To create a deployment you need to tag your images to be deployed:
 docker tag flags-api-php swiftcode/flags:php-latest
 docker tag flags-api-nginx swiftcode/flags:nginx-latest
 docker tag flags-api-db swiftcode/flags:db-latest
+docker push swiftcode/flags:db-latest
 
-docker push flags-api-nginx swiftcode/flags:nginx-latest
+docker push swiftcode/flags:nginx-latest
 
 push images to dockerhub repo swiftcode/flags
 docker push swiftcode/flags --all-tags
