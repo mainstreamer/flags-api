@@ -8,6 +8,8 @@ services:
             file: docker-compose.yml
             service: php
         image: ${IMAGE}:php-latest
+        build:
+            dockerfile: .docker/php-fpm/Dockerfile
     nginx:
         extends:
             file: docker-compose.yml
