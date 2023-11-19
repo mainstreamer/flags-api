@@ -74,3 +74,11 @@ Decryption key needs to be added to CI as SYMFONY_DECRYPTION_SECRET in base64
 #########
 To add secret 
 secret - set
+
+
+
+##############
+LOCAL PROD REPRODUCTION
+
+docker compose -f docker-compose-prod.yml --env-file .env.prod pull
+docker compose -f docker-compose-prod.yml --env-file .env.prod up -d
