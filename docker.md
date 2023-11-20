@@ -38,3 +38,8 @@ docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=138
 create/update docker context:
 docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=ca.pem,cert=cert.pem,key=key.pem"
 docker context update icu --docker "host=tcp://138.68.184.69:2376,ca=ca.pem,cert=cert.pem,key=key.pem"
+
+
+local check of prod env:
+
+docker compose -f docker-compose-prod.yml --env-file .env.prod.local up -d

@@ -76,6 +76,8 @@ jobs:
         run: docker context use icu
       - name: Pull Images
         run: docker compose -f docker-compose-prod.yml --env-file .env.prod pull
+      - name: Network check or create
+        run:  docker network ls | grep -q backend-flags || docker network create backend-flags
       - name: Deploy Images
         env:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}

@@ -81,4 +81,4 @@ secret - set
 LOCAL PROD REPRODUCTION
 
 docker compose -f docker-compose-prod.yml --env-file .env.prod pull
-docker compose -f docker-compose-prod.yml --env-file .env.prod up -d
+docker compose -f docker-compose-prod.yml --env-file .env.prod.local up -d
