@@ -43,3 +43,7 @@ docker context update icu --docker "host=tcp://138.68.184.69:2376,ca=ca.pem,cert
 local check of prod env:
 
 docker compose -f docker-compose-prod.yml --env-file .env.prod.local up -d
+
+
+### need to create or check this network
+docker network ls | grep -q backend-flags || docker network create backend-flags
