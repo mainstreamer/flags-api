@@ -42,7 +42,7 @@ class Score
     /**
      * @return int|mixed
      */
-    public function getSessionTimer()
+    public function getSessionTimer(): int
     {
         return $this->sessionTimer;
     }

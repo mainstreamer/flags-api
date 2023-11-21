@@ -26,3 +26,7 @@ deploy.php
 .DS_Store
 /.docker/certs/*.pem
 /.docker/certs/*.srl
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

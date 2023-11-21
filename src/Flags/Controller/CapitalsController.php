@@ -2,10 +2,8 @@
 
 namespace App\Flags\Controller;
 
-use App\Flags\DTO\CapitalsStatDTO;
-use App\Flags\Entity\CapitalsStat;
+use App\Flags\Entity\Game;
 use App\Flags\Entity\User;
-use App\Flags\Repository\CapitalsStatRepository;
 use App\Flags\Service\CapitalsGameService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
@@ -30,10 +28,16 @@ class CapitalsController extends AbstractController
         $this->flagsGenerator = new FlagsGenerator();
     }
 
-    #[Route('/capitals', name: 'check_cap', methods: ['GET'])]
+    #[Route('/capitals', name: 'get_question', methods: ['GET'])]
     public function check(CapitalsGameService $service): JsonResponse
     {
         return $this->json($service->getQuestion());
+    }
+
+    #[Route('/capitals/question/{game}', name: 'get_question_with_game', methods: ['GET'])]
+    public function questionForGame(Game $game, CapitalsGameService $service): JsonResponse
+    {
+        return $this->json($service->getQuestion($game));
     }
 
     #[Route('/capitals/{countryCode}/{answer}', name: 'answer_cap', methods: ['GET'])]
@@ -46,11 +50,17 @@ class CapitalsController extends AbstractController
     public function gameOver(Request $request, CapitalsGameService $service): JsonResponse
     {
         try {
-            $entituy = $service->handleGameOver($request);
-           return new JsonResponse($entituy);
+            $entity = $service->handleGameOver($request);
+           return new JsonResponse($entity);
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());
         }
+    }
+
+    #[Route('/capitals/answer/{game}/{countryCode}/{answer}', name: 'get_question_for_game', methods: ['GET'])]
+    public function getQuestion(Game $game, string $countryCode, string $answer, CapitalsGameService $service): JsonResponse
+    {
+        return $this->json($service->giveAnswer($countryCode, base64_decode($answer), $game));
     }
 
     #[Route('/capitals/high-scores', name: 'capitals_high_scores', methods: ['GET'])]
@@ -66,14 +76,36 @@ class CapitalsController extends AbstractController
     #[Route('/capitals/test', name: 'test_cap', methods: ['GET'])]
     public function test(CapitalsGameService $service): JsonResponse
     {
-
         try {
-            return new JsonResponse($service->getHighScores());
+            return new JsonResponse($service->startGame());
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());
         }
 
         return $this->json($this->flagsGenerator->getEmojiFlagOrNull('ss'));
+    }
+
+    #[Route('/capitals/test2', name: 'test_cap', methods: ['GET'])]
+    public function test2(CapitalsGameService $service): JsonResponse
+    {
+        try {
+            return new JsonResponse($service->startGame());
+        } catch (\Throwable $e) {
+            return new JsonResponse($e->getMessage());
+        }
+
+        return $this->json($this->flagsGenerator->getEmojiFlagOrNull('ss'));
+    }
+
+    #[Route('/capitals/game-start', name: 'capitals_game_start', methods: ['GET'])]
+    public function startGame(CapitalsGameService $service): JsonResponse
+    {
+        try {
+            $game = $service->startGame();
+            return new JsonResponse(['gameId' => $game->getId()]);
+        } catch (\Throwable $e) {
+            return new JsonResponse($e->getMessage());
+        }
     }
 
     #[Route('/api/tg/login', name: 'telegramLogin2', methods: ['GET'])]
@@ -121,7 +153,7 @@ class CapitalsController extends AbstractController
         $token = $encoder
             ->encode([
                 'username' => $user->getTelegramId(),
-                'exp' => time() + 6000000 + getenv('JWT_TOKEN_TTL')
+                'exp' => time() + 600000 + getenv('JWT_TOKEN_TTL')
             ]);
 
         } catch (\Throwable $exception) {

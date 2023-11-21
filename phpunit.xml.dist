@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
         backupGlobals="false"
         colors="true"
-        bootstrap="vendor/autoload.php"
+        bootstrap="config/bootstrap.php"
 >
     <coverage processUncoveredFiles="true">
         <include>
@@ -17,4 +17,7 @@
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
+    <php>
+        <env name="KERNEL_CLASS" value="App\Kernel" />
+    </php>
 </phpunit>
