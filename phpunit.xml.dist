@@ -20,5 +20,6 @@
     </testsuites>
     <php>
         <env name="KERNEL_CLASS" value="App\Kernel" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" />
     </php>
 </phpunit>
