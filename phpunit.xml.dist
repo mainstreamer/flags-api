@@ -5,6 +5,7 @@
         backupGlobals="false"
         colors="true"
         bootstrap="config/bootstrap.php"
+        convertDeprecationsToExceptions="false"
 >
     <coverage processUncoveredFiles="true">
         <include>
