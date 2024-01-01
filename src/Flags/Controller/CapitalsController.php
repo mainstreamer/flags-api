@@ -2,6 +2,7 @@
 
 namespace App\Flags\Controller;
 
+use App\Flags\Entity\Enum\GameType;
 use App\Flags\Entity\Game;
 use App\Flags\Entity\User;
 use App\Flags\Service\CapitalsGameService;
@@ -85,11 +86,11 @@ class CapitalsController extends AbstractController
         return $this->json($this->flagsGenerator->getEmojiFlagOrNull('ss'));
     }
 
-    #[Route('/capitals/test2', name: 'test_cap', methods: ['GET'])]
+    #[Route('/capitals/test2', name: 'test_cap2', methods: ['GET'])]
     public function test2(CapitalsGameService $service): JsonResponse
     {
         try {
-            return new JsonResponse($service->startGame());
+            return new JsonResponse($service->startGame(GameType::CAPITALS_EUROPE));
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());
         }
@@ -97,11 +98,11 @@ class CapitalsController extends AbstractController
         return $this->json($this->flagsGenerator->getEmojiFlagOrNull('ss'));
     }
 
-    #[Route('/capitals/game-start', name: 'capitals_game_start', methods: ['GET'])]
-    public function startGame(CapitalsGameService $service): JsonResponse
+    #[Route('/capitals/game-start/{type}', name: 'capitals_game_start', methods: ['GET'])]
+    public function startGame(string $type, CapitalsGameService $service): JsonResponse
     {
         try {
-            $game = $service->startGame();
+            $game = $service->startGame(GameType::from($type));
             return new JsonResponse(['gameId' => $game->getId()]);
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());

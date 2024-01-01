@@ -60,9 +60,6 @@ class CapitalsGameService
             }
         }
 
-
-
-
         $optionsDebug = $options;
         /** @var Capital $correct */
         $correct = (array_pop($options));
@@ -116,11 +113,11 @@ class CapitalsGameService
         ['userName' => $item['firstName'] .' ' .$item['lastName'],'score' => $item['score'], 'sessionTimer' => $item['sessionTimer']], $this->entityManager->getRepository(CapitalsStat::class)->getHighScores());
     }
 
-    public function startGame(): Game
+    public function startGame(GameType $gameType): Game
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
-        $this->entityManager->persist($g = new Game($user, GameType::CAPITALS_AFRICA));
+        $this->entityManager->persist($g = new Game($user, $gameType));
         $this->entityManager->flush();
         return $g;
     }

@@ -1,0 +1,34 @@
+{
+  "countries": [
+    {
+      "name": "Afghanistan",
+      "capital": "Kabul",
+      "region": "Asia",
+      "isoCode": "AF"
+    },
+    {
+      "name": "Bangladesh",
+      "capital": "Dhaka",
+      "region": "Asia",
+      "isoCode": "BD"
+    },
+    {
+      "name": "China",
+      "capital": "Beijing",
+      "region": "Asia",
+      "isoCode": "CN"
+    },
+    {
+      "name": "India",
+      "capital": "New Delhi",
+      "region": "Asia",
+      "isoCode": "IN"
+    },
+    {
+      "name": "Japan",
+      "capital": "Tokyo",
+      "region": "Asia",
+      "isoCode": "JP"
+    }
+  ]
+}

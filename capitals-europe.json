@@ -1,0 +1,280 @@
+{
+  "countries": [
+    {
+      "name": "Albania",
+      "capital": "Tirana",
+      "region": "Europe",
+      "isoCode": "AL"
+    },
+    {
+      "name": "Andorra",
+      "capital": "Andorra la Vella",
+      "region": "Europe",
+      "isoCode": "AD"
+    },
+    {
+      "name": "Austria",
+      "capital": "Vienna",
+      "region": "Europe",
+      "isoCode": "AT"
+    },
+    {
+      "name": "Belarus",
+      "capital": "Minsk",
+      "region": "Europe",
+      "isoCode": "BY"
+    },
+    {
+      "name": "Belgium",
+      "capital": "Brussels",
+      "region": "Europe",
+      "isoCode": "BE"
+    },
+    {
+      "name": "Bosnia and Herzegovina",
+      "capital": "Sarajevo",
+      "region": "Europe",
+      "isoCode": "BA"
+    },
+    {
+      "name": "Bulgaria",
+      "capital": "Sofia",
+      "region": "Europe",
+      "isoCode": "BG"
+    },
+    {
+      "name": "Croatia",
+      "capital": "Zagreb",
+      "region": "Europe",
+      "isoCode": "HR"
+    },
+    {
+      "name": "Cyprus",
+      "capital": "Nicosia",
+      "region": "Europe",
+      "isoCode": "CY"
+    },
+    {
+      "name": "Czech Republic",
+      "capital": "Prague",
+      "region": "Europe",
+      "isoCode": "CZ"
+    },
+    {
+      "name": "Denmark",
+      "capital": "Copenhagen",
+      "region": "Europe",
+      "isoCode": "DK"
+    },
+    {
+      "name": "Estonia",
+      "capital": "Tallinn",
+      "region": "Europe",
+      "isoCode": "EE"
+    },
+    {
+      "name": "Finland",
+      "capital": "Helsinki",
+      "region": "Europe",
+      "isoCode": "FI"
+    },
+    {
+      "name": "France",
+      "capital": "Paris",
+      "region": "Europe",
+      "isoCode": "FR"
+    },
+    {
+      "name": "Germany",
+      "capital": "Berlin",
+      "region": "Europe",
+      "isoCode": "DE"
+    },
+    {
+      "name": "Greece",
+      "capital": "Athens",
+      "region": "Europe",
+      "isoCode": "GR"
+    },
+    {
+      "name": "Hungary",
+      "capital": "Budapest",
+      "region": "Europe",
+      "isoCode": "HU"
+    },
+    {
+      "name": "Iceland",
+      "capital": "Reykjavik",
+      "region": "Europe",
+      "isoCode": "IS"
+    },
+    {
+      "name": "Ireland",
+      "capital": "Dublin",
+      "region": "Europe",
+      "isoCode": "IE"
+    },
+    {
+      "name": "Italy",
+      "capital": "Rome",
+      "region": "Europe",
+      "isoCode": "IT"
+    },
+    {
+      "name": "Kosovo",
+      "capital": "Pristina",
+      "region": "Europe",
+      "isoCode": "XK"
+    },
+    {
+      "name": "Latvia",
+      "capital": "Riga",
+      "region": "Europe",
+      "isoCode": "LV"
+    },
+    {
+      "name": "Liechtenstein",
+      "capital": "Vaduz",
+      "region": "Europe",
+      "isoCode": "LI"
+    },
+    {
+      "name": "Lithuania",
+      "capital": "Vilnius",
+      "region": "Europe",
+      "isoCode": "LT"
+    },
+    {
+      "name": "Luxembourg",
+      "capital": "Luxembourg City",
+      "region": "Europe",
+      "isoCode": "LU"
+    },
+    {
+      "name": "Malta",
+      "capital": "Valletta",
+      "region": "Europe",
+      "isoCode": "MT"
+    },
+    {
+      "name": "Moldova",
+      "capital": "Chisinau",
+      "region": "Europe",
+      "isoCode": "MD"
+    },
+    {
+      "name": "Monaco",
+      "capital": "Monaco",
+      "region": "Europe",
+      "isoCode": "MC"
+    },
+    {
+      "name": "Montenegro",
+      "capital": "Podgorica",
+      "region": "Europe",
+      "isoCode": "ME"
+    },
+    {
+      "name": "Netherlands",
+      "capital": "Amsterdam",
+      "region": "Europe",
+      "isoCode": "NL"
+    },
+    {
+      "name": "North Macedonia",
+      "capital": "Skopje",
+      "region": "Europe",
+      "isoCode": "MK"
+    },
+    {
+      "name": "Norway",
+      "capital": "Oslo",
+      "region": "Europe",
+      "isoCode": "NO"
+    },
+    {
+      "name": "Poland",
+      "capital": "Warsaw",
+      "region": "Europe",
+      "isoCode": "PL"
+    },
+    {
+      "name": "Portugal",
+      "capital": "Lisbon",
+      "region": "Europe",
+      "isoCode": "PT"
+    },
+    {
+      "name": "Romania",
+      "capital": "Bucharest",
+      "region": "Europe",
+      "isoCode": "RO"
+    },
+    {
+      "name": "Russia",
+      "capital": "Moscow",
+      "region": "Europe",
+      "isoCode": "RU"
+    },
+    {
+      "name": "San Marino",
+      "capital": "San Marino",
+      "region": "Europe",
+      "isoCode": "SM"
+    },
+    {
+      "name": "Serbia",
+      "capital": "Belgrade",
+      "region": "Europe",
+      "isoCode": "RS"
+    },
+    {
+      "name": "Slovakia",
+      "capital": "Bratislava",
+      "region": "Europe",
+      "isoCode": "SK"
+    },
+    {
+      "name": "Slovenia",
+      "capital": "Ljubljana",
+      "region": "Europe",
+      "isoCode": "SI"
+    },
+    {
+      "name": "Spain",
+      "capital": "Madrid",
+      "region": "Europe",
+      "isoCode": "ES"
+    },
+    {
+      "name": "Sweden",
+      "capital": "Stockholm",
+      "region": "Europe",
+      "isoCode": "SE"
+    },
+    {
+      "name": "Switzerland",
+      "capital": "Bern",
+      "region": "Europe",
+      "isoCode": "CH"
+    },
+    {
+      "name": "Ukraine",
+      "capital": "Kyiv",
+      "region": "Europe",
+      "isoCode": "UA"
+    },
+    {
+      "name": "United Kingdom",
+      "capital": "London",
+      "region": "Europe",
+      "isoCode": "GB"
+    },
+    {
+      "name": "Vatican City",
+      "capital": "Vatican City",
+      "region": "Europe",
+      "isoCode": "VA"
+    }
+  ]
+}

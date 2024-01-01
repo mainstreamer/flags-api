@@ -1,0 +1,154 @@
+{
+  "countries": [
+    {
+      "name": "Australia",
+      "capital": "Canberra",
+      "region": "Oceania",
+      "isoCode": "AU"
+    },
+    {
+      "name": "Fiji",
+      "capital": "Suva",
+      "region": "Oceania",
+      "isoCode": "FJ"
+    },
+    {
+      "name": "Kiribati",
+      "capital": "South Tarawa",
+      "region": "Oceania",
+      "isoCode": "KI"
+    },
+    {
+      "name": "Marshall Islands",
+      "capital": "Majuro",
+      "region": "Oceania",
+      "isoCode": "MH"
+    },
+    {
+      "name": "Micronesia",
+      "capital": "Palikir",
+      "region": "Oceania",
+      "isoCode": "FM"
+    },
+    {
+      "name": "Nauru",
+      "capital": "Yaren",
+      "region": "Oceania",
+      "isoCode": "NR"
+    },
+    {
+      "name": "New Zealand",
+      "capital": "Wellington",
+      "region": "Oceania",
+      "isoCode": "NZ"
+    },
+    {
+      "name": "Palau",
+      "capital": "Ngerulmud",
+      "region": "Oceania",
+      "isoCode": "PW"
+    },
+    {
+      "name": "Papua New Guinea",
+      "capital": "Port Moresby",
+      "region": "Oceania",
+      "isoCode": "PG"
+    },
+    {
+      "name": "Samoa",
+      "capital": "Apia",
+      "region": "Oceania",
+      "isoCode": "WS"
+    },
+    {
+      "name": "Solomon Islands",
+      "capital": "Honiara",
+      "region": "Oceania",
+      "isoCode": "SB"
+    },
+    {
+      "name": "Tonga",
+      "capital": "Nuku'alofa",
+      "region": "Oceania",
+      "isoCode": "TO"
+    },
+    {
+      "name": "Tuvalu",
+      "capital": "Funafuti",
+      "region": "Oceania",
+      "isoCode": "TV"
+    },
+    {
+      "name": "Vanuatu",
+      "capital": "Port Vila",
+      "region": "Oceania",
+      "isoCode": "VU"
+    },
+    {
+      "name": "American Samoa",
+      "capital": "Pago Pago",
+      "region": "Oceania",
+      "isoCode": "AS"
+    },
+    {
+      "name": "Cook Islands",
+      "capital": "Avarua",
+      "region": "Oceania",
+      "isoCode": "CK"
+    },
+    {
+      "name": "French Polynesia",
+      "capital": "Papeete",
+      "region": "Oceania",
+      "isoCode": "PF"
+    },
+    {
+      "name": "Guam",
+      "capital": "Hagåtña",
+      "region": "Oceania",
+      "isoCode": "GU"
+    },
+    {
+      "name": "New Caledonia",
+      "capital": "Nouméa",
+      "region": "Oceania",
+      "isoCode": "NC"
+    },
+    {
+      "name": "Niue",
+      "capital": "Alofi",
+      "region": "Oceania",
+      "isoCode": "NU"
+    },
+    {
+      "name": "Norfolk Island",
+      "capital": "Kingston",
+      "region": "Oceania",
+      "isoCode": "NF"
+    },
+    {
+      "name": "Northern Mariana Islands",
+      "capital": "Saipan",
+      "region": "Oceania",
+      "isoCode": "MP"
+    },
+    {
+      "name": "Pitcairn Islands",
+      "capital": "Adamstown",
+      "region": "Oceania",
+      "isoCode": "PN"
+    },
+    {
+      "name": "Tokelau",
+      "capital": "Nukunonu",
+      "region": "Oceania",
+      "isoCode": "TK"
+    },
+    {
+      "name": "Wallis and Futuna",
+      "capital": "Mata-Utu",
+      "region": "Oceania",
+      "isoCode": "WF"
+    }
+  ]
+}
