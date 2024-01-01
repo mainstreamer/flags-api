@@ -96,3 +96,55 @@ jobs:
         run: docker image prune --force
       - name: Remove keys
         run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
+
+  deploy-staging:
+    needs: symfony-tests
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        env:
+          GITH_KEY: ${{ secrets.GITH_KEY }}
+        run: printenv && docker compose build php
+      - name: Tag Docker image
+        run: |
+          docker tag flags-api-php swiftcode/flags:php-staging
+      - name: Login to DockerHub
+        env:
+          DH_KEY: ${{ secrets.DH_KEY }}
+          DH_LOGIN: ${{ secrets.DH_LOGIN }}
+        run: docker login -u ${DH_LOGIN} -p ${DH_KEY}
+      - name: Push Images
+        run: docker push swiftcode/flags --all-tags
+      - name: Write Secrets
+        run: |
+          echo "${{ secrets.DD_KEY }}" | base64 --decode > ${HOME}/key.pem
+          echo "${{ secrets.DD_CA }}" | base64 --decode > ${HOME}/ca.pem
+          echo "${{ secrets.DD_CERT }}" | base64 --decode > ${HOME}/cert.pem
+          cd ${HOME} && ls -la
+          docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=${HOME}/ca.pem,cert=${HOME}/cert.pem,key=${HOME}/key.pem"
+      - name: Check context
+        run: docker context list
+      - name: Use context
+        run: docker context use icu
+      - name: Pull Images
+        run: docker compose -f docker-compose-staging.yml --env-file .env.staging pull
+      - name: Deploy Images
+        env:
+          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
+        run: docker compose -f docker-compose-staging.yml --env-file .env.staging up -d
+      - name: Create DB (if not exists)
+        run: docker compose -f docker-compose-staging.yml exec php bin/console d:d:c --if-not-exists
+      - name: Deploy jwt keys
+        run: |
+          echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-staging.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
+          echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode | docker compose -f docker-compose-staging.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/public.pem'
+      - name: Run Migrations
+        run: docker compose -f docker-compose-staging.yml exec php bin/console d:m:m -n
+      - name: Validate Schema
+        run: docker compose -f docker-compose-staging.yml exec php bin/console d:s:v
+      - name: Prune Images
+        run: docker image prune --force
+      - name: Remove keys
+        run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
