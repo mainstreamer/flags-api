@@ -1,35 +1,43 @@
 version: "3.6"
 services:
     php:
+        container_name: "php-staging-${PROJECT_NAME}"
+        build:
+            args:
+                KEY: ${GITH_KEY}
+            context: .
+            dockerfile: .docker/php-fpm/Dockerfile
+        depends_on:
+            - nginx
         environment:
             VERSION_HASH: "${GITHUB_SHA:-none}"
             SYMFONY_DECRYPTION_SECRET: "${SYMFONY_DECRYPTION_SECRET}"
-        extends:
-            file: docker-compose.yml
-            service: php
-#        image: ${IMAGE}:php-staging
-        build:
-            dockerfile: .docker/php-fpm/Dockerfile
         networks:
             - backend-flags-staging
     nginx:
-        extends:
-            file: docker-compose.yml
-            service: nginx
-        image: ${IMAGE}:nginx-latest
-        container_name: "nginx-${PROJECT_NAME}"
+        container_name: "nginx-staging-${PROJECT_NAME}"
+        build:
+            context: .
+            dockerfile: .docker/nginx/Dockerfile
+        restart: always
         ports:
             - "8080:80"
             - "4443:443"
         networks:
             - backend-flags-staging
     db:
-        extends:
-            file: docker-compose.yml
-            service: db
-        image: ${IMAGE}:db-latest
+        build:
+            context: .
+            dockerfile: .docker/mysql/Dockerfile
+        container_name: "db-staging-${PROJECT_NAME}"
         environment:
+            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
             MYSQL_DATABASE: "flags_staging"
+            MYSQL_USER: "${MYSQL_USER}"
+            MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+        volumes:
+            - db-data-flags-staging:/var/lib/mysql
+        restart: always
         ports:
             - "33061:3306"
         networks:
