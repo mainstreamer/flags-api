@@ -8,7 +8,6 @@ use App\Flags\Entity\Enum\GameType;
 use App\Flags\Entity\Game;
 use App\Flags\Entity\User;
 use App\Flags\Repository\CapitalRepository;
-use App\Flags\Repository\CapitalsStatRepository;
 use App\Flags\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -36,7 +35,7 @@ class CapitalsGameService
     {
         $excluded = $game !== null ? $game->getQuestions() : [];
 
-        $v = match ($game->getType()->value) {
+        $region = match ($game->getType()->value) {
           GameType::CAPITALS_AFRICA->value => 'Africa',
           GameType::CAPITALS_AMERICAS->value => 'Americas',
           GameType::CAPITALS_ASIA->value => 'Asia',
@@ -44,18 +43,19 @@ class CapitalsGameService
           GameType::CAPITALS_OCEANIA->value => 'Oceania',
         };
 
-        $african = $this->repository->findBy(['region' => $v], ['id' => 'ASC']);
-        if (!$african) {
+        $countries = $this->repository->findBy(['region' => $region], ['id' => 'ASC']);
+        if (!$countries) {
             throw new Exception('no countries found');
         }
 
-        $totalQuestions = count($african);
-        $options = [];
+        $totalQuestions = count($countries);
         $excludedCount = count($excluded);
+        $options = [];
+
         while (count($options) < 4) {
-            shuffle($african);
+            shuffle($countries);
             if (count($options) === 3) {
-                $capital = array_pop($african);
+                $capital = array_pop($countries);
                 if ($excludedCount < $totalQuestions && in_array($capital->getCode(), $excluded)) {
 
                 } else {
@@ -67,7 +67,7 @@ class CapitalsGameService
                     }
                 }
             } else {
-                $options[] = array_pop($african);
+                $options[] = array_pop($countries);
             }
         }
 

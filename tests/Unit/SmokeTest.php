@@ -40,4 +40,20 @@ class SmokeTest extends KernelTestCase
 
         $this->assertTrue(true);
     }
+
+    public function testCount()
+    {
+        foreach (self::COUNTRY_FILES as $fileName) {
+            if (file_exists($fileName)) {
+                ['countries' => $countries] = json_decode(file_get_contents($fileName), true);
+                match ($fileName) {
+                    'capitals-africa.json' => self::assertCount(54, $countries),
+                    'capitals-americas.json' => self::assertCount(53, $countries),
+                    'capitals-asia.json' => self::assertCount(48, $countries),
+                    'capitals-europe.json' => self::assertCount(46, $countries),
+                    'capitals-oceania.json' => self::assertCount(25, $countries),
+                };
+            }
+        }
+    }
 }
