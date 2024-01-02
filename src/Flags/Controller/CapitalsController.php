@@ -86,7 +86,7 @@ class CapitalsController extends AbstractController
     public function test(CapitalsGameService $service): JsonResponse
     {
         try {
-            return new JsonResponse($service->startGame());
+            return new JsonResponse($service->startGame(GameType::CAPITALS_EUROPE));
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());
         }
