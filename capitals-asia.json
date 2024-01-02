@@ -1,0 +1,292 @@
+{
+  "countries": [
+    {
+      "name": "Afghanistan",
+      "capital": "Kabul",
+      "region": "Asia",
+      "isoCode": "AF"
+    },
+    {
+      "name": "Armenia",
+      "capital": "Yerevan",
+      "region": "Asia",
+      "isoCode": "AM"
+    },
+    {
+      "name": "Azerbaijan",
+      "capital": "Baku",
+      "region": "Asia",
+      "isoCode": "AZ"
+    },
+    {
+      "name": "Bahrain",
+      "capital": "Manama",
+      "region": "Asia",
+      "isoCode": "BH"
+    },
+    {
+      "name": "Bangladesh",
+      "capital": "Dhaka",
+      "region": "Asia",
+      "isoCode": "BD"
+    },
+    {
+      "name": "Bhutan",
+      "capital": "Thimphu",
+      "region": "Asia",
+      "isoCode": "BT"
+    },
+    {
+      "name": "Brunei",
+      "capital": "Bandar Seri Begawan",
+      "region": "Asia",
+      "isoCode": "BN"
+    },
+    {
+      "name": "Cambodia",
+      "capital": "Phnom Penh",
+      "region": "Asia",
+      "isoCode": "KH"
+    },
+    {
+      "name": "China",
+      "capital": "Beijing",
+      "region": "Asia",
+      "isoCode": "CN"
+    },
+    {
+      "name": "Cyprus",
+      "capital": "Nicosia",
+      "region": "Asia",
+      "isoCode": "CY"
+    },
+    {
+      "name": "Georgia",
+      "capital": "Tbilisi",
+      "region": "Asia",
+      "isoCode": "GE"
+    },
+    {
+      "name": "India",
+      "capital": "New Delhi",
+      "region": "Asia",
+      "isoCode": "IN"
+    },
+    {
+      "name": "Indonesia",
+      "capital": "Jakarta",
+      "region": "Asia",
+      "isoCode": "ID"
+    },
+    {
+      "name": "Iran",
+      "capital": "Tehran",
+      "region": "Asia",
+      "isoCode": "IR"
+    },
+    {
+      "name": "Iraq",
+      "capital": "Baghdad",
+      "region": "Asia",
+      "isoCode": "IQ"
+    },
+    {
+      "name": "Israel",
+      "capital": "Jerusalem",
+      "region": "Asia",
+      "isoCode": "IL"
+    },
+    {
+      "name": "Japan",
+      "capital": "Tokyo",
+      "region": "Asia",
+      "isoCode": "JP"
+    },
+    {
+      "name": "Jordan",
+      "capital": "Amman",
+      "region": "Asia",
+      "isoCode": "JO"
+    },
+    {
+      "name": "Kazakhstan",
+      "capital": "Nur-Sultan",
+      "region": "Asia",
+      "isoCode": "KZ"
+    },
+    {
+      "name": "Kuwait",
+      "capital": "Kuwait City",
+      "region": "Asia",
+      "isoCode": "KW"
+    },
+    {
+      "name": "Kyrgyzstan",
+      "capital": "Bishkek",
+      "region": "Asia",
+      "isoCode": "KG"
+    },
+    {
+      "name": "Laos",
+      "capital": "Vientiane",
+      "region": "Asia",
+      "isoCode": "LA"
+    },
+    {
+      "name": "Lebanon",
+      "capital": "Beirut",
+      "region": "Asia",
+      "isoCode": "LB"
+    },
+    {
+      "name": "Malaysia",
+      "capital": "Kuala Lumpur",
+      "region": "Asia",
+      "isoCode": "MY"
+    },
+    {
+      "name": "Maldives",
+      "capital": "Male",
+      "region": "Asia",
+      "isoCode": "MV"
+    },
+    {
+      "name": "Mongolia",
+      "capital": "Ulaanbaatar",
+      "region": "Asia",
+      "isoCode": "MN"
+    },
+    {
+      "name": "Myanmar",
+      "capital": "Naypyidaw",
+      "region": "Asia",
+      "isoCode": "MM"
+    },
+    {
+      "name": "Nepal",
+      "capital": "Kathmandu",
+      "region": "Asia",
+      "isoCode": "NP"
+    },
+    {
+      "name": "North Korea",
+      "capital": "Pyongyang",
+      "region": "Asia",
+      "isoCode": "KP"
+    },
+    {
+      "name": "Oman",
+      "capital": "Muscat",
+      "region": "Asia",
+      "isoCode": "OM"
+    },
+    {
+      "name": "Pakistan",
+      "capital": "Islamabad",
+      "region": "Asia",
+      "isoCode": "PK"
+    },
+    {
+      "name": "Palestine",
+      "capital": "Ramallah",
+      "region": "Asia",
+      "isoCode": "PS"
+    },
+    {
+      "name": "Philippines",
+      "capital": "Manila",
+      "region": "Asia",
+      "isoCode": "PH"
+    },
+    {
+      "name": "Qatar",
+      "capital": "Doha",
+      "region": "Asia",
+      "isoCode": "QA"
+    },
+    {
+      "name": "Saudi Arabia",
+      "capital": "Riyadh",
+      "region": "Asia",
+      "isoCode": "SA"
+    },
+    {
+      "name": "Singapore",
+      "capital": "Singapore",
+      "region": "Asia",
+      "isoCode": "SG"
+    },
+    {
+      "name": "South Korea",
+      "capital": "Seoul",
+      "region": "Asia",
+      "isoCode": "KR"
+    },
+    {
+      "name": "Sri Lanka",
+      "capital": "Colombo",
+      "region": "Asia",
+      "isoCode": "LK"
+    },
+    {
+      "name": "Syria",
+      "capital": "Damascus",
+      "region": "Asia",
+      "isoCode": "SY"
+    },
+    {
+      "name": "Tajikistan",
+      "capital": "Dushanbe",
+      "region": "Asia",
+      "isoCode": "TJ"
+    },
+    {
+      "name": "Thailand",
+      "capital": "Bangkok",
+      "region": "Asia",
+      "isoCode": "TH"
+    },
+    {
+      "name": "Timor-Leste",
+      "capital": "Dili",
+      "region": "Asia",
+      "isoCode": "TL"
+    },
+    {
+      "name": "Turkey",
+      "capital": "Ankara",
+      "region": "Asia",
+      "isoCode": "TR"
+    },
+    {
+      "name": "Turkmenistan",
+      "capital": "Ashgabat",
+      "region": "Asia",
+      "isoCode": "TM"
+    },
+    {
+      "name": "United Arab Emirates",
+      "capital": "Abu Dhabi",
+      "region": "Asia",
+      "isoCode": "AE"
+    },
+    {
+      "name": "Uzbekistan",
+      "capital": "Tashkent",
+      "region": "Asia",
+      "isoCode": "UZ"
+    },
+    {
+      "name": "Vietnam",
+      "capital": "Hanoi",
+      "region": "Asia",
+      "isoCode": "VN"
+    },
+    {
+      "name": "Yemen",
+      "capital": "Sana'a",
+      "region": "Asia",
+      "isoCode": "YE"
+    }
+  ]
+}

@@ -2,6 +2,7 @@
 
 namespace App\Flags\Entity;
 
+use App\Flags\Entity\Enum\GameType;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 
@@ -33,6 +34,11 @@ class CapitalsStat
     protected readonly User $user;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected string $gameType;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     protected readonly DateTime $created;
@@ -41,12 +47,14 @@ class CapitalsStat
         int $sessionTimer,
         int $score,
         User $user,
+        GameType $gameType,
         DateTime $created = new DateTime()
     ) {
         $this->sessionTimer = $sessionTimer;
         $this->score = $score;
         $this->user = $user;
         $this->created = $created;
+        $this->gameType = $gameType->value;
     }
 
     public function getSessionTimer(): int
@@ -72,5 +80,10 @@ class CapitalsStat
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getGameType(): GameType
+    {
+        return GameType::from($this->gameType);
     }
 }

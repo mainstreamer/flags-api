@@ -6,7 +6,7 @@ services:
     db:
         ports:
             - "3306:3306"
-#    nginx:
-#        ports:
-#            - "80:80"
-#            - "443:443"
+    nginx:
+        ports:
+            - "80:80"
+            - "443:443"

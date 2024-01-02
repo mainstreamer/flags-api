@@ -1,0 +1,322 @@
+{
+  "countries": [
+    {
+      "name": "Antigua and Barbuda",
+      "capital": "St. John's",
+      "region": "Americas",
+      "isoCode": "AG"
+    },
+    {
+      "name": "Argentina",
+      "capital": "Buenos Aires",
+      "region": "Americas",
+      "isoCode": "AR"
+    },
+    {
+      "name": "Bahamas",
+      "capital": "Nassau",
+      "region": "Americas",
+      "isoCode": "BS"
+    },
+    {
+      "name": "Barbados",
+      "capital": "Bridgetown",
+      "region": "Americas",
+      "isoCode": "BB"
+    },
+    {
+      "name": "Belize",
+      "capital": "Belmopan",
+      "region": "Americas",
+      "isoCode": "BZ"
+    },
+    {
+      "name": "Bolivia",
+      "capital": "Sucre",
+      "region": "Americas",
+      "isoCode": "BO"
+    },
+    {
+      "name": "Brazil",
+      "capital": "Brasília",
+      "region": "Americas",
+      "isoCode": "BR"
+    },
+    {
+      "name": "Canada",
+      "capital": "Ottawa",
+      "region": "Americas",
+      "isoCode": "CA"
+    },
+    {
+      "name": "Chile",
+      "capital": "Santiago",
+      "region": "Americas",
+      "isoCode": "CL"
+    },
+    {
+      "name": "Colombia",
+      "capital": "Bogotá",
+      "region": "Americas",
+      "isoCode": "CO"
+    },
+    {
+      "name": "Costa Rica",
+      "capital": "San José",
+      "region": "Americas",
+      "isoCode": "CR"
+    },
+    {
+      "name": "Cuba",
+      "capital": "Havana",
+      "region": "Americas",
+      "isoCode": "CU"
+    },
+    {
+      "name": "Dominica",
+      "capital": "Roseau",
+      "region": "Americas",
+      "isoCode": "DM"
+    },
+    {
+      "name": "Dominican Republic",
+      "capital": "Santo Domingo",
+      "region": "Americas",
+      "isoCode": "DO"
+    },
+    {
+      "name": "Ecuador",
+      "capital": "Quito",
+      "region": "Americas",
+      "isoCode": "EC"
+    },
+    {
+      "name": "El Salvador",
+      "capital": "San Salvador",
+      "region": "Americas",
+      "isoCode": "SV"
+    },
+    {
+      "name": "Grenada",
+      "capital": "St. George's",
+      "region": "Americas",
+      "isoCode": "GD"
+    },
+    {
+      "name": "Guatemala",
+      "capital": "Guatemala City",
+      "region": "Americas",
+      "isoCode": "GT"
+    },
+    {
+      "name": "Guyana",
+      "capital": "Georgetown",
+      "region": "Americas",
+      "isoCode": "GY"
+    },
+    {
+      "name": "Haiti",
+      "capital": "Port-au-Prince",
+      "region": "Americas",
+      "isoCode": "HT"
+    },
+    {
+      "name": "Honduras",
+      "capital": "Tegucigalpa",
+      "region": "Americas",
+      "isoCode": "HN"
+    },
+    {
+      "name": "Jamaica",
+      "capital": "Kingston",
+      "region": "Americas",
+      "isoCode": "JM"
+    },
+    {
+      "name": "Mexico",
+      "capital": "Mexico City",
+      "region": "Americas",
+      "isoCode": "MX"
+    },
+    {
+      "name": "Nicaragua",
+      "capital": "Managua",
+      "region": "Americas",
+      "isoCode": "NI"
+    },
+    {
+      "name": "Panama",
+      "capital": "Panama City",
+      "region": "Americas",
+      "isoCode": "PA"
+    },
+    {
+      "name": "Paraguay",
+      "capital": "Asunción",
+      "region": "Americas",
+      "isoCode": "PY"
+    },
+    {
+      "name": "Peru",
+      "capital": "Lima",
+      "region": "Americas",
+      "isoCode": "PE"
+    },
+    {
+      "name": "Saint Kitts and Nevis",
+      "capital": "Basseterre",
+      "region": "Americas",
+      "isoCode": "KN"
+    },
+    {
+      "name": "Saint Lucia",
+      "capital": "Castries",
+      "region": "Americas",
+      "isoCode": "LC"
+    },
+    {
+      "name": "Saint Vincent and the Grenadines",
+      "capital": "Kingstown",
+      "region": "Americas",
+      "isoCode": "VC"
+    },
+    {
+      "name": "Suriname",
+      "capital": "Paramaribo",
+      "region": "Americas",
+      "isoCode": "SR"
+    },
+    {
+      "name": "Trinidad and Tobago",
+      "capital": "Port of Spain",
+      "region": "Americas",
+      "isoCode": "TT"
+    },
+    {
+      "name": "United States",
+      "capital": "Washington, D.C.",
+      "region": "Americas",
+      "isoCode": "US"
+    },
+    {
+      "name": "Uruguay",
+      "capital": "Montevideo",
+      "region": "Americas",
+      "isoCode": "UY"
+    },
+    {
+      "name": "Venezuela",
+      "capital": "Caracas",
+      "region": "Americas",
+      "isoCode": "VE"
+    },
+    {
+      "name": "Anguilla",
+      "capital": "The Valley",
+      "region": "Americas",
+      "isoCode": "AI"
+    },
+    {
+      "name": "Aruba",
+      "capital": "Oranjestad",
+      "region": "Americas",
+      "isoCode": "AW"
+    },
+    {
+      "name": "Bermuda",
+      "capital": "Hamilton",
+      "region": "Americas",
+      "isoCode": "BM"
+    },
+    {
+      "name": "British Virgin Islands",
+      "capital": "Road Town",
+      "region": "Americas",
+      "isoCode": "VG"
+    },
+    {
+      "name": "Cayman Islands",
+      "capital": "George Town",
+      "region": "Americas",
+      "isoCode": "KY"
+    },
+    {
+      "name": "Curacao",
+      "capital": "Willemstad",
+      "region": "Americas",
+      "isoCode": "CW"
+    },
+    {
+      "name": "Falkland Islands",
+      "capital": "Stanley",
+      "region": "Americas",
+      "isoCode": "FK"
+    },
+    {
+      "name": "Greenland",
+      "capital": "Nuuk",
+      "region": "Americas",
+      "isoCode": "GL"
+    },
+    {
+      "name": "Guadeloupe",
+      "capital": "Basse-Terre",
+      "region": "Americas",
+      "isoCode": "GP"
+    },
+    {
+      "name": "Martinique",
+      "capital": "Fort-de-France",
+      "region": "Americas",
+      "isoCode": "MQ"
+    },
+    {
+      "name": "Montserrat",
+      "capital": "Plymouth",
+      "region": "Americas",
+      "isoCode": "MS"
+    },
+    {
+      "name": "Netherlands Antilles",
+      "capital": "Willemstad",
+      "region": "Americas",
+      "isoCode": "AN"
+    },
+    {
+      "name": "Puerto Rico",
+      "capital": "San Juan",
+      "region": "Americas",
+      "isoCode": "PR"
+    },
+    {
+      "name": "Saint Barthelemy",
+      "capital": "Gustavia",
+      "region": "Americas",
+      "isoCode": "BL"
+    },
+    {
+      "name": "Saint Martin",
+      "capital": "Marigot",
+      "region": "Americas",
+      "isoCode": "MF"
+    },
+    {
+      "name": "Saint Pierre and Miquelon",
+      "capital": "Saint-Pierre",
+      "region": "Americas",
+      "isoCode": "PM"
+    },
+    {
+      "name": "Turks and Caicos Islands",
+      "capital": "Cockburn Town",
+      "region": "Americas",
+      "isoCode": "TC"
+    },
+    {
+      "name": "Virgin Islands",
+      "capital": "Charlotte Amalie",
+      "region": "Americas",
+      "isoCode": "VI"
+    }
+  ]
+}

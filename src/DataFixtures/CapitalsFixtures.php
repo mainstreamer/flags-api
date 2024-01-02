@@ -8,10 +8,25 @@ use Doctrine\Persistence\ObjectManager;
 
 class CapitalsFixtures extends Fixture
 {
+    private const COUNTRY_FILES = [
+        'capitals-africa.json',
+        'capitals-americas.json',
+        'capitals-asia.json',
+        'capitals-europe.json',
+        'capitals-oceania.json',
+    ];
+
     public function load(ObjectManager $manager): void
     {
-        if (file_exists('capitals.json')) {
-            ['countries' => $countries] = json_decode(file_get_contents('capitals.json'), true);
+        foreach (self::COUNTRY_FILES as $fileName) {
+            $this->loadFileContent($manager, $fileName);
+        }
+    }
+
+    private function loadFileContent(ObjectManager $manager, string $fileName): void
+    {
+        if (file_exists($fileName)) {
+            ['countries' => $countries] = json_decode(file_get_contents($fileName), true);
         }
 
         foreach ($countries ?? [] as $country) {
