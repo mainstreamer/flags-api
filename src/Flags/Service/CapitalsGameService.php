@@ -8,9 +8,11 @@ use App\Flags\Entity\Enum\GameType;
 use App\Flags\Entity\Game;
 use App\Flags\Entity\User;
 use App\Flags\Repository\CapitalRepository;
+use App\Flags\Repository\CapitalsStatRepository;
+use App\Flags\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Rteeom\FlagsGenerator;
+use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -19,6 +21,7 @@ class CapitalsGameService
     private readonly FlagsGenerator $isoFlags;
     public function __construct(
         private readonly CapitalRepository $repository,
+        private readonly GameRepository $gameRepository,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly EntityManagerInterface $entityManager
     )
@@ -33,7 +36,15 @@ class CapitalsGameService
     {
         $excluded = $game !== null ? $game->getQuestions() : [];
 
-        $african = $this->repository->findBy(['region' => 'Africa'], ['id' => 'ASC']);
+        $v = match ($game->getType()->value) {
+          GameType::CAPITALS_AFRICA->value => 'Africa',
+          GameType::CAPITALS_AMERICAS->value => 'Americas',
+          GameType::CAPITALS_ASIA->value => 'Asia',
+          GameType::CAPITALS_EUROPE->value => 'Europe',
+          GameType::CAPITALS_OCEANIA->value => 'Oceania',
+        };
+
+        $african = $this->repository->findBy(['region' => $v], ['id' => 'ASC']);
         if (!$african) {
             throw new Exception('no countries found');
         }
@@ -97,20 +108,29 @@ class CapitalsGameService
 
     public function handleGameOver(Request $request): array
     {
-        ['sessionTimer' => $sessionTimer, 'score' => $score] = json_decode($request->getContent(), true);
+        ['sessionTimer' => $sessionTimer, 'score' => $score, 'gameId' => $gameId] = json_decode($request->getContent(), true);
+
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
-        $entity = new CapitalsStat($sessionTimer, $score, $user);
+        /** @var Game $game */
+        $game = $this->gameRepository->findOneById((int) $gameId);
+
+        $entity = new CapitalsStat($sessionTimer, $score, $user, $game->getType());
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
 
         return [$entity->getId()];
     }
 
-    public function getHighScores(): array
+    public function getHighScores(string $gameType): array
     {
-        return array_map(fn (array $item) =>
-        ['userName' => $item['firstName'] .' ' .$item['lastName'],'score' => $item['score'], 'sessionTimer' => $item['sessionTimer']], $this->entityManager->getRepository(CapitalsStat::class)->getHighScores());
+        return array_map(
+            fn (array $item) => [
+                'userName' => $item['firstName'] .' ' .$item['lastName'],'score' => $item['score'],
+                'sessionTimer' => $item['sessionTimer']
+            ],
+            $this->entityManager->getRepository(CapitalsStat::class)->getHighScores($gameType)
+        );
     }
 
     public function startGame(GameType $gameType): Game

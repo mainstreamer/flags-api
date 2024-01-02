@@ -5,12 +5,13 @@ namespace Unit\Entity;
 use App\Flags\Entity\Enum\GameType;
 use App\Flags\Entity\Game;
 use App\Flags\Entity\User;
-use App\Flags\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class GameTest extends KernelTestCase
 {
+    protected EntityManagerInterface $entityManager;
+
     public function setUp(): void
     {
         parent::setUp();

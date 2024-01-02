@@ -8,7 +8,7 @@ use App\Flags\Entity\User;
 use App\Flags\Service\CapitalsGameService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Rteeom\FlagsGenerator;
+use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +41,7 @@ class CapitalsController extends AbstractController
         return $this->json($service->getQuestion($game));
     }
 
-    #[Route('/capitals/{countryCode}/{answer}', name: 'answer_cap', methods: ['GET'])]
+    #[Route('/capitals/answer/{countryCode}/{answer}', name: 'answer_cap', methods: ['GET'])]
     public function answer(CapitalsGameService $service, string $countryCode, string $answer): JsonResponse
     {
         return $this->json($service->giveAnswer($countryCode, base64_decode($answer)));
@@ -64,11 +64,19 @@ class CapitalsController extends AbstractController
         return $this->json($service->giveAnswer($countryCode, base64_decode($answer), $game));
     }
 
-    #[Route('/capitals/high-scores', name: 'capitals_high_scores', methods: ['GET'])]
-    public function highScores(Request $request, CapitalsGameService $service): JsonResponse
+    #[Route('/capitals/high-scores/{gameType}', name: 'capitals_high_scores', methods: ['GET'])]
+    public function highScores(Request $request, string $gameType, CapitalsGameService $service): JsonResponse
     {
+        $type = match (strtolower($gameType)) {
+            'europe' => GameType::CAPITALS_EUROPE,
+            'asia' => GameType::CAPITALS_ASIA,
+            'africa' => GameType::CAPITALS_AFRICA,
+            'oceania' => GameType::CAPITALS_OCEANIA,
+            'americas' => GameType::CAPITALS_AMERICAS,
+        };
+
         try {
-            return new JsonResponse($service->getHighScores());
+            return new JsonResponse($service->getHighScores($type->value));
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());
         }
