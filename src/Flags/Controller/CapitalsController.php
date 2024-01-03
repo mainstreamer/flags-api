@@ -41,10 +41,10 @@ class CapitalsController extends AbstractController
         return $this->json($service->getQuestion($game));
     }
 
-    #[Route('/capitals/answer/{countryCode}/{answer}', name: 'answer_cap', methods: ['GET'])]
-    public function answer(CapitalsGameService $service, string $countryCode, string $answer): JsonResponse
+    #[Route('/capitals/answer/{game}/{countryCode}/{answer}', name: 'answer_cap', methods: ['GET'])]
+    public function answer(CapitalsGameService $service, Game $game, string $countryCode, string $answer): JsonResponse
     {
-        return $this->json($service->giveAnswer($countryCode, base64_decode($answer)));
+        return $this->json($service->giveAnswer($countryCode, base64_decode($answer), $game));
     }
 
     #[Route('/capitals/game-over', name: 'capitals_game_over', methods: ['POST'])]

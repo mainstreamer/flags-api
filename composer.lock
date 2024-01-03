@@ -2260,22 +2260,24 @@
         },
         {
             "name": "rteeom/isoflags",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mainstreamer/isoflags.git",
-                "reference": "efa92f7b84cf648408c59e10973d7f19e1aa8eb6"
+                "reference": "fba4ac13a942808a0cbc7c6b19fdf9700ab33492"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mainstreamer/isoflags/zipball/efa92f7b84cf648408c59e10973d7f19e1aa8eb6",
-                "reference": "efa92f7b84cf648408c59e10973d7f19e1aa8eb6",
+                "url": "https://api.github.com/repos/mainstreamer/isoflags/zipball/fba4ac13a942808a0cbc7c6b19fdf9700ab33492",
+                "reference": "fba4ac13a942808a0cbc7c6b19fdf9700ab33492",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "php": "^7.4|8.*"
             },
             "require-dev": {
+                "ext-json": "*",
                 "phpunit/phpunit": "^10.4"
             },
             "type": "library",
@@ -2290,16 +2292,16 @@
             ],
             "authors": [
                 {
-                    "name": "Artem",
+                    "name": "Rteeom",
                     "email": "mainstreamer@outlook.com"
                 }
             ],
             "description": "library for easy emoji flags generation from iso country codes",
             "support": {
                 "issues": "https://github.com/mainstreamer/isoflags/issues",
-                "source": "https://github.com/mainstreamer/isoflags/tree/1.1.5"
+                "source": "https://github.com/mainstreamer/isoflags/tree/1.1.6"
             },
-            "time": "2024-01-02T17:33:34+00:00"
+            "time": "2024-01-03T15:35:58+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",

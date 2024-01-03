@@ -52,6 +52,13 @@ class Game
         }
     }
 
+    public function removeQuestion(string $string): void
+    {
+        if (($key = array_search($string, $this->questions)) !== false) {
+            unset($this->questions[$key]);
+        }
+    }
+
     public function getQuestions(): array
     {
         return $this->questions;

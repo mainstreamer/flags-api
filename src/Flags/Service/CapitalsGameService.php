@@ -15,14 +15,14 @@ use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class CapitalsGameService
+readonly class CapitalsGameService
 {
-    private readonly FlagsGenerator $isoFlags;
+    private FlagsGenerator $isoFlags;
     public function __construct(
-        private readonly CapitalRepository $repository,
-        private readonly GameRepository $gameRepository,
-        private readonly TokenStorageInterface $tokenStorage,
-        private readonly EntityManagerInterface $entityManager
+        private CapitalRepository      $repository,
+        private GameRepository         $gameRepository,
+        private TokenStorageInterface  $tokenStorage,
+        private EntityManagerInterface $entityManager
     )
     {
         $this->isoFlags = new FlagsGenerator();
@@ -95,11 +95,15 @@ class CapitalsGameService
         }
     }
 
-    public function giveAnswer(string $isoCode, string $answer): array
+    public function giveAnswer(string $questionCountryCode, string $answer, Game $game): array
     {
         /** @var Capital $capital */
-        $capital = $this->repository->findOneBy(['code' => $isoCode]);
+        $capital = $this->repository->findOneBy(['code' => $questionCountryCode]);
         $isCorrect = strtolower($capital->getName()) === strtolower($answer);
+        if (!$isCorrect) {
+            $game->removeQuestion($questionCountryCode);
+            $this->entityManager->flush();
+        }
         return [
             'isCorrect' => $isCorrect,
             'text' => sprintf('%s it\'s %s', $isCorrect ? 'Yes ✅ - ': 'No ❌ - ', $capital->getName()),
@@ -108,7 +112,11 @@ class CapitalsGameService
 
     public function handleGameOver(Request $request): array
     {
-        ['sessionTimer' => $sessionTimer, 'score' => $score, 'gameId' => $gameId] = json_decode($request->getContent(), true);
+        [
+            'sessionTimer' => $sessionTimer,
+            'score' => $score,
+            'gameId' => $gameId
+        ] = json_decode($request->getContent(), true);
 
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
@@ -137,8 +145,9 @@ class CapitalsGameService
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
-        $this->entityManager->persist($g = new Game($user, $gameType));
+        $this->entityManager->persist($game = new Game($user, $gameType));
         $this->entityManager->flush();
-        return $g;
+
+        return $game;
     }
 }

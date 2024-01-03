@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit;
+namespace App\Tests\Unit;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Rteeom\FlagsGenerator\FlagsGenerator;
@@ -26,7 +26,7 @@ class SmokeTest extends KernelTestCase
         $this->entityManager = $kernel->getContainer()->get('doctrine')->getManager();
     }
 
-    public function testSomething()
+    public function testFlagsGeneratedForAllCountries()
     {
         $flagsGenerator = new FlagsGenerator();
         foreach (self::COUNTRY_FILES as $fileName) {
@@ -41,14 +41,14 @@ class SmokeTest extends KernelTestCase
         $this->assertTrue(true);
     }
 
-    public function testCount()
+    public function testCountriesCount()
     {
         foreach (self::COUNTRY_FILES as $fileName) {
             if (file_exists($fileName)) {
                 ['countries' => $countries] = json_decode(file_get_contents($fileName), true);
                 match ($fileName) {
                     'capitals-africa.json' => self::assertCount(54, $countries),
-                    'capitals-americas.json' => self::assertCount(53, $countries),
+                    'capitals-americas.json' => self::assertCount(55, $countries),
                     'capitals-asia.json' => self::assertCount(48, $countries),
                     'capitals-europe.json' => self::assertCount(46, $countries),
                     'capitals-oceania.json' => self::assertCount(25, $countries),

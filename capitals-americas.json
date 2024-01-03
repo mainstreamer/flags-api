@@ -62,7 +62,7 @@
     },
     {
       "name": "Costa Rica",
-      "capital": "San José",
+      "capital": "San Jose",
       "region": "Americas",
       "isoCode": "CR"
     },
@@ -229,10 +229,22 @@
       "isoCode": "BM"
     },
     {
+      "name": "Bonaire",
+      "capital": "Kralendijk",
+      "region": "Americas",
+      "isoCode": "BQ"
+    },
+    {
       "name": "British Virgin Islands",
       "capital": "Road Town",
       "region": "Americas",
       "isoCode": "VG"
+    },
+    {
+      "name": "Caribbean Netherlands",
+      "capital": "Willemstad",
+      "region": "Americas",
+      "isoCode": "BQ"
     },
     {
       "name": "Cayman Islands",
@@ -277,12 +289,6 @@
       "isoCode": "MS"
     },
     {
-      "name": "Netherlands Antilles",
-      "capital": "Willemstad",
-      "region": "Americas",
-      "isoCode": "AN"
-    },
-    {
       "name": "Puerto Rico",
       "capital": "San Juan",
       "region": "Americas",
@@ -305,6 +311,12 @@
       "capital": "Saint-Pierre",
       "region": "Americas",
       "isoCode": "PM"
+    },
+    {
+      "name": "Sint Maarten",
+      "capital": "Philipsburg",
+      "region": "Americas",
+      "isoCode": "SX"
     },
     {
       "name": "Turks and Caicos Islands",
