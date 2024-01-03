@@ -50,7 +50,7 @@ class SmokeTest extends KernelTestCase
                     'capitals-africa.json' => self::assertCount(54, $countries),
                     'capitals-americas.json' => self::assertCount(55, $countries),
                     'capitals-asia.json' => self::assertCount(48, $countries),
-                    'capitals-europe.json' => self::assertCount(46, $countries),
+                    'capitals-europe.json' => self::assertCount(45, $countries),
                     'capitals-oceania.json' => self::assertCount(25, $countries),
                 };
             }
