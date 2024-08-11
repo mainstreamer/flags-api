@@ -1,8 +1,11 @@
 # Flags quiz api
 
 ### development environment:
+original .env of simply github secret env is required as pre-requisite 
+
 dc up -d
 (uses docker-compose.yml + docker-compose.override.yml for dev files sync)
+
 
 ### deploy (from dev env)
 To create a deployment you need to tag your images to be deployed:
@@ -10,14 +13,14 @@ To create a deployment you need to tag your images to be deployed:
 docker tag flags-api-php swiftcode/flags:php-latest
 docker tag flags-api-nginx swiftcode/flags:nginx-latest
 docker tag flags-api-db swiftcode/flags:db-latest
-docker push swiftcode/flags:db-latest
 
+docker push swiftcode/flags:db-latest
 docker push swiftcode/flags:nginx-latest
 
 push images to dockerhub repo swiftcode/flags
 docker push swiftcode/flags --all-tags
 
-to generate certificates cert.sh 
+to generate certificates (for docker daemon) cert.sh 
 required files:
 -r--r--r--   1 artem  staff      1952 Oct 29 13:55 server-cert.pem
 -r--------   1 artem  staff      3272 Oct 29 13:55 server-key.pem
