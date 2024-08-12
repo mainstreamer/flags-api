@@ -53,7 +53,7 @@ jobs:
       - name: Build the Docker image
         env:
           GITH_KEY: ${{ secrets.GITH_KEY }}
-        run: printenv && docker compose build php
+        run: printenv && docker compose -f docker-compose-prod.yml build php
       - name: Tag Docker image
         run: |
           docker tag flags-api-php swiftcode/flags:php-latest
@@ -77,15 +77,15 @@ jobs:
       - name: Use context
         run: docker context use icu
       - name: Pull Images
-        run: docker compose -f docker-compose-prod.yml --env-file .env.prod pull
+        run: docker compose -f docker-compose-prod.yml pull
       - name: Deploy Images
         env:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml --env-file .env.prod up -d
+        run: docker compose -f docker-compose-prod.yml up -d
       - name: Create DB (if not exists)
         env:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml --env-file .env.prod exec php bin/console d:d:c --if-not-exists
+        run: docker compose -f docker-compose-prod.yml exec php bin/console d:d:c --if-not-exists --env=prod
       - name: Deploy jwt keys
         run: |
           echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
@@ -93,11 +93,11 @@ jobs:
       - name: Run Migrations
         env:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml exec php bin/console d:m:m -n
+        run: docker compose -f docker-compose-prod.yml exec php bin/console d:m:m -n --env=prod
       - name: Validate Schema
         env:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml exec php bin/console d:s:v
+        run: docker compose -f docker-compose-prod.yml exec php bin/console d:s:v --env=prod
       - name: Prune Images
         run: docker image prune --force
       - name: Remove keys

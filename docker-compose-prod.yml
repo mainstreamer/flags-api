@@ -4,6 +4,7 @@ services:
         environment:
             VERSION_HASH: "${GITHUB_SHA:-none}"
             SYMFONY_DECRYPTION_SECRET: "${SYMFONY_DECRYPTION_SECRET}"
+            APP_ENV : "prod"
         extends:
             file: docker-compose.yml
             service: php
