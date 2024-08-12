@@ -83,14 +83,20 @@ jobs:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
         run: docker compose -f docker-compose-prod.yml --env-file .env.prod up -d
       - name: Create DB (if not exists)
-        run: docker compose -f docker-compose-prod.yml exec php bin/console d:d:c --if-not-exists
+        env:
+          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
+        run: docker compose -f docker-compose-prod.yml --env-file .env.prod exec php bin/console d:d:c --if-not-exists
       - name: Deploy jwt keys
         run: |
           echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
           echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/public.pem'
       - name: Run Migrations
+        env:
+          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
         run: docker compose -f docker-compose-prod.yml exec php bin/console d:m:m -n
       - name: Validate Schema
+        env:
+          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
         run: docker compose -f docker-compose-prod.yml exec php bin/console d:s:v
       - name: Prune Images
         run: docker image prune --force
