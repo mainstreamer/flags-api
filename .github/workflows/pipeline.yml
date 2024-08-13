@@ -85,7 +85,7 @@ jobs:
       - name: Create DB (if not exists)
         env:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml exec php bin/console d:d:c --if-not-exists --env=prod
+        run: docker compose -f docker-compose-prod.yml exec -e SYMFONY_DECRYPTION_SECRET=${SYMFONY_DECRYPTION_SECRET} php bin/console d:d:c --if-not-exists --env=prod
       - name: Deploy jwt keys
         run: |
           echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
