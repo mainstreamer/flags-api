@@ -77,11 +77,11 @@ jobs:
       - name: Use context
         run: docker context use icu
       - name: Pull Images
-        run: docker compose -f docker-compose-prod.yml pull
+        run: docker compose --env-file .env.prod -f docker-compose-prod.yml pull
       - name: Deploy Images
         env:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml up -d
+        run: docker compose --env-file .env.prod -f docker-compose-prod.yml up -d
       - name: Create DB (if not exists)
         env:
           SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
