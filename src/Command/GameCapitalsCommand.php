@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Flags\Entity\Capital;
 use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -11,13 +12,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Intl\Countries;
-use Symfony\Component\Intl\Intl;
 
 #[AsCommand(
-    name: 'game:flags',
+    name: 'game:capitals',
     description: 'guess flag console game',
 )]
-class GameFlagsCommand extends Command
+class GameCapitalsCommand extends Command
 {
     private FlagsGenerator $flagsGenerator;
     private array $isoCodes;
@@ -40,35 +40,62 @@ class GameFlagsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-//        $arg1 = $input->getArgument('arg1');
-//
-//        if ($arg1) {
-//            $io->note(sprintf('You passed an argument: %s', $arg1));
-//        }
-//
-//        if ($input->getOption('option1')) {
-//            // ...
-//        }
+        $db = $this->load();
 
         $choices = [];
         for ($total = count($this->isoCodes), $max = 4, $i = 0; $i < $max; ++$i) {
-            $choices[] = strtolower($this->isoCodes[rand(0, $total)]);
+            if ($randomChoice = $this->isoCodes[rand(0, $total)]) {
+                $choices[] = $randomChoice;
+            }
+
         }
 
         $correctIndex = rand(0, 3);
-        $options = array_map(fn (string $code) => $this->flagsGenerator->getEmojiFlagOrNull($code), $choices);
+        $options = array_map(fn (string $code) => $db[$code]->getName(), $choices);
 
         $choice = $io->choice(
-            'Select the flag of ' . Countries::getName(strtoupper($choices[$correctIndex])),
+            'Select the capital of ' . Countries::getName(strtoupper($choices[$correctIndex])) . " " . $this->flagsGenerator->getEmojiFlagOrNull(strtolower($choices[$correctIndex])) . " ",
             $options,
         );
 
-        if ($choice === $this->flagsGenerator->getEmojiFlagOrNull($choices[$correctIndex])) {
+        if ($choice === $db[$choices[$correctIndex]]->getName()) {
             $io->success('Yes! :]');
         } else {
             $io->warning('No :[');
         }
 
         return Command::SUCCESS;
+    }
+
+    private const COUNTRY_FILES = [
+        'capitals-africa.json',
+        'capitals-americas.json',
+        'capitals-asia.json',
+        'capitals-europe.json',
+        'capitals-oceania.json',
+    ];
+
+    public function load(): array
+    {
+        $result = [];
+        foreach (self::COUNTRY_FILES as $fileName) {
+            $result = array_merge($result, $this->loadFileContent($fileName));
+        }
+
+        return $result;
+    }
+
+    private function loadFileContent(string $fileName): array
+    {
+        if (file_exists($fileName)) {
+            ['countries' => $countries] = json_decode(file_get_contents($fileName), true);
+        }
+
+        $capitals = [];
+        foreach ($countries ?? [] as $country) {
+            $capitals[$country['isoCode']] = new Capital($country['capital'], $country['name'], $country['isoCode'], $country['region']);
+        }
+
+        return $capitals;
     }
 }

@@ -91,10 +91,22 @@
       "isoCode": "DE"
     },
     {
+      "name": "Gibraltar",
+      "capital": "Gibraltar",
+      "region": "Europe",
+      "isoCode": "GI"
+    },
+    {
       "name": "Greece",
       "capital": "Athens",
       "region": "Europe",
       "isoCode": "GR"
+    },
+    {
+      "name": "Faroe Islands",
+      "capital": "Torshavn",
+      "region": "Europe",
+      "isoCode": "FO"
     },
     {
       "name": "Hungary",
@@ -113,6 +125,12 @@
       "capital": "Dublin",
       "region": "Europe",
       "isoCode": "IE"
+    },
+    {
+      "name": "Isle of Man",
+      "capital": "Douglas",
+      "region": "Europe",
+      "isoCode": "IM"
     },
     {
       "name": "Italy",

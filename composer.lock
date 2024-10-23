@@ -2260,16 +2260,16 @@
         },
         {
             "name": "rteeom/isoflags",
-            "version": "1.1.6",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mainstreamer/isoflags.git",
-                "reference": "fba4ac13a942808a0cbc7c6b19fdf9700ab33492"
+                "reference": "ec3a4cc808a86cb001cbbc19651ffd514f76684f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mainstreamer/isoflags/zipball/fba4ac13a942808a0cbc7c6b19fdf9700ab33492",
-                "reference": "fba4ac13a942808a0cbc7c6b19fdf9700ab33492",
+                "url": "https://api.github.com/repos/mainstreamer/isoflags/zipball/ec3a4cc808a86cb001cbbc19651ffd514f76684f",
+                "reference": "ec3a4cc808a86cb001cbbc19651ffd514f76684f",
                 "shasum": ""
             },
             "require": {
@@ -2299,9 +2299,9 @@
             "description": "library for easy emoji flags generation from iso country codes",
             "support": {
                 "issues": "https://github.com/mainstreamer/isoflags/issues",
-                "source": "https://github.com/mainstreamer/isoflags/tree/1.1.6"
+                "source": "https://github.com/mainstreamer/isoflags/tree/1.2.0"
             },
-            "time": "2024-01-03T15:35:58+00:00"
+            "time": "2024-10-23T19:44:49+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",

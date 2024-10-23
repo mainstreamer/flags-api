@@ -67,6 +67,12 @@
       "isoCode": "GE"
     },
     {
+      "name": "Hong Kong",
+      "capital": "Hong Kong",
+      "region": "Asia",
+      "isoCode": "HK"
+    },
+    {
       "name": "India",
       "capital": "New Delhi",
       "region": "Asia",
@@ -77,6 +83,13 @@
       "capital": "Jakarta",
       "region": "Asia",
       "isoCode": "ID"
+    },
+
+    {
+      "name": "British Indian Ocean Territory",
+      "capital": "Camp Thunder Cove",
+      "region": "Asia",
+      "isoCode": "IO"
     },
     {
       "name": "Iran",
@@ -137,6 +150,12 @@
       "capital": "Beirut",
       "region": "Asia",
       "isoCode": "LB"
+    },
+    {
+      "name": "Macau",
+      "capital": "Macau",
+      "region": "Asia",
+      "isoCode": "MO"
     },
     {
       "name": "Malaysia",
@@ -233,6 +252,12 @@
       "capital": "Damascus",
       "region": "Asia",
       "isoCode": "SY"
+    },
+    {
+      "name": "Taiwan",
+      "capital": "Taipei",
+      "region": "Asia",
+      "isoCode": "TW"
     },
     {
       "name": "Tajikistan",

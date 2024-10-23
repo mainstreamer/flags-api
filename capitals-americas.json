@@ -13,6 +13,12 @@
       "isoCode": "AR"
     },
     {
+      "name": "Netherlands Antilles",
+      "capital": "Willemstad",
+      "region": "Americas",
+      "isoCode": "AN"
+    },
+    {
       "name": "Bahamas",
       "capital": "Nassau",
       "region": "Americas",
@@ -311,6 +317,13 @@
       "capital": "Saint-Pierre",
       "region": "Americas",
       "isoCode": "PM"
+    },
+
+    {
+      "name": " South Georgia and the South Sandwich Islands",
+      "capital": "King Edward Point",
+      "region": "Americas",
+      "isoCode": "SG"
     },
     {
       "name": "Sint Maarten",
