@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^8.4",
+        "php": "^8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "*",
@@ -10,12 +10,11 @@
         "doctrine/doctrine-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "*",
         "doctrine/orm": "*",
-        "knpuniversity/oauth2-client-bundle": "^2.20",
-        "league/oauth2-client": "^2.9",
         "lexik/jwt-authentication-bundle": "*",
         "nelmio/cors-bundle": "^2.3",
         "phpactor/language-server": "^6.1",
         "rteeom/isoflags": "^1.1",
+        "sensio/framework-extra-bundle": "*",
         "symfony/console": "*",
         "symfony/dotenv": "*",
         "symfony/expression-language": "*",
@@ -83,6 +82,6 @@
         "phpunit/phpunit": "^9.6",
         "symfony/contracts": "*",
         "symfony/phpunit-bridge": "^6.3",
-        "vimeo/psalm": "^6.0"
+        "vimeo/psalm": "^4.4"
     }
 }
