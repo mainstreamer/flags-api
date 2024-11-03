@@ -15,7 +15,7 @@ use Symfony\Component\Intl\Countries;
 
 #[AsCommand(
     name: 'game:capitals',
-    description: 'guess flag console game',
+    description: 'guess capital console game',
 )]
 class GameCapitalsCommand extends Command
 {
@@ -41,28 +41,37 @@ class GameCapitalsCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $db = $this->load();
-
-        $choices = [];
-        for ($total = count($this->isoCodes), $max = 4, $i = 0; $i < $max; ++$i) {
-            if ($randomChoice = $this->isoCodes[rand(0, $total)]) {
-                $choices[] = $randomChoice;
+        $excluded = ['UM', 'AQ', 'TF', 'HM', 'SH', 'RU', 'CX', 'SJ'];
+        $lives = 3;
+        while ($lives > 0) {
+            $choices = [];
+            for ($total = count($this->isoCodes), $max = 10, $i = 0; $i < $max; ++$i) {
+                if ($randomChoice = $this->isoCodes[rand(0, $total - 1)]) {
+                    if (in_array($randomChoice, $excluded) || in_array($randomChoice, $choices)) {
+                        --$i;
+                        continue;
+                    }
+                    $choices[] = $randomChoice;
+                }
             }
 
+            $correctIndex = rand(0, 3);
+            $options = array_map(fn (string $code) => $db[$code]->getName(), $choices);
+
+            $io->text(sprintf('Lives: %d', $lives));
+            $choice = $io->choice(
+                'Select the capital of ' . Countries::getName(strtoupper($choices[$correctIndex])) . " " . $this->flagsGenerator->getEmojiFlagOrNull(strtolower($choices[$correctIndex])) . " ",
+                $options,
+            );
+
+            if ($choice === $db[$choices[$correctIndex]]->getName()) {
+                $io->success('Yes! :]');
+            } else {
+                $io->warning('No :[');
+                --$lives;
+            }
         }
 
-        $correctIndex = rand(0, 3);
-        $options = array_map(fn (string $code) => $db[$code]->getName(), $choices);
-
-        $choice = $io->choice(
-            'Select the capital of ' . Countries::getName(strtoupper($choices[$correctIndex])) . " " . $this->flagsGenerator->getEmojiFlagOrNull(strtolower($choices[$correctIndex])) . " ",
-            $options,
-        );
-
-        if ($choice === $db[$choices[$correctIndex]]->getName()) {
-            $io->success('Yes! :]');
-        } else {
-            $io->warning('No :[');
-        }
 
         return Command::SUCCESS;
     }

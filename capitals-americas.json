@@ -271,6 +271,12 @@
       "isoCode": "FK"
     },
     {
+      "name": "French Guiana",
+      "capital": "Cayenne",
+      "region": "Americas",
+      "isoCode": "GF"
+    },
+    {
       "name": "Greenland",
       "capital": "Nuuk",
       "region": "Americas",

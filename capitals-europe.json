@@ -19,6 +19,12 @@
       "isoCode": "AT"
     },
     {
+      "name": "Aland",
+      "capital": "Mariehamn",
+      "region": "Europe",
+      "isoCode": "AX"
+    },
+    {
       "name": "Belarus",
       "capital": "Minsk",
       "region": "Europe",
@@ -91,6 +97,12 @@
       "isoCode": "DE"
     },
     {
+      "name": "Guernsey",
+      "capital": "Saint Peter Port",
+      "region": "Europe",
+      "isoCode": "GG"
+    },
+    {
       "name": "Gibraltar",
       "capital": "Gibraltar",
       "region": "Europe",
@@ -137,6 +149,12 @@
       "capital": "Rome",
       "region": "Europe",
       "isoCode": "IT"
+    },
+    {
+      "name": "Jersey",
+      "capital": "Saint Helier",
+      "region": "Europe",
+      "isoCode": "JE"
     },
     {
       "name": "Kosovo",
