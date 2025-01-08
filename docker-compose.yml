@@ -8,6 +8,7 @@ services:
                 KEY: ${GITH_KEY}
             context: .
             dockerfile: .docker/php-fpm/Dockerfile
+        image: ghcr.io/mainstreamer/flags/php:${TAG}
         environment:
             SYMFONY_DECRYPTION_SECRET: "${SYMFONY_DECRYPTION_SECRET}"
         depends_on:
@@ -19,6 +20,7 @@ services:
         build:
             context: .
             dockerfile: .docker/nginx/Dockerfile
+        image: ghcr.io/mainstreamer/flags/api:${TAG}
         restart: always
         networks:
             - backend-flags
@@ -26,6 +28,7 @@ services:
         build:
             context: .
             dockerfile: .docker/mysql/Dockerfile
+        image: ghcr.io/mainstreamer/flags/db:${TAG}
         container_name: "db-${PROJECT_NAME}"
         environment:
             MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
@@ -42,3 +45,5 @@ networks:
         external: true
 volumes:
     db-data-flags: ~
+
+## Note to self: docker compose reads .env file in current root dir automatically

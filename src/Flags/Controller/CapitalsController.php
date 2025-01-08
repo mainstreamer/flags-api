@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+#[Route(path:'/v1', name: "api_")]
 class CapitalsController extends AbstractController
 {
     protected FlagsGenerator $flagsGenerator;
@@ -117,11 +118,22 @@ class CapitalsController extends AbstractController
         }
     }
 
-    #[Route('/api/tg/login', name: 'telegramLogin2', methods: ['GET'])]
+    #[Route('/api/tg/login/demo', name: 'telegramLogin3', methods: ['GET'])]
+    public function authDemoAction(Request $request, JWTEncoderInterface $encoder): Response
+    {
+        $user = $this->em->getRepository(User::class)->findOneByTelegramUsername('rteeom');
+        $token = $encoder
+            ->encode([
+                'username' => $user->getTelegramId(),
+                'exp' => time() + 600000 + getenv('JWT_TOKEN_TTL')
+            ]);
+        return new JsonResponse(['token' => $token]);
+    }
+
+        #[Route('/api/tg/login', name: 'telegramLogin2', methods: ['GET'])]
     public function authAction(Request $request, JWTEncoderInterface $encoder): Response
     {
         try {
-
         $data = $request->query->all();
         $hash = $data['hash'];
         unset($data['hash']);

@@ -1,8 +1,7 @@
 include .env
 init: build-containers run-containers composer import-db run-api
 run: run-containers run-api 
-build:
-	@docker compose build
+
 run-containers:
 	@docker compose up -d
 run-api:
@@ -27,5 +26,11 @@ sh:
 	@docker compose exec php sh
 dumper:
 	@docker compose exec php vendor/bin/var-dump-server
+
+build:
+	docker compose build
+push:
+	docker compose push
+
 %:
 	@
