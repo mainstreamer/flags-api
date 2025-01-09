@@ -1,0 +1,104 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: TEST-STAGING
+on: [push, pull_request]
+permissions:
+  contents: read
+
+jobs:
+  symfony-tests:
+    runs-on: ubuntu-latest
+    steps:
+      #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
+      # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
+      # uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+        with:
+          php-version: '8.2'
+      - uses: actions/checkout@v3
+      - name: Copy .env.test.local
+        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.test', '.env');"
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --ignore-platform-reqs
+      - name: Create Database
+        run: |
+          mkdir -p data
+          touch data/database.sqlite
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
+        run: vendor/bin/phpunit
+      - name: Execute psalm
+        run: vendor/bin/psalm
+
+  deploy:
+    needs: symfony-tests
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        env:
+          GITH_KEY: ${{ secrets.GITH_KEY }}
+        run: printenv && docker compose build php
+      - name: Tag Docker image
+        run: |
+          docker tag flags-api-php swiftcode/flags:php-latest
+          docker tag flags-api-php swiftcode/flags:php-${{ github.sha }}
+      - name: Login to DockerHub
+        env:
+          DH_KEY: ${{ secrets.DH_KEY }}
+          DH_LOGIN: ${{ secrets.DH_LOGIN }}
+        run: docker login -u ${DH_LOGIN} -p ${DH_KEY}
+      - name: Push Images
+        run: docker push swiftcode/flags --all-tags
+      - name: Write Secrets
+        run: |
+          echo "${{ secrets.DD_KEY }}" | base64 --decode > ${HOME}/key.pem
+          echo "${{ secrets.DD_CA }}" | base64 --decode > ${HOME}/ca.pem
+          echo "${{ secrets.DD_CERT }}" | base64 --decode > ${HOME}/cert.pem
+          cd ${HOME} && ls -la
+          docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=${HOME}/ca.pem,cert=${HOME}/cert.pem,key=${HOME}/key.pem"
+      - name: Check context
+        run: docker context list
+      - name: Use context
+        run: docker context use icu
+      - name: Pull Images
+        run: docker compose --env-file .env.prod -f docker-compose-prod.yml pull
+      - name: Deploy Images
+        env:
+          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
+        run: docker compose --env-file .env.prod -f docker-compose-prod.yml up -d
+      - name: Create DB (if not exists)
+        env:
+          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
+        run: docker compose -f docker-compose-prod.yml exec -e SYMFONY_DECRYPTION_SECRET=${SYMFONY_DECRYPTION_SECRET} php bin/console d:d:c --if-not-exists --env=prod
+      - name: Deploy jwt keys
+        run: |
+          echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
+          echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/public.pem'
+      - name: Run Migrations
+        env:
+          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
+        run: docker compose -f docker-compose-prod.yml exec php bin/console d:m:m -n --env=prod
+      - name: Validate Schema
+        env:
+          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
+        run: docker compose -f docker-compose-prod.yml exec php bin/console d:s:v --env=prod
+      - name: Prune Images
+        run: docker image prune --force
+      - name: Remove keys
+        run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
