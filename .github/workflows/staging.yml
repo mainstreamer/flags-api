@@ -60,11 +60,6 @@ jobs:
         run: |
           echo $GITHUB_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Deploy jwt keys
-        run: |
-          echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
-          echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/public.pem'
-
       - name: Env vars
         run: cp .env.staging .env
 
