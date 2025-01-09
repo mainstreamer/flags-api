@@ -61,6 +61,14 @@ jobs:
           echo $GITHUB_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build the Docker image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub
+          TAG: staging-latest
+          PROJECT_NAME: flags-api
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: default
+          MYSQL_USER: user
+          DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
         run: | 
           docker compose build
           docker compose push
