@@ -19,12 +19,11 @@ readonly class CapitalsGameService
 {
     private FlagsGenerator $isoFlags;
     public function __construct(
-        private CapitalRepository      $repository,
-        private GameRepository         $gameRepository,
-        private TokenStorageInterface  $tokenStorage,
-        private EntityManagerInterface $entityManager
-    )
-    {
+        private CapitalRepository $repository,
+        private GameRepository $gameRepository,
+        private TokenStorageInterface $tokenStorage,
+        private EntityManagerInterface $entityManager,
+    ) {
         $this->isoFlags = new FlagsGenerator();
     }
 
