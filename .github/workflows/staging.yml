@@ -61,16 +61,18 @@ jobs:
           echo $GITHUB_TOKEN | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build the Docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/flags-api-php:staging .
+        run: | 
+          docker compose build
+          docker compose push
 
-      - name: Tag Docker image
-        run: |
-          docker tag ghcr.io/${{ github.repository_owner }}/flags-api-php:staging ghcr.io/${{ github.repository_owner }}/flags-api-php:${{ github.sha }}
-
-      - name: Push Docker images to GitHub Container Registry
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/flags-api-php:staging
-          docker push ghcr.io/${{ github.repository_owner }}/flags-api-php:${{ github.sha }}
+#      - name: Tag Docker image
+#        run: |
+#          docker tag ghcr.io/${{ github.repository_owner }}/flags-api-php:staging ghcr.io/${{ github.repository_owner }}/flags-api-php:${{ github.sha }}
+#
+#      - name: Push Docker images to GitHub Container Registry
+#        run: |
+#          docker push ghcr.io/${{ github.repository_owner }}/flags-api-php:staging
+#          docker push ghcr.io/${{ github.repository_owner }}/flags-api-php:${{ github.sha }}
 
 #      - name: Build the Docker image
 #        env:
