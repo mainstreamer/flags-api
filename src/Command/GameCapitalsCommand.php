@@ -41,7 +41,7 @@ class GameCapitalsCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $db = $this->load();
-        $excluded = ['UM', 'AQ', 'TF', 'HM', 'SH', 'RU', 'CX', 'SJ'];
+        $excluded = ['UM', 'AQ', 'TF', 'HM', 'SH', 'RU', 'CX', 'SJ', 'RE', 'GS'];
         $lives = 3;
         while ($lives > 0) {
             $choices = [];
@@ -55,7 +55,7 @@ class GameCapitalsCommand extends Command
                 }
             }
 
-            $correctIndex = rand(0, 3);
+            $correctIndex = rand(0, 9);
             $options = array_map(fn (string $code) => $db[$code]->getName(), $choices);
 
             $io->text(sprintf('Lives: %d', $lives));
@@ -65,9 +65,9 @@ class GameCapitalsCommand extends Command
             );
 
             if ($choice === $db[$choices[$correctIndex]]->getName()) {
-                $io->success('Yes! :]');
+                $io->success('YES');
             } else {
-                $io->warning('No :[');
+                $io->error('No :[');
                 --$lives;
             }
         }
