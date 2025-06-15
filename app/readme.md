@@ -11,13 +11,6 @@ update bot's domain via Botfather and use one from ngrok
 
 run make update with argument url=https://... for webhook (not sure if this step does anything useful at all TODO check)
 
-Caveats:
-on Fedora you need to allow containers to access files (SELinux contexts)
-```
-cd into project folder
-chcon -Rt container_file_t .
-```
-
 ### deploy (from dev env)
 To create a deployment you need to tag your images to be deployed:
 

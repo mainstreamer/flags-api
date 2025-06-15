@@ -24,7 +24,7 @@ fix:
 --:
 	@docker compose exec php sh -c "$(filter-out $@,$(MAKECMDGOALS) $(MAKEFLAGS))"
 sh: ## Shell access into php container
-	@docker compose exec -u 1000 php sh
+	@docker compose exec php sh
 dumper:
 	@docker compose exec php vendor/bin/var-dump-server
 domain-upd: ## Set webhook url for bot, needs named argument e.g. domain-upd url=https://url.com
