@@ -25,6 +25,12 @@
       "isoCode": "BW"
     },
     {
+      "name": "Bouvet Island",
+      "capital": "Oslo",
+      "region": "Africa",
+      "isoCode": "BV"
+    },
+    {
       "name": "Burkina Faso",
       "capital": "Ouagadougou",
       "region": "Africa",
@@ -53,6 +59,12 @@
       "capital": "Bangui",
       "region": "Africa",
       "isoCode": "CF"
+    },
+    {
+      "name": "Western Sahara",
+      "capital": "Laayoune",
+      "region": "Africa",
+      "isoCode": "EH"
     },
     {
       "name": "Chad",
@@ -203,6 +215,12 @@
       "capital": "Port Louis",
       "region": "Africa",
       "isoCode": "MU"
+    },
+    {
+      "name": "Mayotte",
+      "capital": "Mamoudzou",
+      "region": "Asia",
+      "isoCode": "YT"
     },
     {
       "name": "Morocco",

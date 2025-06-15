@@ -1,11 +1,15 @@
 # Flags quiz api
 
 ### development environment:
-original .env of simply github secret env is required as pre-requisite 
+original .env of simply github secret env is required as pre-requisite (BOT_TOKEN value is sensitive, private key that encrypts all symfony credentials to) 
 
 dc up -d
 (uses docker-compose.yml + docker-compose.override.yml for dev files sync)
 
+get url from ngrok pointing to local frontend app (port 8080)
+update bot's domain via Botfather and use one from ngrok
+
+run make update with argument url=https://... for webhook (not sure if this step does anything useful at all TODO check)
 
 ### deploy (from dev env)
 To create a deployment you need to tag your images to be deployed:
@@ -81,7 +85,7 @@ secret - set
 
 
 ##############
-LOCAL PROD REPRODUCTION
+LOCAL PROD ENV REPLICATION
 
 docker compose -f docker-compose-prod.yml --env-file .env.prod pull
 docker compose -f docker-compose-prod.yml --env-file .env.prod.local up -d

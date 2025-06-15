@@ -21,10 +21,9 @@ class CapitalsController extends AbstractController
     protected FlagsGenerator $flagsGenerator;
 
     public function __construct(
-        protected ValidatorInterface $validator, 
+        protected ValidatorInterface $validator,
         protected string $botToken,
-        protected readonly EntityManagerInterface $em
-
+        protected readonly EntityManagerInterface $em,
     ) {
         $this->flagsGenerator = new FlagsGenerator();
     }
@@ -52,17 +51,22 @@ class CapitalsController extends AbstractController
     {
         try {
             $entity = $service->handleGameOver($request);
-           return new JsonResponse($entity);
+            return new JsonResponse($entity);
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());
         }
     }
 
     #[Route('/capitals/answer/{game}/{countryCode}/{answer}', name: 'get_question_for_game', methods: ['GET'])]
-    public function getQuestion(Game $game, string $countryCode, string $answer, CapitalsGameService $service): JsonResponse
-    {
-        return $this->json($service->giveAnswer($countryCode, base64_decode($answer), $game));
-    }
+  public function getQuestion(
+      Game $game,
+      string $countryCode,
+      string $answer,
+      CapitalsGameService $service
+  ): JsonResponse
+  {
+      return $this->json($service->giveAnswer($countryCode, base64_decode($answer), $game));
+  }
 
     #[Route('/capitals/high-scores/{gameType}', name: 'capitals_high_scores', methods: ['GET'])]
     public function highScores(Request $request, string $gameType, CapitalsGameService $service): JsonResponse
