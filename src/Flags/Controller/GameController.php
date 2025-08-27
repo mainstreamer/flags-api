@@ -261,7 +261,7 @@ class GameController extends AbstractController
         
             if (!isset($result[$key]['rate'])) {
                 $result[$key]['rate'] = 0;
-                $result[$key]['times'] = $result[$key]['times'].'/'.$result[$key]['times'];
+                $result[$key]['times'] = "0/".$result[$key]['times'];
             }
         }
     
