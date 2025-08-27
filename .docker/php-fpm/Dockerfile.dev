@@ -1,0 +1,29 @@
+# .docker/php-fpm/Dockerfile.dev
+FROM php:8.2-fpm-alpine
+
+# Install system dependencies
+RUN apk add --no-cache \
+    bash \
+    git \
+    mysql-client \
+    libpng-dev \
+    libzip-dev \
+    postgresql-dev \
+    $PHPIZE_DEPS
+
+# Install PHP extensions
+RUN docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    zip \
+    intl
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+
+# Create user matching host
+RUN adduser -u 1000 -D -s /bin/bash appuser
+USER appuser
+
+WORKDIR /var/www/webapp
