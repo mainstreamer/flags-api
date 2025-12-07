@@ -1,0 +1,18 @@
+
+# configure your clients as described here: https://github.com/knpuniversity/oauth2-client-bundle#configuration
+# config/packages/knpu_oauth2_client.yaml
+knpu_oauth2_client:
+  clients:
+    flags_app:
+      type: generic
+      provider_class: App\Flags\Service\HqAuthProvider
+      client_id: '%env(OAUTH_CLIENT_ID)%'
+      client_secret: '%env(OAUTH_CLIENT_SECRET)%'
+      redirect_route: oauth_check
+      redirect_params: {}
+      # Your OAuth2 server's base URL
+      provider_options:
+        domain: '%env(OAUTH_SERVER_URL)%'
+        urlAuthorize: '%env(OAUTH_SERVER_URL)%/oauth2/authorize'
+        urlAccessToken: '%env(OAUTH_SERVER_URL)%/oauth2/token'
+        urlResourceOwnerDetails: '%env(OAUTH_SERVER_URL)%/oauth2/me'

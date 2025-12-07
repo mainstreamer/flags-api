@@ -27,5 +27,7 @@ sh:
 	@docker compose exec php sh
 dumper:
 	@docker compose exec php vendor/bin/var-dump-server
+network:
+	@docker network create backend-flags
 %:
 	@
