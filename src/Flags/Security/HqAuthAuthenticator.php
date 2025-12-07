@@ -156,18 +156,28 @@ class HqAuthAuthenticator extends OAuth2Authenticator
         $refreshToken = $request->attributes->get('oauth_refresh_token');
         $expiresIn = $request->attributes->get('oauth_expires_in');
 
+
+        return new Response("<!DOCTYPE html><script>
+            window.opener.postMessage({
+                type: 'oauth_success',
+                access_token: '$accessToken',
+                refresh_token: '$refreshToken'
+            }, '*');
+            window.close();
+        </script>");
+
         // Return JSON with the tokens for the frontend
-        return new JsonResponse([
-            'success' => true,
-            'access_token' => $accessToken,
-            'refresh_token' => $refreshToken,
-            'expires_in' => $expiresIn,
-            'token_type' => 'Bearer',
-            'user' => [
-//                'email' => $token->getUser()->getEmail(),
-                'roles' => $token->getUser()->getRoles(),
-            ]
-        ]);
+//        return new JsonResponse([
+//            'success' => true,
+//            'access_token' => $accessToken,
+//            'refresh_token' => $refreshToken,
+//            'expires_in' => $expiresIn,
+//            'token_type' => 'Bearer',
+//            'user' => [
+////                'email' => $token->getUser()->getEmail(),
+//                'roles' => $token->getUser()->getRoles(),
+//            ]
+//        ]);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response

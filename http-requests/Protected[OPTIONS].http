@@ -1,0 +1,5 @@
+### GET request to example server
+OPTIONS https://localhost:4430/api/protected
+ngrok-skip-browser-warning: true
+
+###http://localhost/test

@@ -30,3 +30,7 @@ services:
 
     App\DataFixtures\:
         resource: '../src/DataFixtures/*'
+
+    App\EventListener\NgrokHeaderListener:
+      tags:
+        - { name: kernel.event_subscriber }

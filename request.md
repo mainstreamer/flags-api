@@ -7,6 +7,13 @@ https://auth.izeebot.top/oauth2/authorize?client_id=flags_app&redirect_uri=https
 
 QUICK DEBUG PGSQL QUERY:
 
+psql -U openid_user -d openid_db
+
 UPDATE oauth2_client
-SET redirect_uris = 'https://3bd5404da6bd.ngrok-free.app/oauth/check'
+SET redirect_uris = 'https://04866a95d62b.ngrok-free.app/oauth/check'
 WHERE identifier = 'flags_app';
+
+# Verify
+SELECT identifier, redirect_uris FROM oauth2_client WHERE identifier = 'flags_app';
+
+https://04866a95d62b.ngrok-free.app/

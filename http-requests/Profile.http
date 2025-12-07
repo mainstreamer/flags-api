@@ -1,0 +1,6 @@
+### GET request to example server
+GET https://localhost:4430/api/profile
+Authorization: Bearer {{t1}}
+ngrok-skip-browser-warning: true
+
+###http://localhost/test
