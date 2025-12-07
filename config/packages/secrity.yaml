@@ -5,7 +5,7 @@ security:
     database_provider:
       entity:
         class: App\Flags\Entity\User
-        property: email
+        property: sub
 
   password_hashers:
     App\Flags\Entity\User:
@@ -15,6 +15,12 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+
+    # NEW: Dedicated firewall to handle API Preflights (OPTIONS)
+    api_preflight:
+      pattern: ^/api
+      methods: [OPTIONS]
+      security: false # Bypasses all security/authenticators for OPTIONS
 
     # OAuth login flow (needs sessions for state parameter)
     oauth:
@@ -39,6 +45,8 @@ security:
         path: app_logout
 
   access_control:
+    # Allow OPTIONS requests for all API paths without a token
+    - { path: ^/api, methods: [OPTIONS], roles: PUBLIC_ACCESS }
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/oauth/check, roles: PUBLIC_ACCESS }
     - { path: ^/api/public, roles: PUBLIC_ACCESS }

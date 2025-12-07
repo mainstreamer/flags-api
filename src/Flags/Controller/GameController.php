@@ -137,7 +137,7 @@ class GameController extends AbstractController
     }
 
     /** @Security("is_granted('ROLE_USER')") */
-    #[Route('/protected', name: 'get_profile', methods: ['GET'])]
+    #[Route('/api/protected', name: 'get_profile', methods: ['GET', 'OPTIONS'])]
     public function getProfile(): Response
     {
         return $this->json($this->getUser());
@@ -207,7 +207,7 @@ class GameController extends AbstractController
     }
     
     /** @Security("is_granted('ROLE_USER')") */
-    #[Route('/incorrect', name: 'incorrect', methods: ['GET'])]
+    #[Route('/api/incorrect', name: 'incorrect', methods: ['GET', 'OPTIONS'])]
     public function getStat(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
         $correctResults = $repository->findCorrectGuesses($user->getId());
@@ -240,7 +240,7 @@ class GameController extends AbstractController
     }
 
     /** @Security("is_granted('ROLE_USER')") */
-    #[Route('/correct', name: 'correct', methods: ['GET'])]
+    #[Route('/api/correct', name: 'correct', methods: ['GET', 'OPTIONS'])]
     public function getRight(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
         $correctResults = $repository->findCorrectGuesses($user->getId());
@@ -269,5 +269,16 @@ class GameController extends AbstractController
         array_multisort($result, SORT_DESC, SORT_NUMERIC, array_column($result, 'rate'), SORT_DESC, SORT_NUMERIC);
         
         return $this->json($result);
+    }
+
+    #[Route('/test-header', name: 'test_header')]
+    public function testHeader(): Response
+    {
+        return new JsonResponse([
+            'message' => 'If you see this without ngrok warning, headers work!',
+            'headers' => [
+                'ngrok-skip' => 'true'
+            ]
+        ]);
     }
 }

@@ -262,6 +262,7 @@ class User implements UserInterface
         return $this->answers;
     }
 
+
     public function getUserIdentifier(): string
     {
         return $this->sub ?? $this->telegramId ?? $this->id;

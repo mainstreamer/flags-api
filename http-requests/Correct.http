@@ -1,0 +1,6 @@
+### GET request to example server
+GET https://369c0297b669.ngrok-free.app/api/correct
+Authorization: Bearer {{t1}}
+ngrok-skip-browser-warning: true
+
+###http://localhost/test
