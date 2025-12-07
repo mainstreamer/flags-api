@@ -1,0 +1,5 @@
+### GET request to example server
+GET http://localhost/test
+Authorization: Bearer {{oauth_token}}
+
+###

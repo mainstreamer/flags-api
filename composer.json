@@ -10,6 +10,8 @@
         "doctrine/doctrine-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "*",
         "doctrine/orm": "*",
+        "knpuniversity/oauth2-client-bundle": "^2.20",
+        "league/oauth2-client": "^2.9",
         "lexik/jwt-authentication-bundle": "*",
         "nelmio/cors-bundle": "^2.3",
         "phpactor/language-server": "^6.1",

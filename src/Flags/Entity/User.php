@@ -45,38 +45,43 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $telegramPhotoUrl;
-    
+
     /**
      * @ORM\Column(type="integer")
      */
     private int $highScore = 0;
-    
+
     /**
      * @ORM\Column(type="integer")
      */
     private int $gamesTotal = 0;
-    
+
     /**
      * @ORM\Column(type="integer")
      */
     private int $bestTime = 0;
-    
+
     /**
      * @ORM\Column(type="integer")
      */
     private int $timeTotal = 0;
-    
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $sub = null;  // OAuth2 subject identifier
+
     /**
      * @OneToMany(targetEntity="Answer", mappedBy="user", cascade={"persist"})
      * @Ignore
      */
     private ?Collection $answers;
-    
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -166,17 +171,17 @@ class User implements UserInterface
     {
         // TODO: Implement eraseCredentials() method.
     }
-    
+
     public function getHighScore(): int
     {
         return $this->highScore;
     }
-    
+
     public function setHighScore(int $score): void
     {
-        $this->highScore = $score;   
+        $this->highScore = $score;
     }
-    
+
     /**
      * @return int
      */
@@ -184,7 +189,7 @@ class User implements UserInterface
     {
         return $this->gamesTotal;
     }
-    
+
     /**
      * @param int $gamesTotal
      */
@@ -192,7 +197,7 @@ class User implements UserInterface
     {
         $this->gamesTotal = $gamesTotal;
     }
-    
+
     /**
      * @return int
      */
@@ -200,7 +205,7 @@ class User implements UserInterface
     {
         return $this->bestTime;
     }
-    
+
     /**
      * @param int $bestTime
      */
@@ -208,7 +213,7 @@ class User implements UserInterface
     {
         $this->bestTime = $bestTime;
     }
-    
+
     /**
      * @return int
      */
@@ -216,7 +221,7 @@ class User implements UserInterface
     {
         return $this->timeTotal;
     }
-    
+
     /**
      * @param Score $score
      * @param array[App\Entity\Answer] $answers
@@ -236,19 +241,19 @@ class User implements UserInterface
             $this->addAnswer($item);
         }
     }
-    
+
     public function addAnswer(Answer $answer): void
     {
         $answer->setUser($this);
         $this->answers[] = $answer;
     }
-    
+
     public function removeAnswer(Answer $answer): void
     {
         $answer->setUser(null);
         $this->answers->removeElement($answer);
     }
-    
+
     /**
      * @return ArrayCollection|Collection
      */
@@ -259,6 +264,16 @@ class User implements UserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->id;
+        return $this->sub ?? $this->telegramId ?? $this->id;
+    }
+
+    public function getSub(): ?string
+    {
+        return $this->sub;
+    }
+
+    public function setSub(string $sub): void
+    {
+        $this->sub = $sub;
     }
 }

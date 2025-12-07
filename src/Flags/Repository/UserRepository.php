@@ -6,6 +6,9 @@ use App\Flags\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
+use League\OAuth2\Client\Provider\GenericResourceOwner;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -13,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository implements UserLoaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -76,4 +79,36 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function loadUserByIdentifier(string $identifier): ?UserInterface
+    {
+        return $this->findOneBySub($identifier) ?? $this->findOneByTelegramId($identifier);
+    }
+
+    public function loadOrCreateFromOAuth(GenericResourceOwner $userInfo): User
+    {
+        // Assuming your OAuth server returns "sub" as unique identifier
+        $sub = $userInfo->getId();     // or ->getUid(), ->getEmail(), depending on your provider
+//        $email = $userInfo->getEmail();
+
+        // Try to find existing user
+        $user = $this->findOneBy(['sub' => $sub]);
+
+        if ($user) {
+            return $user;
+        }
+
+//        $userInfoArray = $userInfo->toArray()
+        // Create new user
+        $user = new User();
+        $user->setSub($sub);
+//        $user->setEmail($userInfoArray['email'] ?? null);
+//        $user->setRoles(['ROLE_USER']);
+
+        $em = $this->getEntityManager();
+        $em->persist($user);
+        $em->flush();
+
+        return $user;
+    }
 }

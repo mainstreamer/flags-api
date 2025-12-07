@@ -189,7 +189,8 @@ class GameController extends AbstractController
         #[Autowire(service: 'lexik_jwt_authentication.handler.authentication_success')]
         AuthenticationSuccessHandlerInterface $handler
     ): Response {
-        $user = $repository->getAnyUser();
+//        $user = $repository->getAnyUser();
+        $user = $repository->findOneBySub('1');
 //        $token = $encoder
 //            ->encode([
 //                'username' => $user->getTelegramId(),

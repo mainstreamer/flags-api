@@ -16,6 +16,7 @@ class AppFixtures extends Fixture
         if (!$user) {
             $user = new User();
             $user->setTelegramId('994310081');
+            $user->setSub('1');
             $manager->persist($user);
             $manager->flush();
         }

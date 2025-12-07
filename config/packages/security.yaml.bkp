@@ -1,0 +1,96 @@
+security:
+  enable_authenticator_manager: true
+
+  providers:
+    database_provider:
+      entity:
+        class: App\Flags\Entity\User
+        property: email
+
+  password_hashers:
+    App\Flags\Entity\User:
+      algorithm: bcrypt
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    main:
+      lazy: true
+      provider: database_provider
+
+      stateless: true  # Important for API!
+      jwt: ~  # Enable JWT authentication
+
+      custom_authenticators:
+        - App\Flags\Security\HqAuthAuthenticator
+        - lexik_jwt_authentication.jwt_token_authenticator  # For JWT validation
+
+      logout:
+        path: app_logout
+        target: app_login
+
+  access_control:
+    - { path: ^/login, roles: PUBLIC_ACCESS }
+    - { path: ^/oauth/check, roles: PUBLIC_ACCESS }
+    - { path: ^/check, roles: PUBLIC_ACCESS }
+    - { path: ^/capitals/test, roles: PUBLIC_ACCESS }
+    - { path: ^/capitals/test2, roles: ROLE_USER }
+    - { path: ^/capitals/high-scores, roles: PUBLIC_ACCESS }
+    - { path: ^/api/tg/login, roles: PUBLIC_ACCESS }
+    - { path: ^/test, roles: ROLE_USER }
+    - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/capitals, roles: ROLE_USER }
+
+
+#security:
+#    enable_authenticator_manager: true
+#    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+#    providers:
+#        database_provider:
+#            entity:
+#                class: App\Flags\Entity\User
+##                property: telegramId
+#                  # Add a separate provider for OAuth users if needed
+##            oauth_user_provider:
+##              entity:
+##                class: App\Flags\Entity\User
+##                property: email  # or whatever identifier your OAuth returns
+#    password_hashers:
+#        App\Entity\User:
+#            algorithm: bcrypt
+#    firewalls:
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
+#        main:
+##            jwt: ~
+#            lazy: true
+#            provider: database_provider
+#
+#            custom_authenticators:
+#              - App\Flags\Security\HqAuthAuthenticator
+##              - lexic_jwt_authentication.jwt_token_authenticator
+#
+#            logout:
+#              path: app_logout
+#              target: app_login
+##        main:
+##            jwt: ~
+#            # activate different ways to authenticate
+#            # https://symfony.com/doc/current/security.html#firewalls-authentication
+#
+#    # Easy way to control access for large sections of your site
+#    # Note: Only the *first* access control that matches will be used
+#    access_control:
+#        - { path: ^/login, roles: PUBLIC_ACCESS }
+#        - { path: ^/oauth/check, roles: PUBLIC_ACCESS }
+#        - { path: ^/check, roles: PUBLIC_ACCESS }
+#        - { path: ^/capitals/test, roles: PUBLIC_ACCESS }
+#        - { path: ^/capitals/test2, roles: ROLE_USER }
+#        - { path: ^/capitals/high-scores, roles: PUBLIC_ACCESS }
+#        - { path: ^/api/tg/login, roles: PUBLIC_ACCESS }
+#        - { path: ^/test, roles: ROLE_USER }
+#        - { path: ^/profile, roles: ROLE_USER }
+#        - { path: ^/capitals, roles: ROLE_USER }

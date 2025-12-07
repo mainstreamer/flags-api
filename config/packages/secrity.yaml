@@ -1,0 +1,48 @@
+security:
+  enable_authenticator_manager: true
+
+  providers:
+    database_provider:
+      entity:
+        class: App\Flags\Entity\User
+        property: email
+
+  password_hashers:
+    App\Flags\Entity\User:
+      algorithm: bcrypt
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    # OAuth login flow (needs sessions for state parameter)
+    oauth:
+      pattern: ^/(login|oauth)
+      stateless: false
+      provider: database_provider
+      custom_authenticators:
+        - App\Flags\Security\HqAuthAuthenticator
+
+    # API endpoints protected by JWT
+    api:
+      pattern: ^/api
+      stateless: true
+      provider: database_provider
+      jwt: ~
+
+    # Main firewall for web pages
+    main:
+      lazy: true
+      provider: database_provider
+      logout:
+        path: app_logout
+
+  access_control:
+    - { path: ^/login, roles: PUBLIC_ACCESS }
+    - { path: ^/oauth/check, roles: PUBLIC_ACCESS }
+    - { path: ^/api/public, roles: PUBLIC_ACCESS }
+    - { path: ^/api, roles: ROLE_USER }
+    - { path: ^/capitals/test$, roles: PUBLIC_ACCESS }
+    - { path: ^/capitals/high-scores, roles: PUBLIC_ACCESS }
+    - { path: ^/capitals, roles: ROLE_USER }
