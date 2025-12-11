@@ -1,0 +1,49 @@
+{
+    # Global options
+    auto_https off  # We'll handle HTTPS at ingress level in K8s
+    admin off       # Disable admin API for security
+}
+
+:80 {
+    # Root directory
+    root * /var/www/webapp/public
+
+    # PHP-FPM configuration
+    php_fastcgi php:9000 {
+        split .php
+        index index.php
+        resolve_root_symlink
+    }
+
+    # Serve static files
+    file_server
+
+    # Logging
+    log {
+        output file /var/log/caddy/access.log
+        format json
+    }
+
+    # CORS headers
+    @options {
+        method OPTIONS
+    }
+    handle @options {
+        header Access-Control-Allow-Origin "*"
+        header Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE, PATCH"
+        header Access-Control-Allow-Headers "Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since"
+        header Access-Control-Max-Age "1728000"
+        respond 204
+    }
+
+    # Apply CORS to all responses
+    header Access-Control-Allow-Origin "*"
+
+    # Gzip compression
+    encode gzip
+
+    # Max body size (for file uploads)
+    request_body {
+        max_size 50MB
+    }
+}

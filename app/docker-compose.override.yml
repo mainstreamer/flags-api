@@ -1,12 +1,18 @@
 services:
     php:
+        build:
+          args:
+            KEY: ${GITH_KEY}
+            USER_ID: 1000
+            GROUP_ID: 1000
+          target: development
         volumes:
             - .:/var/www/webapp:rw,cached
         user: "1000:1000" 
     db:
         ports:
             - "3306:3306"
-    nginx:
+    caddy:
         ports:
             - "80:80"
             - "443:443"

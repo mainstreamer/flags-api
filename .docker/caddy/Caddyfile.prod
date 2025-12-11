@@ -1,0 +1,50 @@
+{
+    email your-email@example.com  # For Let's Encrypt notifications
+}
+
+flags-api.izeebot.top {
+# Root directory
+    root * /var/www/webapp/public
+
+# PHP-FPM
+    php_fastcgi php:9000 {
+                             split .php
+                             index index.php
+                             resolve_root_symlink
+                         }
+
+# Serve static files
+    file_server
+
+# Logging
+    log {
+            output file /var/log/caddy/access.log
+            format json
+        }
+
+# CORS
+    @options method OPTIONS
+    handle @options {
+                        header Access-Control-Allow-Origin "*"
+                        header Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE, PATCH"
+                        header Access-Control-Allow-Headers "Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since"
+                        header Access-Control-Max-Age "1728000"
+                        respond 204
+                    }
+
+    header Access-Control-Allow-Origin "*"
+
+# Compression
+    encode gzip zstd
+
+# Request body size
+    request_body {
+                     max_size 50MB
+                 }
+
+# Security headers
+    header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header X-Content-Type-Options "nosniff"
+    header X-Frame-Options "SAMEORIGIN"
+    header Referrer-Policy "strict-origin-when-cross-origin"
+}
