@@ -1,0 +1,62 @@
+services:
+    php:
+        container_name: "php-flags-api"
+        build:
+            context: ..
+            dockerfile: .docker/php-fpm/Dockerfile
+            target: production
+        environment:
+            SYMFONY_DECRYPTION_SECRET: "${SYMFONY_DECRYPTION_SECRET}"
+#        depends_on:
+#            - caddy
+        networks:
+            - backend-flags
+    caddy:
+        container_name: "caddy-flags-api"
+        build:
+            context: ..
+            dockerfile: .docker/caddy/Dockerfile
+        restart: always
+#        ports:
+#            - "80:80"
+#            - "443:443"
+        volumes:
+            - ./:/var/www/webapp:cached
+            - caddy_data:/data
+            - caddy_config:/config
+            - caddy_logs:/var/log/caddy
+        networks:
+            - backend-flags
+        depends_on:
+            - php
+#    nginx:
+#        container_name: "nginx-php-flags-api"
+#        build:
+#            context: .
+#            dockerfile: ../.docker/nginx/Dockerfile
+#        restart: always
+#        networks:
+#            - backend-flags
+    db:
+        build:
+            context: ..
+            dockerfile: .docker/mysql/Dockerfile
+        container_name: "db-flags-api"
+        environment:
+            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+            MYSQL_DATABASE: "${MYSQL_DATABASE}"
+            MYSQL_USER: "${MYSQL_USER}"
+            MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+        volumes:
+            - db-data-flags:/var/lib/mysql
+        restart: always
+        networks:
+            - backend-flags
+networks:
+    backend-flags:
+        external: true
+volumes:
+    db-data-flags: ~
+    caddy_logs: ~
+    caddy_data: ~
+    caddy_config: ~

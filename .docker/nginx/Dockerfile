@@ -6,10 +6,10 @@ RUN apk add --update \
 
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/*
 
-ADD .docker/nginx/nginx.conf /etc/nginx/
-ADD .docker/nginx/host.conf /etc/nginx/conf.d/
-ADD .docker/nginx/cert.crt /etc/ssl/cert.crt
-ADD .docker/nginx/cert.key /etc/ssl/cert.key
+ADD ../.docker/nginx/nginx.conf /etc/nginx/
+ADD ../.docker/nginx/host.conf /etc/nginx/conf.d/
+ADD ../.docker/nginx/cert.crt /etc/ssl/cert.crt
+ADD ../.docker/nginx/cert.key /etc/ssl/cert.key
 
 RUN rm /etc/nginx/conf.d/default.conf
 
