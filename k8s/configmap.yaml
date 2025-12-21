@@ -1,0 +1,23 @@
+# =============================================================================
+# SECURITY NOTE:
+# This simplified setup loads all env vars from a single secret created from .env.prod
+# For production, consider using:
+#   - Kubernetes Secrets with proper RBAC
+#   - External secret managers (HashiCorp Vault, AWS Secrets Manager, etc.)
+#   - Sealed Secrets for GitOps workflows
+#   - Separate secrets from non-sensitive config
+# =============================================================================
+
+# Non-sensitive configuration only
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flags-api-config
+  namespace: flags-api
+  labels:
+    app.kubernetes.io/name: flags-api
+    app.kubernetes.io/part-of: flags-quiz
+data:
+  # PHP-FPM service discovery
+  PHP_FPM_HOST: "php"
+  PHP_FPM_PORT: "59000"

@@ -8,11 +8,18 @@ services:
           target: development
         volumes:
             - .:/var/www/webapp:rw,cached
-        user: "1000:1000" 
+            
     db:
         ports:
             - "3306:3306"
     caddy:
         ports:
-            - "80:80"
-            - "443:443"
+            - "8000:80"
+            - "4430:443"
+        volumes:
+            - ./:/var/www/webapp:cached
+            - caddy_data:/data
+            - caddy_config:/config
+            - caddy_logs:/var/log/caddy
+        build:
+          dockerfile: .docker/caddy/Dockerfile

@@ -15,16 +15,11 @@ services:
         container_name: "caddy-flags-api"
         build:
             context: ..
-            dockerfile: .docker/caddy/Dockerfile
+            dockerfile: .docker/caddy/Dockerfile.prod
         restart: always
 #        ports:
 #            - "80:80"
 #            - "443:443"
-        volumes:
-            - ./:/var/www/webapp:cached
-            - caddy_data:/data
-            - caddy_config:/config
-            - caddy_logs:/var/log/caddy
         networks:
             - backend-flags
         depends_on:

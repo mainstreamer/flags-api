@@ -1,50 +1,51 @@
 {
-    email your-email@example.com  # For Let's Encrypt notifications
+    # Trust proxies from internal/VPN networks
+    servers {
+        trusted_proxies static 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+    }
 }
 
-flags-api.izeebot.top {
-# Root directory
-    root * /var/www/webapp/public
+:80 {
+    # Health check (handle locally before proxy)
+    @health path /health
+    handle @health {
+        respond "OK" 200
+    }
 
-# PHP-FPM
-    php_fastcgi php:9000 {
-                             split .php
-                             index index.php
-                             resolve_root_symlink
-                         }
-
-# Serve static files
-    file_server
-
-# Logging
-    log {
-            output file /var/log/caddy/access.log
-            format json
-        }
-
-# CORS
+    # CORS preflight
     @options method OPTIONS
     handle @options {
-                        header Access-Control-Allow-Origin "*"
-                        header Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE, PATCH"
-                        header Access-Control-Allow-Headers "Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since"
-                        header Access-Control-Max-Age "1728000"
-                        respond 204
-                    }
+        header Access-Control-Allow-Origin "*"
+        header Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE, PATCH"
+        header Access-Control-Allow-Headers "Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since"
+        header Access-Control-Max-Age "1728000"
+        respond 204
+    }
 
+    # CORS header for all responses
     header Access-Control-Allow-Origin "*"
 
-# Compression
+    # Compression
     encode gzip zstd
 
-# Request body size
-    request_body {
-                     max_size 50MB
-                 }
-
-# Security headers
-    header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    # Security headers
     header X-Content-Type-Options "nosniff"
     header X-Frame-Options "SAMEORIGIN"
     header Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Proxy everything to PHP-FPM (Symfony front controller)
+    reverse_proxy php:59000 {
+        transport fastcgi {
+            root /var/www/html/public
+            env SCRIPT_FILENAME /var/www/html/public/index.php
+            env HTTPS {http.request.header.X-Forwarded-Proto}
+            env SERVER_PORT {http.request.header.X-Forwarded-Port}
+        }
+    }
+
+    # Logging
+    log {
+        output stdout
+        format json
+    }
 }
