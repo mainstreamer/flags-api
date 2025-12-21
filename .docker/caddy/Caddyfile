@@ -46,4 +46,9 @@
     request_body {
         max_size 50MB
     }
+
+    @health path /health
+    handle @health {
+        respond "OK" 200
+    }
 }

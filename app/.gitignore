@@ -15,7 +15,7 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
-.idea
+.idea/*
 @auto-scripts
 *.decrypt.*.php
 ###> phpunit/phpunit ###

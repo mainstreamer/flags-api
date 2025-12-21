@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: flags-api
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  # secrets.yaml is a placeholder - secret created from .env.prod via deploy.sh
+  - mysql-pvc.yaml
+  - mysql-deployment.yaml
+  - php-deployment.yaml
+  - caddy-deployment.yaml
+  - services.yaml
+  - ingress.yaml
+
+commonLabels:
+  app.kubernetes.io/managed-by: kustomize
+  app.kubernetes.io/part-of: flags-quiz
+
+images:
+  - name: ghcr.io/mainstreamer/flags-api-php
+    newTag: latest
+  - name: ghcr.io/mainstreamer/flags-api-caddy
+    newTag: latest
+  - name: mysql
+    newTag: "9.0"

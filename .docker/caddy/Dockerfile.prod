@@ -12,7 +12,7 @@ RUN deluser www-data 2>/dev/null || true && \
     adduser -D -u 1000 -G www-data www-data
 
 # Copy Caddyfile
-COPY .docker/caddy/Caddyfile /etc/caddy/Caddyfile
+COPY .docker/caddy/Caddyfile.prod /etc/caddy/Caddyfile
 
 COPY ../../app /var/www/webapp
 
