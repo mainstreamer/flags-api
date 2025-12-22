@@ -6,39 +6,29 @@ use App\Flags\DTO\ScoreDTO;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Flags\Repository\ScoreRepository")
- */
+#[ORM\Entity(repositoryClass: "App\Flags\Repository\ScoreRepository")]
 class Score
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     protected int $id;
-    
-    /**
-     * @ORM\Column(type="integer", length=255)
-     */
+
+    #[ORM\Column(type: "integer", length: 255)]
     protected int $sessionTimer;
-    
-    /**
-     * @ORM\Column(type="integer", length=255)
-     * @Assert\Type("integer")
-     */
+
+    #[ORM\Column(type: "integer", length: 255)]
+    #[Assert\Type("integer")]
     protected int $score;
-    
-    /**
-     * @ORM\Column(type="datetime")
-     */
+
+    #[ORM\Column(type: "datetime")]
     protected \DateTime $date;
-    
+
     public function __construct()
     {
         $this->date = new \DateTime();
     }
-    
+
     /**
      * @return int|mixed
      */
@@ -46,7 +36,7 @@ class Score
     {
         return $this->sessionTimer;
     }
-    
+
     /**
      * @param int|mixed $sessionTimer
      */
@@ -54,7 +44,7 @@ class Score
     {
         $this->sessionTimer = $sessionTimer;
     }
-    
+
     /**
      * @return int|mixed
      */
@@ -62,7 +52,7 @@ class Score
     {
         return $this->score;
     }
-    
+
     /**
      * @param int|mixed $score
      */
@@ -70,13 +60,13 @@ class Score
     {
         $this->score = $score;
     }
-    
+
     public function fromDTO(ScoreDTO $dto): self
     {
         $score = new static();
         $score->setSessionTimer($dto->sessionTimer);
         $score->setScore($dto->score);
-        
+
         return $score;
     }
 }

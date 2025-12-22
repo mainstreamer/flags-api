@@ -4,31 +4,21 @@ namespace App\Flags\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Flags\Repository\FlagRepository")
- */
+#[ORM\Entity(repositoryClass: "App\Flags\Repository\FlagRepository")]
 class Flag
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $code;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $shows = 0;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: "integer")]
     private int $correctGuesses = 0;
 
 
@@ -72,7 +62,7 @@ class Flag
     {
         return $this->correctGuesses;
     }
-    
+
 
     public function incrementCorrectAnswersCounter(): void
     {

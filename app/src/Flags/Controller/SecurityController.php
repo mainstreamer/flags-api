@@ -23,6 +23,22 @@ class SecurityController extends AbstractController
             ->redirect(['openid', 'profile', 'email'], []);
     }
 
+    #[Route('/debug/headers', name: 'debug_headers')]
+    public function debugHeaders(Request $request): JsonResponse
+    {
+        return new JsonResponse([
+            'scheme' => $request->getScheme(),
+            'isSecure' => $request->isSecure(),
+            'host' => $request->getHost(),
+            'clientIp' => $request->getClientIp(),
+            'X-Forwarded-Proto' => $request->headers->get('X-Forwarded-Proto'),
+            'X-Forwarded-For' => $request->headers->get('X-Forwarded-For'),
+            'X-Forwarded-Host' => $request->headers->get('X-Forwarded-Host'),
+            'trustedProxies' => Request::getTrustedProxies(),
+            'server_HTTPS' => $_SERVER['HTTPS'] ?? 'not set',
+        ]);
+    }
+
     #[Route('/oauth/check', name: 'oauth_check')]
     public function check()
     {
