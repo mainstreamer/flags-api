@@ -15,15 +15,19 @@
     # CORS preflight
     @options method OPTIONS
     handle @options {
-        header Access-Control-Allow-Origin "*"
+        header Access-Control-Allow-Origin "https://flags.izeebot.top"
         header Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE, PATCH"
         header Access-Control-Allow-Headers "Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since"
+        header Access-Control-Allow-Credentials "true"
+        header Access-Control-Expose-Headers "Authorization"
         header Access-Control-Max-Age "1728000"
         respond 204
     }
 
-    # CORS header for all responses
-    header Access-Control-Allow-Origin "*"
+    # CORS headers for all responses
+    header Access-Control-Allow-Origin "https://flags.izeebot.top"
+    header Access-Control-Allow-Credentials "true"
+    header Access-Control-Expose-Headers "Authorization"
 
     # Compression
     encode gzip zstd

@@ -3,52 +3,33 @@
 namespace App\Flags\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-/**
- * @ORM\Entity(repositoryClass="App\Flags\Repository\AnswerRepository")
- */
+#[ORM\Entity(repositoryClass: "App\Flags\Repository\AnswerRepository")]
 class Answer
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     protected int $id;
-    
-    /**
-     * @ORM\Column(type="integer")
-     */
+
+    #[ORM\Column(type: "integer")]
     protected int $timer;
-    
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+
+    #[ORM\Column(type: "string", length: 255)]
     protected string $flagCode;
-    
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+
+    #[ORM\Column(type: "string", length: 255)]
     protected string $answerOptions;
-    
-    /**
-     * @ORM\Column(type="boolean")
-     */
+
+    #[ORM\Column(type: "boolean")]
     protected bool $correct;
-    
-    /**
-     * @ORM\Column(type="datetime")
-     */
+
+    #[ORM\Column(type: "datetime")]
     protected \DateTime $date;
-    
-    /**
-     * Many features have one product. This is the owning side.
-     * @ManyToOne(targetEntity="User", inversedBy="answers")
-     * @Ignore
-     */
+
+    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "answers")]
+    #[Ignore]
     protected ?User $user;
 
     /**
@@ -58,7 +39,7 @@ class Answer
     {
         return $this->timer;
     }
-    
+
     /**
      * @param int $timer
      */
@@ -66,7 +47,7 @@ class Answer
     {
         $this->timer = $timer;
     }
-    
+
     /**
      * @return string
      */
@@ -74,7 +55,7 @@ class Answer
     {
         return $this->flagCode;
     }
-    
+
     /**
      * @param string $flagCode
      */
@@ -82,7 +63,7 @@ class Answer
     {
         $this->flagCode = $flagCode;
     }
-    
+
     /**
      * @return array
      */
@@ -90,7 +71,7 @@ class Answer
     {
         return $this->answerOptions;
     }
-    
+
     /**
      * @param array $answerOptions
      */
@@ -98,7 +79,7 @@ class Answer
     {
         $this->answerOptions = json_encode($answerOptions);
     }
-    
+
     /**
      * @return bool
      */
@@ -106,7 +87,7 @@ class Answer
     {
         return $this->correct;
     }
-    
+
     /**
      * @param bool $correct
      */
@@ -114,7 +95,7 @@ class Answer
     {
         $this->correct = $correct;
     }
-    
+
     /**
      * @return \DateTime
      */
@@ -122,7 +103,7 @@ class Answer
     {
         return $this->date;
     }
-    
+
     /**
      * @param \DateTime $date
      */
@@ -130,7 +111,7 @@ class Answer
     {
         $this->date = $date;
     }
-    
+
     /**
      * @return string
      */
@@ -138,7 +119,7 @@ class Answer
     {
         return $this->id;
     }
-    
+
     public function fromArray(array $array): self
     {
         $item = new static;
@@ -147,10 +128,10 @@ class Answer
         $item->setTimer($array['time']);
         $item->setCorrect($array['correct']);
         $item->setDate((new \DateTime())->setTimestamp(round($array['answerDateTime']/1000)));
-        
+
         return $item;
     }
-    
+
     /**
      * @return User|null
      */
@@ -158,7 +139,7 @@ class Answer
     {
         return $this->user;
     }
-    
+
     /**
      * @param User|null $user
      */

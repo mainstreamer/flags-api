@@ -5,31 +5,21 @@ namespace App\Flags\Entity;
 use App\Flags\Entity\Enum\GameType;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Flags\Repository\GameRepository")
- */
+#[ORM\Entity(repositoryClass: "App\Flags\Repository\GameRepository")]
 class Game
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $type;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Flags\Entity\User")
-     */
+    #[ORM\ManyToOne(targetEntity: "App\Flags\Entity\User")]
     private readonly User $user;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: "json")]
     private array $questions = [];
 
     public function __construct(
