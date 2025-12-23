@@ -133,7 +133,7 @@ class GameController extends AbstractController
         return $this->json($this->getUser());
     }
 
-    #[Route('/flags/scores', name: 'get_high_scores', methods: ['GET'])]
+    #[Route('/scores', name: 'get_high_scores', methods: ['GET'])]
     public function getHighScores(UserRepository $repository): Response
     {
         return $this->json($repository->getHighScores());

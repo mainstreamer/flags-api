@@ -16,7 +16,6 @@
         "nelmio/cors-bundle": "^2.3",
         "phpactor/language-server": "^6.1",
         "rteeom/isoflags": "^1.1",
-        "sensio/framework-extra-bundle": "*",
         "symfony/console": "*",
         "symfony/dotenv": "*",
         "symfony/expression-language": "*",

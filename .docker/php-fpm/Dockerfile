@@ -29,6 +29,7 @@ FROM base AS development
 
 ARG USER_ID=1000
 ARG GROUP_ID=1000
+WORKDIR /var/www/html
 
 RUN apk add --no-cache git curl wget vim bash
 
@@ -42,8 +43,8 @@ RUN { \
     echo 'opcache.enable_cli = 1'; \
     echo 'opcache.validate_timestamps = 1'; \
     echo 'opcache.revalidate_freq = 0'; \
-    echo 'session.save_handler = redis'; \
-    echo 'session.save_path = "tcp://redis:6379"'; \
+    echo 'session.save_handler = files'; \
+    echo 'session.save_path = "/tmp"'; \
     echo 'display_errors = On'; \
     echo 'error_reporting = E_ALL'; \
     echo 'log_errors = On'; \
@@ -83,8 +84,8 @@ RUN { \
     echo 'memory_limit = 256M'; \
     echo 'opcache.enable = 1'; \
     echo 'opcache.enable_cli = 0'; \
-    echo 'session.save_handler = redis'; \
-    echo 'session.save_path = "tcp://redis:6379"'; \
+    echo 'session.save_handler = files'; \
+    echo 'session.save_path = "/tmp"'; \
     echo 'display_errors = Off'; \
     echo 'log_errors = On'; \
 } > /usr/local/etc/php/conf.d/custom.ini
