@@ -1,4 +1,4 @@
 ### Submit correct flag answer
-POST {{url}}/api/flags/correct/ua
+POST {{url}}/api/flags/correct/au
 Authorization: Bearer {{0xNTK_token}}
 Content-Type: application/json

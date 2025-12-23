@@ -6,7 +6,7 @@
 
 :80 {
     # Root directory
-    root * /var/www/webapp/public
+    root * /var/www/html/public
 
     # PHP-FPM configuration
     php_fastcgi php:9000 {

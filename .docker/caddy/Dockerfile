@@ -14,7 +14,7 @@ RUN deluser www-data 2>/dev/null || true && \
 # Copy Caddyfile
 COPY .docker/caddy/Caddyfile /etc/caddy/Caddyfile
 
-COPY ../../app /var/www/webapp
+COPY ../../app /var/www/html
 
 # Create log directory
 RUN mkdir -p /var/log/caddy && \
