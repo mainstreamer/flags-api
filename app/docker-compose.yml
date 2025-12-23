@@ -7,8 +7,6 @@ services:
             target: production
         environment:
             SYMFONY_DECRYPTION_SECRET: "${SYMFONY_DECRYPTION_SECRET}"
-#        depends_on:
-#            - caddy
         networks:
             - backend-flags
     caddy:
@@ -17,21 +15,10 @@ services:
             context: ..
             dockerfile: .docker/caddy/Dockerfile.prod
         restart: always
-#        ports:
-#            - "80:80"
-#            - "443:443"
         networks:
             - backend-flags
         depends_on:
             - php
-#    nginx:
-#        container_name: "nginx-php-flags-api"
-#        build:
-#            context: .
-#            dockerfile: ../.docker/nginx/Dockerfile
-#        restart: always
-#        networks:
-#            - backend-flags
     db:
         build:
             context: ..

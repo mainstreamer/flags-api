@@ -2,13 +2,11 @@ services:
     php:
         build:
           args:
-            KEY: ${GITH_KEY}
             USER_ID: 1000
             GROUP_ID: 1000
           target: development
         volumes:
-            - .:/var/www/webapp:rw,cached
-            
+            - .:/var/www/html:rw,cached
     db:
         ports:
             - "3306:3306"
@@ -17,7 +15,7 @@ services:
             - "8000:80"
             - "4430:443"
         volumes:
-            - ./:/var/www/webapp:cached
+            - ./:/var/www/html:cached
             - caddy_data:/data
             - caddy_config:/config
             - caddy_logs:/var/log/caddy

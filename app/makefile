@@ -1,18 +1,25 @@
 include .env
+default: welcome
 init: build-containers run-containers composer import-db run-api
 run: run-containers run-api 
+db:
+	@docker compose exec php bin/console d:d:c --if-not-exists
+	@docker compose exec php bin/console d:m:m -n
 build:
 	@docker compose build
-run-containers:
+up:
 	@docker compose up -d
-run-api:
-	@symfony server:start
+down:
+	@docker compose down
+rebuild: down build up
 import-db:
 	@bin/console d:d:i flags.sql
 composer:
 	@docker compose exec php composer install
-deploy:
-	@./vendor/bin/dep deploy production
+psalm:
+	@docker compose exec php vendor/bin/psalm --no-cache
+cache:
+	@docker compose exec php bin/console c:c
 welcome:
 	@echo hi
 test:

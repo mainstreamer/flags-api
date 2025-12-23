@@ -36,3 +36,13 @@ services:
     App\EventListener\NgrokHeaderListener:
       tags:
         - { name: kernel.event_subscriber }
+
+    App\EventListener\JsonExceptionListener:
+      arguments:
+        $environment: '%kernel.environment%'
+      tags:
+        - { name: kernel.event_subscriber }
+
+    App\EventListener\JwtAuthenticationFailureListener:
+      tags:
+        - { name: kernel.event_subscriber }
