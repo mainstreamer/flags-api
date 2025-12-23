@@ -37,6 +37,19 @@ security:
       provider: database_provider
       jwt: ~
 
+    # Game endpoints protected by JWT
+    flags:
+      pattern: ^/flags
+      stateless: true
+      provider: database_provider
+      jwt: ~
+
+    capitals:
+      pattern: ^/capitals
+      stateless: true
+      provider: database_provider
+      jwt: ~
+
     # Main firewall for web pages
     main:
       lazy: true
@@ -46,11 +59,11 @@ security:
 
   access_control:
     # Allow OPTIONS requests for all API paths without a token
-    - { path: ^/api, methods: [OPTIONS], roles: PUBLIC_ACCESS }
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/oauth/check, roles: PUBLIC_ACCESS }
     - { path: ^/api/public, roles: PUBLIC_ACCESS }
-    - { path: ^/api, roles: ROLE_USER }
     - { path: ^/capitals/test$, roles: PUBLIC_ACCESS }
     - { path: ^/capitals/high-scores, roles: PUBLIC_ACCESS }
+    - { path: ^/api, methods: [OPTIONS], roles: PUBLIC_ACCESS }
+    - { path: ^/api, roles: ROLE_USER }
     - { path: ^/capitals, roles: ROLE_USER }

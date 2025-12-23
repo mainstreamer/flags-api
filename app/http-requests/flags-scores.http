@@ -1,0 +1,6 @@
+### Submit game score
+POST {{url}}/flags/scores
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+{"score":0,"sessionTimer":45,"answers":[]}

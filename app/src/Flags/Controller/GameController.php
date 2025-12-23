@@ -11,26 +11,18 @@ use App\Flags\Repository\AnswerRepository;
 use App\Flags\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-//use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Rteeom\FlagsGenerator\FlagsGenerator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ContainerControllerResolver;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 
+#[Route('/api/flags')]
 class GameController extends AbstractController
 {
     protected FlagsGenerator $flagsGenerator;
@@ -65,7 +57,6 @@ class GameController extends AbstractController
 
         return $this->json([
             'APP_ENV' => getenv('APP_ENV'),
-            'xaxa' => 'lalka',
             'version' => getenv('VERSION_HASH'),
             'flags' => $flags,
             // questionText
@@ -75,11 +66,11 @@ class GameController extends AbstractController
         ]);
     }
 
-    /**
-     * @Entity("flag", expr="repository.findOneByCode(flags)")
-     */
-    #[Route('/flags/correct/{flags}', name: 'submit_correct', methods: ['POST'])]
-    public function correct(Flag $flag, EntityManagerInterface $entityManager): Response
+    #[Route('/correct/{flag}', name: 'submit_correct', methods: ['POST'])]
+    public function correct(
+        #[MapEntity(mapping: ['flag' => 'code'])] Flag $flag,
+        EntityManagerInterface $entityManager,
+    ): Response
     {
         $flag->incrementCorrectAnswersCounter();
         $entityManager->flush();
@@ -136,7 +127,6 @@ class GameController extends AbstractController
         return new JsonResponse(['token' => $token]);
     }
 
-    /** @Security("is_granted('ROLE_USER')") */
     #[Route('/api/protected', name: 'get_profile', methods: ['GET', 'OPTIONS'])]
     public function getProfile(): Response
     {
@@ -149,8 +139,7 @@ class GameController extends AbstractController
         return $this->json($repository->getHighScores());
     }
 
-    /** @Security("is_granted('ROLE_USER')") */
-    #[Route('/flags/scores', name: 'submit_game_results', methods: ['POST'])]
+    #[Route('/scores', name: 'submit_game_results', methods: ['POST'])]
     public function postScore(Request $request, EntityManagerInterface $entityManager, #[CurrentUser] $user): Response
     {
         $requestArray = json_decode($request->getContent(), true);
@@ -179,35 +168,8 @@ class GameController extends AbstractController
 
         return new Response($flag);
     }
-
-    #[Route('/token', name: 'test_token', methods: ['GET'])]
-    public function getToken(
-        JWTEncoderInterface $encoder,
-        UserRepository $repository,
-        TokenStorageInterface $storage,
-        JWTTokenManagerInterface $JWTManager,
-        #[Autowire(service: 'lexik_jwt_authentication.handler.authentication_success')]
-        AuthenticationSuccessHandlerInterface $handler
-    ): Response {
-//        $user = $repository->getAnyUser();
-        $user = $repository->findOneBySub('1');
-//        $token = $encoder
-//            ->encode([
-//                'username' => $user->getTelegramId(),
-//                'exp' => time() + 36000
-//            ]);
-
-        $token = $JWTManager->create($user);
-//        $handler = $this->container->get('lexik_jwt_authentication.handler.authentication_success');
-        $handler->handleAuthenticationSuccess($user, $token);
-
-//        $storage->setToken($user->getTelegramId(), $token);
     
-        return $this->json(['token' => $token]);
-    }
-    
-    /** @Security("is_granted('ROLE_USER')") */
-    #[Route('/api/incorrect', name: 'incorrect', methods: ['GET', 'OPTIONS'])]
+    #[Route('/incorrect', name: 'incorrect', methods: ['GET', 'OPTIONS'])]
     public function getStat(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
         $correctResults = $repository->findCorrectGuesses($user->getId());
@@ -239,8 +201,7 @@ class GameController extends AbstractController
         return $this->json($result);
     }
 
-    /** @Security("is_granted('ROLE_USER')") */
-    #[Route('/api/correct', name: 'correct', methods: ['GET', 'OPTIONS'])]
+    #[Route('/correct', name: 'correct', methods: ['GET', 'OPTIONS'])]
     public function getRight(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
         $correctResults = $repository->findCorrectGuesses($user->getId());
@@ -269,16 +230,5 @@ class GameController extends AbstractController
         array_multisort($result, SORT_DESC, SORT_NUMERIC, array_column($result, 'rate'), SORT_DESC, SORT_NUMERIC);
         
         return $this->json($result);
-    }
-
-    #[Route('/test-header', name: 'test_header')]
-    public function testHeader(): Response
-    {
-        return new JsonResponse([
-            'message' => 'If you see this without ngrok warning, headers work!',
-            'headers' => [
-                'ngrok-skip' => 'true'
-            ]
-        ]);
     }
 }
