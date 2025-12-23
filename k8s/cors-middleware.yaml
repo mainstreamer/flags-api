@@ -1,0 +1,32 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: cors-headers
+  namespace: flags-api
+spec:
+  headers:
+    accessControlAllowMethods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "PATCH"
+      - "OPTIONS"
+    accessControlAllowHeaders:
+      - "Authorization"
+      - "Content-Type"
+      - "Accept"
+      - "Origin"
+      - "User-Agent"
+      - "DNT"
+      - "Cache-Control"
+      - "X-Mx-ReqToken"
+      - "Keep-Alive"
+      - "X-Requested-With"
+      - "If-Modified-Since"
+    accessControlAllowOriginList:
+      - "https://flags.izeebot.top"
+    accessControlAllowCredentials: true
+    accessControlExposeHeaders:
+      - "Authorization"
+    accessControlMaxAge: 1728000

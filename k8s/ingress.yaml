@@ -7,10 +7,7 @@ metadata:
     app.kubernetes.io/name: flags-api
     app.kubernetes.io/part-of: flags-quiz
   annotations:
-    # Uncomment for nginx ingress controller
-    # kubernetes.io/ingress.class: nginx
-    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
-
+    traefik.ingress.kubernetes.io/router.middlewares: flags-api-cors-headers@kubernetescrd
     # Uncomment for cert-manager TLS
     # cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
@@ -20,7 +17,7 @@ spec:
   #       - api.flags.example.com
   #     secretName: flags-api-tls
   rules:
-    - host: api.flags.example.com  # Change to your domain
+    - host: api.flags.izeebot.top  # Change to your domain
       http:
         paths:
           - path: /

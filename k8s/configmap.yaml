@@ -21,3 +21,5 @@ data:
   # PHP-FPM service discovery
   PHP_FPM_HOST: "php"
   PHP_FPM_PORT: "59000"
+  # Trust all private network ranges (Traefik -> Caddy -> PHP)
+  TRUSTED_PROXIES: "127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"

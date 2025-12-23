@@ -8,7 +8,7 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 # Install all extensions in one command - MUCH faster
 RUN install-php-extensions \
-    pdo_pgsql \
+    pdo_mysql \
     intl \
     opcache \
     gd \
@@ -130,7 +130,7 @@ RUN { \
     echo 'opcache.memory_consumption = 256'; \
     echo 'opcache.validate_timestamps = 0'; \
     echo 'session.save_handler = redis'; \
-    echo 'session.save_path = "tcp://redis:6379"'; \
+    echo 'session.save_path = "tcp://redis.flaux.svc.cluster.local:6379"'; \
     echo 'display_errors = Off'; \
     echo 'log_errors = On'; \
 } > /usr/local/etc/php/conf.d/custom.ini

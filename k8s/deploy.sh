@@ -69,6 +69,10 @@ kubectl apply -f caddy-deployment.yaml
 echo "Applying services..."
 kubectl apply -f services.yaml
 
+# Apply CORS middleware (required for Traefik)
+echo "Applying CORS middleware..."
+kubectl apply -f cors-middleware.yaml
+
 # Apply ingress (optional)
 echo "Applying ingress..."
 kubectl apply -f ingress.yaml
