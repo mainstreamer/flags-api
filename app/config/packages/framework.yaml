@@ -10,6 +10,10 @@ framework:
         cookie_secure: auto
         cookie_samesite: lax
 
+    # Trust proxy headers (k8s, Caddy, ngrok)
+    trusted_proxies: '127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-port', 'x-forwarded-proto']
+
     #esi: true
     #fragments: true
     php_errors:

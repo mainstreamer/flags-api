@@ -1,0 +1,55 @@
+{
+    servers {
+        trusted_proxies static 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+    }
+}
+
+:80 {
+    # 1. Health check (stays separate)
+    handle /health {
+        respond "OK" 200
+    }
+
+    # 2. Wrap everything else in a route
+    route {
+        # Force CORS headers on ALL responses (GET, POST, etc.)
+        header {
+            Access-Control-Allow-Origin "https://flags.izeebot.top"
+            Access-Control-Allow-Credentials "true"
+            Access-Control-Expose-Headers "Authorization"
+            Vary Origin
+        }
+
+        # Handle Preflight separately
+        @options method OPTIONS
+        handle @options {
+            header Access-Control-Allow-Origin "https://flags.izeebot.top"
+            header Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE, PATCH"
+            header Access-Control-Allow-Credentials "true"
+            header Access-Control-Max-Age "1728000"
+            header Access-Control-Allow-Headers "Authorization, Content-Type, Accept, Origin, User-Agent, DNT, Cache-Control, X-Mx-ReqToken, Keep-Alive, X-Requested-With, If-Modified-Since, X-API-KEY"
+            respond 204
+        }
+
+        # 3. Security & Compression
+        encode gzip zstd
+        header {
+            X-Content-Type-Options "nosniff"
+            X-Frame-Options "SAMEORIGIN"
+            Referrer-Policy "strict-origin-when-cross-origin"
+        }
+
+        # 4. Proxy to Symfony
+        reverse_proxy php:59000 {
+            transport fastcgi {
+                root /var/www/html/public
+                env SCRIPT_FILENAME /var/www/html/public/index.php
+            }
+        }
+    }
+
+    log {
+        output stdout
+        format json
+    }
+}
