@@ -26,6 +26,7 @@ spec:
       - "If-Modified-Since"
     accessControlAllowOriginList:
       - "https://flags.izeebot.top"
+      - "https://capitals.izeebot.top"
     accessControlAllowCredentials: true
     accessControlExposeHeaders:
       - "Authorization"

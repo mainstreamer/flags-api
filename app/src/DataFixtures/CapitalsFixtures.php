@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class CapitalsFixtures extends Fixture
 {
-    private const COUNTRY_FILES = [
+    private const array COUNTRY_FILES = [
         'capitals-africa.json',
         'capitals-americas.json',
         'capitals-asia.json',

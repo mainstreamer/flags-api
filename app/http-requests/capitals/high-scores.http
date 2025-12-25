@@ -1,0 +1,19 @@
+### Get Europe high scores
+GET {{url}}/capitals/high-scores/europe
+Content-Type: application/json
+
+### Get Asia high scores
+GET {{url}}/capitals/high-scores/asia
+Content-Type: application/json
+
+### Get Africa high scores
+GET {{url}}/capitals/high-scores/africa
+Content-Type: application/json
+
+### Get Americas high scores
+GET {{url}}/capitals/high-scores/americas
+Content-Type: application/json
+
+### Get Oceania high scores
+GET {{url}}/capitals/high-scores/oceania
+Content-Type: application/json

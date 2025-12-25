@@ -30,6 +30,12 @@ security:
       custom_authenticators:
         - App\Flags\Security\HqAuthAuthenticator
 
+    # Public API endpoints (no auth required)
+    api_public:
+      pattern: ^/api/flags/scores$
+      methods: [GET]
+      security: false
+
     # API endpoints protected by JWT
     api:
       pattern: ^/api
@@ -65,5 +71,6 @@ security:
     - { path: ^/capitals/test$, roles: PUBLIC_ACCESS }
     - { path: ^/capitals/high-scores, roles: PUBLIC_ACCESS }
     - { path: ^/api, methods: [OPTIONS], roles: PUBLIC_ACCESS }
+    - { path: ^/capitals, methods: [ OPTIONS ], roles: PUBLIC_ACCESS }
     - { path: ^/api, roles: ROLE_USER }
     - { path: ^/capitals, roles: ROLE_USER }

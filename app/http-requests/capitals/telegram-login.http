@@ -1,0 +1,5 @@
+### Telegram login
+# Query params: id, first_name, last_name, username, photo_url, auth_date, hash
+# The hash is calculated from the data using bot token
+GET {{url}}/api/tg/login?id=123456789&first_name=John&last_name=Doe&username=johndoe&auth_date=1700000000&hash=abc123
+Content-Type: application/json
