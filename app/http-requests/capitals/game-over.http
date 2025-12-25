@@ -1,0 +1,6 @@
+### Submit game results
+POST {{url}}/capitals/game-over
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+{"gameId": 5, "score": 10, "sessionTimer": 45}

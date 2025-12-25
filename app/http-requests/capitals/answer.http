@@ -1,0 +1,19 @@
+### Submit answer for a game
+# URL format: /capitals/answer/{gameId}/{countryCode}/{base64EncodedAnswer}
+# Example: answering "Paris" for France (FR) in game 1
+# base64("Paris") = UGFyaXM=
+GET {{url}}/capitals/answer/5/FR/UGFyaXM=
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Answer example: "Berlin" for Germany (DE)
+# base64("Berlin") = QmVybGlu
+GET {{url}}/capitals/answer/1/DE/QmVybGlu
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Answer example: "Madrid" for Spain (ES)
+# base64("Madrid") = TWFkcmlk
+GET {{url}}/capitals/answer/1/ES/TWFkcmlk
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json

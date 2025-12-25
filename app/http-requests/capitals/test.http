@@ -1,0 +1,9 @@
+### Test endpoint 1
+GET {{url}}/capitals/test
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Test endpoint 2
+GET {{url}}/capitals/test2
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json

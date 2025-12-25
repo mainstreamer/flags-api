@@ -1,0 +1,9 @@
+### Get random question (no game context)
+GET {{url}}/capitals
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Get question for specific game (replace {gameId} with actual game ID)
+GET {{url}}/capitals/question/5
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json

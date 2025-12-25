@@ -1,0 +1,24 @@
+### Start Europe game
+GET {{url}}/capitals/game-start/CAPITALS_EUROPE
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Start Asia game
+GET {{url}}/capitals/game-start/CAPITALS_ASIA
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Start Africa game
+GET {{url}}/capitals/game-start/CAPITALS_AFRICA
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Start Americas game
+GET {{url}}/capitals/game-start/CAPITALS_AMERICAS
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Start Oceania game
+GET {{url}}/capitals/game-start/CAPITALS_OCEANIA
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json

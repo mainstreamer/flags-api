@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 
@@ -127,12 +128,13 @@ class GameController extends AbstractController
         return new JsonResponse(['token' => $token]);
     }
 
-    #[Route('/api/protected', name: 'get_profile', methods: ['GET', 'OPTIONS'])]
+    #[Route('/protected', name: 'get_profile', methods: ['GET', 'OPTIONS'])]
     public function getProfile(): Response
     {
         return $this->json($this->getUser());
     }
 
+    #[IsGranted('PUBLIC_ACCESS')]
     #[Route('/scores', name: 'get_high_scores', methods: ['GET'])]
     public function getHighScores(UserRepository $repository): Response
     {
@@ -140,21 +142,20 @@ class GameController extends AbstractController
     }
 
     #[Route('/scores', name: 'submit_game_results', methods: ['POST'])]
-    public function postScore(Request $request, EntityManagerInterface $entityManager, #[CurrentUser] $user): Response
+    public function postScore(Request $request, EntityManagerInterface $entityManager, #[CurrentUser] User $user): Response
     {
         $requestArray = json_decode($request->getContent(), true);
         $scoreDTO = new ScoreDTO($requestArray);
-        $score = (new Score())->fromDTO($scoreDTO);
+        $score = new Score()->fromDTO($scoreDTO);
     
         $answers = [];
         if (isset($requestArray['answers'])) {
             foreach ($requestArray['answers'] as $answer) {
-                $item = (new Answer())->fromArray($answer);
+                $item = new Answer()->fromArray($answer);
                 $answers[] = $item;
             }    
         }
 
-        /** @var User $user */
         $user->finalizeGame($score, $answers);
         $entityManager->flush();
         

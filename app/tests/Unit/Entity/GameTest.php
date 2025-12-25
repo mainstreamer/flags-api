@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Unit\Entity;
+namespace Unit\Entity;
 
 use App\Flags\Entity\Enum\GameType;
 use App\Flags\Entity\Game;

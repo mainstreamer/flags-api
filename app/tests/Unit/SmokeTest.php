@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SmokeTest extends KernelTestCase
 {
-    private const COUNTRY_FILES = [
+    private const array COUNTRY_FILES = [
         'capitals-africa.json',
         'capitals-americas.json',
         'capitals-asia.json',
