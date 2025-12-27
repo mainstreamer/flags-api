@@ -10,7 +10,6 @@ use App\Flags\Entity\User;
 use App\Flags\Repository\CapitalRepository;
 use App\Flags\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -18,34 +17,34 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 readonly class CapitalsGameService
 {
     private FlagsGenerator $isoFlags;
+
     public function __construct(
-        private CapitalRepository      $repository,
-        private GameRepository         $gameRepository,
-        private TokenStorageInterface  $tokenStorage,
-        private EntityManagerInterface $entityManager
-    )
-    {
+        private CapitalRepository $repository,
+        private GameRepository $gameRepository,
+        private TokenStorageInterface $tokenStorage,
+        private EntityManagerInterface $entityManager,
+    ) {
         $this->isoFlags = new FlagsGenerator();
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function getQuestion(?Game $game = null): array
     {
-        $excluded = $game !== null ? $game->getQuestions() : [];
+        $excluded = null !== $game ? $game->getQuestions() : [];
 
         $region = match ($game->getType()->value) {
-          GameType::CAPITALS_AFRICA->value => 'Africa',
-          GameType::CAPITALS_AMERICAS->value => 'Americas',
-          GameType::CAPITALS_ASIA->value => 'Asia',
-          GameType::CAPITALS_EUROPE->value => 'Europe',
-          GameType::CAPITALS_OCEANIA->value => 'Oceania',
+            GameType::CAPITALS_AFRICA->value => 'Africa',
+            GameType::CAPITALS_AMERICAS->value => 'Americas',
+            GameType::CAPITALS_ASIA->value => 'Asia',
+            GameType::CAPITALS_EUROPE->value => 'Europe',
+            GameType::CAPITALS_OCEANIA->value => 'Oceania',
         };
 
         $countries = $this->repository->findBy(['region' => $region], ['id' => 'ASC']);
         if (!$countries) {
-            throw new Exception('no countries found');
+            throw new \Exception('no countries found');
         }
 
         $totalQuestions = count($countries);
@@ -54,10 +53,9 @@ readonly class CapitalsGameService
 
         while (count($options) < 4) {
             shuffle($countries);
-            if (count($options) === 3) {
+            if (3 === count($options)) {
                 $capital = array_pop($countries);
                 if ($excludedCount < $totalQuestions && in_array($capital->getCode(), $excluded)) {
-
                 } else {
                     $correct = $capital;
                     $options[] = $correct;
@@ -73,7 +71,7 @@ readonly class CapitalsGameService
 
         $optionsDebug = $options;
         /** @var Capital $correct */
-        $correct = (array_pop($options));
+        $correct = array_pop($options);
 
         $options = [
             ['option' => $correct->getName(), 'country' => $correct->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($correct->getCode()))],
@@ -104,9 +102,10 @@ readonly class CapitalsGameService
             $game->removeQuestion($questionCountryCode);
             $this->entityManager->flush();
         }
+
         return [
             'isCorrect' => $isCorrect,
-            'text' => sprintf('%s it\'s %s', $isCorrect ? 'Yes ✅ - ': 'No ❌ - ', $capital->getName()),
+            'text' => sprintf('%s it\'s %s', $isCorrect ? 'Yes ✅ - ' : 'No ❌ - ', $capital->getName()),
         ];
     }
 
@@ -115,7 +114,7 @@ readonly class CapitalsGameService
         [
             'sessionTimer' => $sessionTimer,
             'score' => $score,
-            'gameId' => $gameId
+            'gameId' => $gameId,
         ] = json_decode($request->getContent(), true);
 
         /** @var User $user */
@@ -134,8 +133,8 @@ readonly class CapitalsGameService
     {
         return array_map(
             fn (array $item) => [
-                'userName' => $item['firstName'] .' ' .$item['lastName'],'score' => $item['score'],
-                'sessionTimer' => $item['sessionTimer']
+                'userName' => $item['firstName'].' '.$item['lastName'], 'score' => $item['score'],
+                'sessionTimer' => $item['sessionTimer'],
             ],
             $this->entityManager->getRepository(CapitalsStat::class)->getHighScores($gameType)
         );

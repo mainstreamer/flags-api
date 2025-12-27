@@ -23,6 +23,7 @@ class GameTest extends KernelTestCase
     private function getNewInstance(): Game
     {
         $user = new User();
+
         return new Game($user, GameType::CAPITALS_AFRICA);
     }
 

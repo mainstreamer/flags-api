@@ -35,7 +35,7 @@ class JsonExceptionListener implements EventSubscriberInterface
             'code' => $statusCode,
         ];
 
-        if ($this->environment === 'dev') {
+        if ('dev' === $this->environment) {
             $data['trace'] = $exception->getTraceAsString();
         }
 

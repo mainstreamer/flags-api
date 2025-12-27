@@ -19,12 +19,12 @@ class AnswerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Answer::class);
     }
-    
+
     public function findIncorrectGuesses(string $userId): array
     {
-//        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0 
-//GROUP BY answer.flag_code ORDER BY incorrect DESC;
-        
+        //        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
+        // GROUP BY answer.flag_code ORDER BY incorrect DESC;
+
         return $this->createQueryBuilder('a')
             ->select('COUNT(a.flagCode) as times')
             ->addSelect('a.flagCode')
@@ -41,9 +41,9 @@ class AnswerRepository extends ServiceEntityRepository
 
     public function findCorrectGuesses(string $userId): array
     {
-        //        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0 
-        //GROUP BY answer.flag_code ORDER BY incorrect DESC;
-        
+        //        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
+        // GROUP BY answer.flag_code ORDER BY incorrect DESC;
+
         return $this->createQueryBuilder('a')
             ->select('COUNT(a.flagCode) as times')
             ->addSelect('a.flagCode')
@@ -57,12 +57,12 @@ class AnswerRepository extends ServiceEntityRepository
             ->getArrayResult()
         ;
     }
-    
+
     public function findAllGuesses(string $userId): array
     {
-//        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0 
-//GROUP BY answer.flag_code ORDER BY incorrect DESC;
-        
+        //        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
+        // GROUP BY answer.flag_code ORDER BY incorrect DESC;
+
         return $this->createQueryBuilder('a')
             ->select('COUNT(a.flagCode) as times')
             ->addSelect('a.flagCode')
@@ -74,7 +74,7 @@ class AnswerRepository extends ServiceEntityRepository
             ->getArrayResult()
         ;
     }
-    
+
     // /**
     //  * @return Flag[] Returns an array of Flag objects
     //  */

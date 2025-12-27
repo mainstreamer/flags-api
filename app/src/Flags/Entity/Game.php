@@ -10,21 +10,21 @@ class Game
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $type;
 
     #[ORM\ManyToOne(targetEntity: "App\Flags\Entity\User")]
     private readonly User $user;
 
-    #[ORM\Column(type: "json")]
+    #[ORM\Column(type: 'json')]
     private array $questions = [];
 
     public function __construct(
         User $user,
-        GameType $type
+        GameType $type,
     ) {
         $this->user = $user;
         $this->type = $type->value;

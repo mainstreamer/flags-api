@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Flags\Entity\User;
 use App\Flags\Repository\CapitalsStatRepository;
 use Doctrine\ORM\Mapping as ORM;
-use DateTime;
 
 #[ORM\Entity(repositoryClass: CapitalsStatRepository::class)]
 class CapitalsStat
@@ -23,7 +22,7 @@ class CapitalsStat
         #[ORM\ManyToOne(targetEntity: User::class)]
         protected readonly User $user,
         #[ORM\Column(type: 'datetime')]
-        protected readonly DateTime $created = new DateTime()
+        protected readonly \DateTime $created = new \DateTime(),
     ) {
     }
 
@@ -42,7 +41,7 @@ class CapitalsStat
         return $this->user;
     }
 
-    public function getCreated(): DateTime
+    public function getCreated(): \DateTime
     {
         return $this->created;
     }

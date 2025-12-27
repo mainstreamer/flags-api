@@ -22,7 +22,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     {
         parent::__construct($registry, User::class);
     }
-    
+
     public function getHighScores()
     {
         return $this->createQueryBuilder('u')
@@ -38,7 +38,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->getScalarResult()
         ;
     }
-    
+
     public function getAnyUser(): User
     {
         return $this->matching(
@@ -50,7 +50,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
                 ->setMaxResults(1)
         )->get(0);
     }
-    
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
@@ -89,7 +89,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     {
         // Assuming your OAuth server returns "sub" as unique identifier
         $sub = $userInfo->getId();     // or ->getUid(), ->getEmail(), depending on your provider
-//        $email = $userInfo->getEmail();
+        //        $email = $userInfo->getEmail();
 
         // Try to find existing user
         $user = $this->findOneBy(['sub' => $sub]);
@@ -98,12 +98,12 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             return $user;
         }
 
-//        $userInfoArray = $userInfo->toArray()
+        //        $userInfoArray = $userInfo->toArray()
         // Create new user
         $user = new User();
         $user->setSub($sub);
-//        $user->setEmail($userInfoArray['email'] ?? null);
-//        $user->setRoles(['ROLE_USER']);
+        //        $user->setEmail($userInfoArray['email'] ?? null);
+        //        $user->setRoles(['ROLE_USER']);
 
         $em = $this->getEntityManager();
         $em->persist($user);

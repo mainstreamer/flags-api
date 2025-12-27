@@ -20,18 +20,18 @@ class SetWebhookCommand extends Command
      *       $botToken: '%env(string:BOT_TOKEN)%'
      */
     protected static $defaultName = 'app:set-webhook';
-    
+
     protected HttpClientInterface $client;
-    
+
     protected string $botToken;
-    
+
     public function __construct(HttpClientInterface $client, string $botToken)
     {
         parent::__construct();
         $this->client = $client;
         $this->botToken = $botToken;
     }
-    
+
     protected function configure()
     {
         $this
@@ -40,19 +40,19 @@ class SetWebhookCommand extends Command
             ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $arg1 = $input->getArgument('arg1');
-//        $r = $this->client->request(Request::METHOD_GET, 'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1);
-        $r = $this->client->request(Request::METHOD_GET, 'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1);
+        //        $r = $this->client->request(Request::METHOD_GET, 'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1);
+        $r = $this->client->request(Request::METHOD_GET, 'https://api.telegram.org/bot'.$this->botToken.'/setWebhook?url='.$arg1);
         if ($arg1) {
             $io->note(sprintf('You passed an argument: %s', $arg1));
         }
         $io->write($r->getContent());
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
-        
+
         return 0;
     }
 }

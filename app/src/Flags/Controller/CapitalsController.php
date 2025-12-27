@@ -21,10 +21,9 @@ class CapitalsController extends AbstractController
     protected FlagsGenerator $flagsGenerator;
 
     public function __construct(
-        protected ValidatorInterface $validator, 
+        protected ValidatorInterface $validator,
         protected string $botToken,
-        protected readonly EntityManagerInterface $em
-
+        protected readonly EntityManagerInterface $em,
     ) {
         $this->flagsGenerator = new FlagsGenerator();
     }
@@ -52,7 +51,8 @@ class CapitalsController extends AbstractController
     {
         try {
             $entity = $service->handleGameOver($request);
-           return new JsonResponse($entity);
+
+            return new JsonResponse($entity);
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());
         }
@@ -111,6 +111,7 @@ class CapitalsController extends AbstractController
     {
         try {
             $game = $service->startGame(GameType::from($type));
+
             return new JsonResponse(['gameId' => $game->getId()]);
         } catch (\Throwable $e) {
             return new JsonResponse($e->getMessage());
@@ -121,50 +122,48 @@ class CapitalsController extends AbstractController
     public function authAction(Request $request, JWTEncoderInterface $encoder): Response
     {
         try {
+            $data = $request->query->all();
+            $hash = $data['hash'];
+            unset($data['hash']);
 
-        $data = $request->query->all();
-        $hash = $data['hash'];
-        unset($data['hash']);
+            $data_check_arr = [];
+            foreach ($data as $key => $value) {
+                $data_check_arr[] = $key.'='.$value;
+            }
 
-        $data_check_arr = [];
-        foreach ($data as $key => $value) {
-            $data_check_arr[] = $key . '=' . $value;
-        }
+            sort($data_check_arr);
+            $data_check_string = implode("\n", $data_check_arr);
+            $bot_token = $this->botToken;
+            $check_hash = $hash;
+            $secret_key = hash('sha256', $bot_token, true);
+            $hash = hash_hmac('sha256', $data_check_string, $secret_key);
 
-        sort($data_check_arr);
-        $data_check_string = implode("\n", $data_check_arr);
-        $bot_token = $this->botToken;
-        $check_hash = $hash;
-        $secret_key = hash('sha256', $bot_token, true);
-        $hash = hash_hmac('sha256', $data_check_string, $secret_key);
+            if (0 !== strcmp($hash, $check_hash)) {
+                throw new \Exception('Data is NOT from Telegram');
+            }
 
-        if (strcmp($hash, $check_hash) !== 0) {
-            throw new \Exception('Data is NOT from Telegram');
-        }
+            if ((time() - $data['auth_date']) > 86400) {
+                throw new \Exception('Data is outdated');
+            }
 
-        if ((time() - $data['auth_date']) > 86400) {
-            throw new \Exception('Data is outdated');
-        }
+            $user = $this->em->getRepository(User::class)->findOneByTelegramId($data['id']);
 
-        $user = $this->em->getRepository(User::class)->findOneByTelegramId($data['id']);
+            if (null === $user) {
+                $user = new User();
+                $user->setTelegramId($data['id']);
+                $user->setFirstName($data['first_name']);
+                $user->setLastName($data['last_name']);
+                $user->setTelegramUsername($data['username'] ?? null);
+                $user->setTelegramPhotoUrl($data['photo_url'] ?? null);
+                $this->em->persist($user);
+                $this->em->flush();
+            }
 
-        if ($user === null) {
-            $user = new User();
-            $user->setTelegramId($data['id']);
-            $user->setFirstName($data['first_name']);
-            $user->setLastName($data['last_name']);
-            $user->setTelegramUsername($data['username'] ?? null);
-            $user->setTelegramPhotoUrl($data['photo_url'] ?? null);
-            $this->em->persist($user);
-            $this->em->flush();
-        }
-
-        $token = $encoder
-            ->encode([
-                'username' => $user->getTelegramId(),
-                'exp' => time() + 600000 + getenv('JWT_TOKEN_TTL')
-            ]);
-
+            $token = $encoder
+                ->encode([
+                    'username' => $user->getTelegramId(),
+                    'exp' => time() + 600000 + getenv('JWT_TOKEN_TTL'),
+                ]);
         } catch (\Throwable $exception) {
             return new JsonResponse(['error' => $exception->getMessage()]);
         }

@@ -76,18 +76,21 @@ class PopulateCapitalsCommand extends Command
     {
         if (!file_exists($fileName)) {
             $io->error(sprintf('File not found: %s', $fileName));
+
             return 0;
         }
 
         $content = file_get_contents($fileName);
-        if ($content === false) {
+        if (false === $content) {
             $io->error(sprintf('Could not read file: %s', $fileName));
+
             return 0;
         }
 
         $data = json_decode($content, true);
         if (!isset($data['countries']) || !is_array($data['countries'])) {
             $io->error(sprintf('Invalid JSON structure in: %s', $fileName));
+
             return 0;
         }
 
@@ -100,7 +103,7 @@ class PopulateCapitalsCommand extends Command
                 $country['region']
             );
             $this->entityManager->persist($capital);
-            $count++;
+            ++$count;
         }
 
         $this->entityManager->flush();

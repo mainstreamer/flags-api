@@ -9,18 +9,17 @@ class Flag
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $code;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $shows = 0;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $correctGuesses = 0;
-
 
     public function getId(): ?int
     {
@@ -39,17 +38,11 @@ class Flag
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getShows(): int
     {
         return $this->shows;
     }
 
-    /**
-     * @param int $shows
-     */
     public function setShows(int $shows): void
     {
         $this->shows = $shows;
@@ -62,7 +55,6 @@ class Flag
     {
         return $this->correctGuesses;
     }
-
 
     public function incrementCorrectAnswersCounter(): void
     {

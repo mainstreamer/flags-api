@@ -13,7 +13,8 @@ class SecurityController extends AbstractController
 {
     public function __construct(
         private HttpClientInterface $httpClient,
-    ) {}
+    ) {
+    }
 
     #[Route('/login', name: 'app_login')]
     public function login(ClientRegistry $clientRegistry)
@@ -54,7 +55,7 @@ class SecurityController extends AbstractController
     #[Route('/api/refresh', name: 'api_refresh', methods: ['POST'])]
     public function refresh(Request $request): JsonResponse
     {
-        # TODO Check if it works at all
+        // TODO Check if it works at all
 
         $data = json_decode($request->getContent(), true);
         $refreshToken = $data['refresh_token'] ?? null;
@@ -64,13 +65,13 @@ class SecurityController extends AbstractController
         }
 
         try {
-            $response = $this->httpClient->request('POST', $_ENV['OAUTH_SERVER_URL'] . '/oauth2/token', [
+            $response = $this->httpClient->request('POST', $_ENV['OAUTH_SERVER_URL'].'/oauth2/token', [
                 'body' => [
                     'grant_type' => 'refresh_token',
                     'refresh_token' => $refreshToken,
                     'client_id' => $_ENV['OAUTH_CLIENT_ID'],
                     'client_secret' => $_ENV['OAUTH_CLIENT_SECRET'],
-                ]
+                ],
             ]);
 
             $tokens = $response->toArray();

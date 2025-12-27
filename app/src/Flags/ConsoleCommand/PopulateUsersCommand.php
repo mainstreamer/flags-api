@@ -67,7 +67,7 @@ HELP)
 
         $jsonPath = $input->getOption('json');
 
-        if ($jsonPath !== null) {
+        if (null !== $jsonPath) {
             return $this->createFromJson($jsonPath, $input->getOption('skip-existing'), $io);
         }
 
@@ -79,8 +79,9 @@ HELP)
         $telegramId = $input->getArgument('telegramId');
 
         $existing = $this->userRepository->findOneBy(['telegramId' => $telegramId]);
-        if ($existing !== null) {
+        if (null !== $existing) {
             $io->error(sprintf('User with telegramId "%s" already exists (id: %d).', $telegramId, $existing->getId()));
+
             return Command::FAILURE;
         }
 
@@ -103,18 +104,21 @@ HELP)
     {
         if (!file_exists($jsonPath)) {
             $io->error(sprintf('JSON file not found: %s', $jsonPath));
+
             return Command::FAILURE;
         }
 
         $content = file_get_contents($jsonPath);
-        if ($content === false) {
+        if (false === $content) {
             $io->error(sprintf('Could not read file: %s', $jsonPath));
+
             return Command::FAILURE;
         }
 
         $data = json_decode($content, true);
-        if ($data === null) {
+        if (null === $data) {
             $io->error('Invalid JSON format.');
+
             return Command::FAILURE;
         }
 
@@ -123,6 +127,7 @@ HELP)
 
         if (!is_array($users)) {
             $io->error('JSON must be an array of users or {"users": [...]}');
+
             return Command::FAILURE;
         }
 
@@ -133,26 +138,26 @@ HELP)
         foreach ($users as $index => $userData) {
             if (!isset($userData['telegramId'])) {
                 $io->warning(sprintf('Entry %d missing telegramId, skipped.', $index));
-                $errorCount++;
+                ++$errorCount;
                 continue;
             }
 
             $telegramId = (string) $userData['telegramId'];
             $existing = $this->userRepository->findOneBy(['telegramId' => $telegramId]);
 
-            if ($existing !== null) {
+            if (null !== $existing) {
                 if ($skipExisting) {
-                    $skippedCount++;
+                    ++$skippedCount;
                     continue;
                 }
                 $io->warning(sprintf('User telegramId=%s already exists, skipped.', $telegramId));
-                $skippedCount++;
+                ++$skippedCount;
                 continue;
             }
 
             $user = $this->buildUser($userData);
             $this->entityManager->persist($user);
-            $createdCount++;
+            ++$createdCount;
         }
 
         $this->entityManager->flush();

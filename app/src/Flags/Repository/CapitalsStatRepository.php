@@ -20,29 +20,27 @@ class CapitalsStatRepository extends ServiceEntityRepository
         parent::__construct($registry, CapitalsStat::class);
     }
 
-
-//    public function getHighScores(): iterable
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->select('s.firstName')
-//            ->addSelect('s.score')
-//            ->addSelect('s.sessionTimer')
-//            ->addSelect('s.timeTotal')
-//            ->addOrderBy('s.score', 'DESC')
-//            ->addOrderBy('s.sessionTimer', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getScalarResult()
-//        ;
-//
-//    }
-
+    //    public function getHighScores(): iterable
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->select('s.firstName')
+    //            ->addSelect('s.score')
+    //            ->addSelect('s.sessionTimer')
+    //            ->addSelect('s.timeTotal')
+    //            ->addOrderBy('s.score', 'DESC')
+    //            ->addOrderBy('s.sessionTimer', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getScalarResult()
+    //        ;
+    //
+    //    }
 
     public function getHighScores3(string $gameType): array
     {
         $qb = $this->createQueryBuilder('t');
 
-// Subquery to find rows with the maximum score for each user and gameType
+        // Subquery to find rows with the maximum score for each user and gameType
         $subQuery = $this->createQueryBuilder('subT')
             ->select('MAX(subT.score) as maxScore, subT.user, subT.gameType')
             ->groupBy('subT.user, subT.gameType');
@@ -52,7 +50,7 @@ class CapitalsStatRepository extends ServiceEntityRepository
         $qb->select('u.firstName, u.lastName, u.id, t.score, t.gameType, t.sessionTimer')
             ->innerJoin('t.user', 'u')
             ->innerJoin(
-                '(' . $subQuery->getDQL() . ')',
+                '('.$subQuery->getDQL().')',
                 'maxScores',
                 'WITH',
                 't.user = maxScores.user AND t.gameType = maxScores.gameType AND t.score = maxScores.maxScore'
@@ -64,32 +62,32 @@ class CapitalsStatRepository extends ServiceEntityRepository
             ->setMaxResults(10);
 
         $query = $qb->getQuery();
-//
-////        dump($gameType);
-//        $qb = $this->createQueryBuilder('t');
-//        $qb->select('u.firstName, u.lastName, u.id, t.score, t.gameType, MIN(t.sessionTimer) as sessionTimer')
-//            ->innerJoin('t.user', 'u')
-//            ->where(
-//                $qb->expr()->eq(
-//                    't.score',
-//                    '(' .$this->createQueryBuilder('subT')
-//                        ->select('MAX(subT.score)')
-//                        ->where('subT.user = t.user')
-//                        ->where('subT.gameType = :gameType')
-//                        ->getDQL() . ')'
-//                )
-//            )
-//            ->setParameter('gameType', $gameType)
-//
-//            ->groupBy('t.score, u.id, t.gameType')
-//            ->orderBy('t.score', 'DESC')
-//            ->addOrderBy('sessionTimer', 'ASC')
-//            ->setMaxResults(10);
-//        ;
-//
-//
-//        $query = $qb->getQuery();
-////        $query->setParameter('gameType', $gameType);
+        //
+        // //        dump($gameType);
+        //        $qb = $this->createQueryBuilder('t');
+        //        $qb->select('u.firstName, u.lastName, u.id, t.score, t.gameType, MIN(t.sessionTimer) as sessionTimer')
+        //            ->innerJoin('t.user', 'u')
+        //            ->where(
+        //                $qb->expr()->eq(
+        //                    't.score',
+        //                    '(' .$this->createQueryBuilder('subT')
+        //                        ->select('MAX(subT.score)')
+        //                        ->where('subT.user = t.user')
+        //                        ->where('subT.gameType = :gameType')
+        //                        ->getDQL() . ')'
+        //                )
+        //            )
+        //            ->setParameter('gameType', $gameType)
+        //
+        //            ->groupBy('t.score, u.id, t.gameType')
+        //            ->orderBy('t.score', 'DESC')
+        //            ->addOrderBy('sessionTimer', 'ASC')
+        //            ->setMaxResults(10);
+        //        ;
+        //
+        //
+        //        $query = $qb->getQuery();
+        // //        $query->setParameter('gameType', $gameType);
         $results = $query->getResult();
 
         return $results;
@@ -97,25 +95,25 @@ class CapitalsStatRepository extends ServiceEntityRepository
 
     public function getHighScores2(string $gameType): array
     {
-//        dump($gameType);
+        //        dump($gameType);
         $qb = $this->createQueryBuilder('t');
-//        $qb->select('u.firstName, u.lastName, u.id, t.score, t.gameType, MIN(t.sessionTimer) as sessionTimer')
+        //        $qb->select('u.firstName, u.lastName, u.id, t.score, t.gameType, MIN(t.sessionTimer) as sessionTimer')
         $qb->select('u.firstName, u.lastName, u.id, t.score as score, t.gameType, MIN(t.sessionTimer) as sessionTimer')
 //            ->innerJoin('t.user', 'u', 'WITH', 't.gameType = :gameType' )
             ->innerJoin('t.user', 'u')
 //            ->innerJoin(
 //                    '(' . $this->createQueryBuilder('subT')
 //                        ->select('MAX(subT.score) as maxScore')
-////                        ->where('subT.user = t.user')
+// //                        ->where('subT.user = t.user')
 //                        ->getDQL() . ')'
-////                        ->where('subT.sessionTimer = sessionTimer')
+// //                        ->where('subT.sessionTimer = sessionTimer')
 //
 //                ,
 //                'maxScore',
 //                'WITH',
 //                'maxScore.gameType = :gameType'
 //            )
-////
+// //
             ->where(
                 $qb->expr()->in(
                     't.score',
@@ -134,12 +132,12 @@ class CapitalsStatRepository extends ServiceEntityRepository
 //                    't.sessionTimer',
 //                    $this->createQueryBuilder('subT2')
 //                        ->select('MIN(subT2.sessionTimer)')
-////                        ->innerJoin('subT2.user', 'u2')
+// //                        ->innerJoin('subT2.user', 'u2')
 //                        ->where('subT2.user = t.user')
 //                        ->andWhere('subT2.gameType = :gameType')
 //                        ->groupBy('subT2.user, subT2.gameType')
-////                        ->andWhere('subT2.score = :scoreMax')
-////                        ->where('subT.sessionTimer = sessionTimer')
+// //                        ->andWhere('subT2.score = :scoreMax')
+// //                        ->where('subT.sessionTimer = sessionTimer')
 //                        ->getDQL()
 //                )
 //            )
@@ -151,7 +149,7 @@ class CapitalsStatRepository extends ServiceEntityRepository
 //                    ->select('MAX(subT.score)')
 //                    ->where('subT.user = t.user')
 //                    ->andWhere('subT.gameType = :gameType')
-////                        ->where('subT.sessionTimer = sessionTimer')
+// //                        ->where('subT.sessionTimer = sessionTimer')
 //                    ->getDQL() . ')'
 //            ))
 
@@ -161,9 +159,8 @@ class CapitalsStatRepository extends ServiceEntityRepository
             ->setMaxResults(10)
         ;
 
-
         $query = $qb->getQuery();
-//        $query->setParameter('gameType', $gameType);
+        //        $query->setParameter('gameType', $gameType);
         $results = $query->getResult();
 
         return $results;
@@ -171,7 +168,6 @@ class CapitalsStatRepository extends ServiceEntityRepository
 
     public function getHighScores(string $gameType): array
     {
-
         $em = $this->getEntityManager();
 
         $sql = '
@@ -218,9 +214,10 @@ class CapitalsStatRepository extends ServiceEntityRepository
         $statement = $connection->prepare($sql);
         $statement->bindValue('gameType', $gameType);
         $result = $statement->executeQuery();
-return $result->fetchAllAssociative();
-//        $result = $statement->fetchAll();
-//        return $result;
+
+        return $result->fetchAllAssociative();
+        //        $result = $statement->fetchAll();
+        //        return $result;
     }
     // /**
     //  * @return Flag[] Returns an array of Flag objects

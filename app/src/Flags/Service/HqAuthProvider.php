@@ -10,9 +10,9 @@ class HqAuthProvider extends GenericProvider
 {
     public function __construct(array $options = [], array $collaborators = [])
     {
-        $options['urlAuthorize'] = $options['domain'] . '/oauth2/authorize';
-        $options['urlAccessToken'] = $options['domain'] . '/oauth2/token';
-        $options['urlResourceOwnerDetails'] = $options['domain'] . '/oauth2/userinfo';
+        $options['urlAuthorize'] = $options['domain'].'/oauth2/authorize';
+        $options['urlAccessToken'] = $options['domain'].'/oauth2/token';
+        $options['urlResourceOwnerDetails'] = $options['domain'].'/oauth2/userinfo';
 
         parent::__construct($options, $collaborators);
     }

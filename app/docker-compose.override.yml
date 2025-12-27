@@ -9,7 +9,7 @@ services:
             - .:/var/www/html:rw,cached
     db:
         ports:
-            - "3306:3306"
+            - "33060:3306"
     caddy:
         ports:
             - "8000:80"

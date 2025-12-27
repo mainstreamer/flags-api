@@ -16,10 +16,10 @@ class UserNormalizer implements ContextAwareNormalizerInterface
     }
 
     /**
-     * @param mixed $object
      * @param string|null $format
-     * @param array $context
+     *
      * @return array|\ArrayObject|bool|float|int|mixed|string|null
+     *
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function normalize(mixed $object, $format = null, array $context = [])
@@ -31,12 +31,6 @@ class UserNormalizer implements ContextAwareNormalizerInterface
         return $data;
     }
 
-    /**
-     * @param mixed $data
-     * @param string|null $format
-     * @param array $context
-     * @return bool
-     */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return $data instanceof User;

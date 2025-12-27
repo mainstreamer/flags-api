@@ -12,6 +12,7 @@ use App\Flags\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Rteeom\FlagsGenerator\FlagsGenerator;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 
 #[Route('/api/flags')]
 class GameController extends AbstractController
@@ -29,9 +29,8 @@ class GameController extends AbstractController
     protected FlagsGenerator $flagsGenerator;
 
     public function __construct(
-        protected ValidatorInterface $validator, 
+        protected ValidatorInterface $validator,
         protected string $botToken,
-
     ) {
         $this->flagsGenerator = new FlagsGenerator();
     }
@@ -41,13 +40,14 @@ class GameController extends AbstractController
     {
         return $this->json(['ok']);
     }
+
     #[Route('/test', name: 'test', methods: ['GET'])]
     public function getQuestion(): JsonResponse
     {
         $flags = [];
 
         while (count($flags) < 4) {
-            $countryCode = chr(rand(97,122)).chr(rand(97,122));
+            $countryCode = chr(rand(97, 122)).chr(rand(97, 122));
             $flag = $this->flagsGenerator->getEmojiFlagOrNull($countryCode);
             if ($flag) {
                 $flags[$countryCode] = $flag;
@@ -71,8 +71,7 @@ class GameController extends AbstractController
     public function correct(
         #[MapEntity(mapping: ['flag' => 'code'])] Flag $flag,
         EntityManagerInterface $entityManager,
-    ): Response
-    {
+    ): Response {
         $flag->incrementCorrectAnswersCounter();
         $entityManager->flush();
 
@@ -88,7 +87,7 @@ class GameController extends AbstractController
 
         $data_check_arr = [];
         foreach ($data as $key => $value) {
-            $data_check_arr[] = $key . '=' . $value;
+            $data_check_arr[] = $key.'='.$value;
         }
 
         sort($data_check_arr);
@@ -98,7 +97,7 @@ class GameController extends AbstractController
         $secret_key = hash('sha256', $bot_token, true);
         $hash = hash_hmac('sha256', $data_check_string, $secret_key);
 
-        if (strcmp($hash, $check_hash) !== 0) {
+        if (0 !== strcmp($hash, $check_hash)) {
             throw new \Exception('Data is NOT from Telegram');
         }
 
@@ -108,7 +107,7 @@ class GameController extends AbstractController
 
         $user = $this->getDoctrine()->getRepository(User::class)->findOneByTelegramId($data['id']);
 
-        if ($user === null) {
+        if (null === $user) {
             $user = new User();
             $user->setTelegramId($data['id']);
             $user->setFirstName($data['first_name']);
@@ -122,7 +121,7 @@ class GameController extends AbstractController
         $token = $encoder
             ->encode([
                 'username' => $user->getTelegramId(),
-                'exp' => time() + 6000000 + getenv('JWT_TOKEN_TTL')
+                'exp' => time() + 6000000 + getenv('JWT_TOKEN_TTL'),
             ]);
 
         return new JsonResponse(['token' => $token]);
@@ -147,35 +146,35 @@ class GameController extends AbstractController
         $requestArray = json_decode($request->getContent(), true);
         $scoreDTO = new ScoreDTO($requestArray);
         $score = new Score()->fromDTO($scoreDTO);
-    
+
         $answers = [];
         if (isset($requestArray['answers'])) {
             foreach ($requestArray['answers'] as $answer) {
                 $item = new Answer()->fromArray($answer);
                 $answers[] = $item;
-            }    
+            }
         }
 
         $user->finalizeGame($score, $answers);
         $entityManager->flush();
-        
+
         return new Response(null, Response::HTTP_OK);
     }
 
     #[Route('/test/{flag}', name: 'test_flag', methods: ['GET'])]
     public function getEmoji(string $flag): Response
     {
-        $flag = $this->flagsGenerator->getEmojiFlagOrNull($flag) ?? 'invalid code';     
+        $flag = $this->flagsGenerator->getEmojiFlagOrNull($flag) ?? 'invalid code';
 
         return new Response($flag);
     }
-    
+
     #[Route('/incorrect', name: 'incorrect', methods: ['GET', 'OPTIONS'])]
     public function getStat(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
         $correctResults = $repository->findCorrectGuesses($user->getId());
         $result = $repository->findAllGuesses($user->getId());
-        //TODO move this logic to service
+        // TODO move this logic to service
         foreach ($result as $key => $item) {
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
@@ -184,19 +183,19 @@ class GameController extends AbstractController
                     $shown = (int) $result[$key]['times'];
                     $guessed = (int) $value['times'];
                     $res = $shown - $guessed;
-                    $result[$key]['rate'] =  (int) (round($res / $shown, 2) * 100) ;
-                    $result[$key]['times'] = $res."/$shown";   
-                       
+                    $result[$key]['rate'] = (int) (round($res / $shown, 2) * 100);
+                    $result[$key]['times'] = $res."/$shown";
+
                     break;
-                } 
+                }
             }
-            
+
             if (!isset($result[$key]['rate'])) {
                 $result[$key]['rate'] = 100;
                 $result[$key]['times'] = $result[$key]['times'].'/'.$result[$key]['times'];
             }
         }
-        
+
         array_multisort($result, SORT_DESC, SORT_NUMERIC, array_column($result, 'rate'), SORT_DESC, SORT_NUMERIC);
 
         return $this->json($result);
@@ -207,29 +206,29 @@ class GameController extends AbstractController
     {
         $correctResults = $repository->findCorrectGuesses($user->getId());
         $result = $repository->findAllGuesses($user->getId());
-        //TODO move this logic to service
+        // TODO move this logic to service
         foreach ($result as $key => $item) {
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
             $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
-                    $shown =  (int) $result[$key]['times'];
+                    $shown = (int) $result[$key]['times'];
                     $errors = (int) $value['times'];
-                    $result[$key]['rate'] = (int) (round($errors/$shown, 2) * 100) ;
+                    $result[$key]['rate'] = (int) (round($errors / $shown, 2) * 100);
                     $result[$key]['times'] = "$errors/$shown";
-                
+
                     break;
                 }
             }
-        
+
             if (!isset($result[$key]['rate'])) {
                 $result[$key]['rate'] = 0;
-                $result[$key]['times'] = "0/".$result[$key]['times'];
+                $result[$key]['times'] = '0/'.$result[$key]['times'];
             }
         }
-    
+
         array_multisort($result, SORT_DESC, SORT_NUMERIC, array_column($result, 'rate'), SORT_DESC, SORT_NUMERIC);
-        
+
         return $this->json($result);
     }
 }

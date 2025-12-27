@@ -54,6 +54,7 @@ class PopulateFlagsCommand extends Command
 
         if (empty($codes)) {
             $io->error('No country codes found in JSON files.');
+
             return Command::FAILURE;
         }
 
@@ -63,15 +64,15 @@ class PopulateFlagsCommand extends Command
         foreach ($codes as $code) {
             $existing = $this->flagRepository->findOneBy(['code' => $code]);
 
-            if ($existing !== null) {
-                $skippedCount++;
+            if (null !== $existing) {
+                ++$skippedCount;
                 continue;
             }
 
             $flag = new Flag();
             $flag->setCode($code);
             $this->entityManager->persist($flag);
-            $createdCount++;
+            ++$createdCount;
         }
 
         $this->entityManager->flush();
@@ -109,7 +110,7 @@ class PopulateFlagsCommand extends Command
             }
 
             $content = file_get_contents($fileName);
-            if ($content === false) {
+            if (false === $content) {
                 $io->warning(sprintf('Could not read file: %s', $fileName));
                 continue;
             }

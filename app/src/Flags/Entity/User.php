@@ -13,40 +13,40 @@ class User implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $telegramId;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $firstName;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $lastName;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $telegramUsername;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $telegramPhotoUrl;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $highScore = 0;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $gamesTotal = 0;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $bestTime = 0;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $timeTotal = 0;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $sub = null;  // OAuth2 subject identifier
 
-    #[ORM\OneToMany(targetEntity: "Answer", mappedBy: "user", cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: 'Answer', mappedBy: 'user', cascade: ['persist'])]
     #[Ignore]
     private ?Collection $answers;
 
@@ -155,48 +155,32 @@ class User implements UserInterface
         $this->highScore = $score;
     }
 
-    /**
-     * @return int
-     */
     public function getGamesTotal(): int
     {
         return $this->gamesTotal;
     }
 
-    /**
-     * @param int $gamesTotal
-     */
     public function setGamesTotal(int $gamesTotal): void
     {
         $this->gamesTotal = $gamesTotal;
     }
 
-    /**
-     * @return int
-     */
     public function getBestTime(): int
     {
         return $this->bestTime;
     }
 
-    /**
-     * @param int $bestTime
-     */
     public function setBestTime(int $bestTime): void
     {
         $this->bestTime = $bestTime;
     }
 
-    /**
-     * @return int
-     */
     public function getTimeTotal(): int
     {
         return $this->timeTotal;
     }
 
     /**
-     * @param Score $score
      * @param array[App\Entity\Answer] $answers
      */
     public function finalizeGame(Score $score, array $answers): void
@@ -205,9 +189,9 @@ class User implements UserInterface
         $this->timeTotal += $score->getSessionTimer();
         if ($this->highScore <= $score->getScore()) {
             $this->highScore = $score->getScore();
-            $this->bestTime  = $score->getSessionTimer();
+            $this->bestTime = $score->getSessionTimer();
         } elseif ($this->highScore == $score->getScore() && ($this->bestTime > $score->getSessionTimer())) {
-            $this->bestTime  = $score->getSessionTimer();
+            $this->bestTime = $score->getSessionTimer();
         }
 
         foreach ($answers as $item) {
@@ -234,7 +218,6 @@ class User implements UserInterface
     {
         return $this->answers;
     }
-
 
     public function getUserIdentifier(): string
     {

@@ -19,24 +19,23 @@ class GetTokenCommand extends Command
      *       $botToken: '%env(string:BOT_TOKEN)%'
      */
     protected static $defaultName = 'dev:token';
-    
+
     public function __construct(
         private readonly JWTEncoderInterface $encoder,
         private readonly HttpClientInterface $client,
         private readonly EntityManagerInterface $entityManager,
-        private readonly string $botToken
-    )
-    {
+        private readonly string $botToken,
+    ) {
         parent::__construct();
     }
-    
+
     protected function configure()
     {
         $this
             ->setDescription('Get access token')
         ;
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $repo = $this->entityManager->getRepository(User::class);
@@ -45,7 +44,7 @@ class GetTokenCommand extends Command
         $token = $this->encoder
             ->encode([
                 'username' => $user->getTelegramId(),
-                'exp' => time() + 600000 + getenv('JWT_TOKEN_TTL')
+                'exp' => time() + 600000 + getenv('JWT_TOKEN_TTL'),
             ]);
 
         $output->writeln(sprintf('<info>%s</info>', $token));

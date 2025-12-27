@@ -11,17 +11,17 @@ class Score
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     protected int $id;
 
-    #[ORM\Column(type: "integer", length: 255)]
+    #[ORM\Column(type: 'integer', length: 255)]
     protected int $sessionTimer;
 
-    #[ORM\Column(type: "integer", length: 255)]
-    #[Assert\Type("integer")]
+    #[ORM\Column(type: 'integer', length: 255)]
+    #[Assert\Type('integer')]
     protected int $score;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: 'datetime')]
     protected \DateTime $date;
 
     public function __construct()

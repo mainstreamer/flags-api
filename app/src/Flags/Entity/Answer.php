@@ -10,55 +10,43 @@ class Answer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     protected int $id;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     protected int $timer;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $flagCode;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $answerOptions;
 
-    #[ORM\Column(type: "boolean")]
+    #[ORM\Column(type: 'boolean')]
     protected bool $correct;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: 'datetime')]
     protected \DateTime $date;
 
-    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "answers")]
+    #[ORM\ManyToOne(targetEntity: 'User', inversedBy: 'answers')]
     #[Ignore]
     protected ?User $user;
 
-    /**
-     * @return int
-     */
     public function getTimer(): int
     {
         return $this->timer;
     }
 
-    /**
-     * @param int $timer
-     */
     public function setTimer(int $timer): void
     {
         $this->timer = $timer;
     }
 
-    /**
-     * @return string
-     */
     public function getFlagCode(): string
     {
         return $this->flagCode;
     }
 
-    /**
-     * @param string $flagCode
-     */
     public function setFlagCode(string $flagCode): void
     {
         $this->flagCode = $flagCode;
@@ -72,49 +60,31 @@ class Answer
         return $this->answerOptions;
     }
 
-    /**
-     * @param array $answerOptions
-     */
     public function setAnswerOptions(array $answerOptions): void
     {
         $this->answerOptions = json_encode($answerOptions);
     }
 
-    /**
-     * @return bool
-     */
     public function isCorrect(): bool
     {
         return $this->correct;
     }
 
-    /**
-     * @param bool $correct
-     */
     public function setCorrect(bool $correct): void
     {
         $this->correct = $correct;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getDate(): \DateTime
     {
         return $this->date;
     }
 
-    /**
-     * @param \DateTime $date
-     */
     public function setDate(\DateTime $date): void
     {
         $this->date = $date;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
@@ -122,27 +92,21 @@ class Answer
 
     public function fromArray(array $array): self
     {
-        $item = new static;
+        $item = new static();
         $item->setAnswerOptions($array['options']);
         $item->setFlagCode($array['answerCode']);
         $item->setTimer($array['time']);
         $item->setCorrect($array['correct']);
-        $item->setDate((new \DateTime())->setTimestamp(round($array['answerDateTime']/1000)));
+        $item->setDate((new \DateTime())->setTimestamp(round($array['answerDateTime'] / 1000)));
 
         return $item;
     }
 
-    /**
-     * @return User|null
-     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @param User|null $user
-     */
     public function setUser(?User $user): void
     {
         $this->user = $user;

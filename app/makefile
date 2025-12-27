@@ -28,6 +28,8 @@ psalm:
 	@docker compose exec php vendor/bin/psalm --no-cache
 fix:
 	@docker compose exec php vendor/bin/php-cs-fixer fix
+code-style:
+	@docker compose exec php vendor/bin/php-cs-fixer check
 --:
 	@docker compose exec php sh -c "$(filter-out $@,$(MAKECMDGOALS) $(MAKEFLAGS))"
 sh:
