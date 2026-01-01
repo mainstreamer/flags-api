@@ -7,11 +7,13 @@ namespace App\Flags\Security;
 use App\Flags\Service\JwksService;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
+use Psr\Log\LoggerInterface;
 
 class JwksJwtEncoder implements JWTEncoderInterface
 {
     public function __construct(
         private readonly JwksService $jwksService,
+        private readonly ?LoggerInterface $logger = null,
     ) {
     }
 
@@ -22,14 +24,19 @@ class JwksJwtEncoder implements JWTEncoderInterface
 
     public function decode($token): array
     {
+        $this->logger?->debug('JwksJwtEncoder: Starting token decode');
+
         $publicKey = $this->jwksService->getPublicKey();
 
         if (!$publicKey) {
+            $this->logger?->error('JwksJwtEncoder: Unable to fetch public key from JWKS endpoint');
             throw new JWTDecodeFailureException(
                 JWTDecodeFailureException::INVALID_TOKEN,
                 'Unable to fetch public key from JWKS endpoint'
             );
         }
+
+        $this->logger?->debug('JwksJwtEncoder: Public key fetched successfully');
 
         $parts = explode('.', $token);
         if (\count($parts) !== 3) {
@@ -93,11 +100,17 @@ class JwksJwtEncoder implements JWTEncoderInterface
 
         // Check expiration
         if (isset($payload['exp']) && $payload['exp'] < time()) {
+            $this->logger?->warning('JwksJwtEncoder: Token has expired', ['exp' => $payload['exp']]);
             throw new JWTDecodeFailureException(
                 JWTDecodeFailureException::EXPIRED_TOKEN,
                 'Token has expired'
             );
         }
+
+        $this->logger?->info('JwksJwtEncoder: Token decoded successfully', [
+            'sub' => $payload['sub'] ?? 'missing',
+            'exp' => $payload['exp'] ?? 'missing',
+        ]);
 
         return $payload;
     }

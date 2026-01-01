@@ -3,3 +3,5 @@ lexik_jwt_authentication:
     public_key: '%kernel.project_dir%/config/jwt/public.pem'
     user_id_claim: sub
     token_ttl: 3600
+    encoder:
+        service: App\Flags\Security\JwksJwtEncoder
