@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.14.3@d0b040a91f280f071c1abcb1b77ce3822058725a">
+  <file src="src/DataFixtures/AppFixtures.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function load(ObjectManager $manager): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AppFixtures]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/DataFixtures/CapitalsFixtures.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function load(ObjectManager $manager): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[CapitalsFixtures]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Entity/CapitalsStat.php">
+    <UnusedClass>
+      <code><![CDATA[CapitalsStat]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/EventListener/JsonExceptionListener.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[JsonExceptionListener]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/EventListener/JwtAuthenticationFailureListener.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[JwtAuthenticationFailureListener]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/EventListener/NgrokHeaderListener.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[NgrokHeaderListener]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/ConsoleCommand/GetTokenCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function configure()]]></code>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[GetTokenCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/ConsoleCommand/PopulateCapitalsCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function configure(): void]]></code>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[PopulateCapitalsCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/ConsoleCommand/PopulateFlagsCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function configure(): void]]></code>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[PopulateFlagsCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/ConsoleCommand/PopulateUsersCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function configure(): void]]></code>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[PopulateUsersCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/ConsoleCommand/SetWebhookCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function configure()]]></code>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[SetWebhookCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/Controller/CapitalsController.php">
+    <PossiblyUnusedParam>
+      <code><![CDATA[$request]]></code>
+    </PossiblyUnusedParam>
+    <UnevaluatedCode>
+      <code><![CDATA[return $this->json($this->flagsGenerator->getEmojiFlagOrNull('ss'));]]></code>
+      <code><![CDATA[return $this->json($this->flagsGenerator->getEmojiFlagOrNull('ss'));]]></code>
+    </UnevaluatedCode>
+    <UnusedClass>
+      <code><![CDATA[CapitalsController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/Controller/GameController.php">
+    <UnusedClass>
+      <code><![CDATA[GameController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/Controller/SecurityController.php">
+    <UnusedClass>
+      <code><![CDATA[SecurityController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/DTO/CapitalsStatDTO.php">
+    <UnusedClass>
+      <code><![CDATA[CapitalsStatDTO]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/DTO/ScoreDTO.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$date]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Flags/Entity/Answer.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getAnswerOptions]]></code>
+      <code><![CDATA[getDate]]></code>
+      <code><![CDATA[getFlagCode]]></code>
+      <code><![CDATA[getId]]></code>
+      <code><![CDATA[getTimer]]></code>
+      <code><![CDATA[getUser]]></code>
+      <code><![CDATA[isCorrect]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Flags/Entity/Capital.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getId]]></code>
+      <code><![CDATA[getRegion]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Flags/Entity/CapitalsStat.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getCreated]]></code>
+      <code><![CDATA[getGameType]]></code>
+      <code><![CDATA[getScore]]></code>
+      <code><![CDATA[getSessionTimer]]></code>
+      <code><![CDATA[getUser]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Flags/Entity/Enum/WorldRegions.php">
+    <UnusedClass>
+      <code><![CDATA[WorldRegions]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/Entity/Flag.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getCorrectGuesses]]></code>
+      <code><![CDATA[getId]]></code>
+      <code><![CDATA[getShows]]></code>
+      <code><![CDATA[setShows]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Flags/Entity/Game.php">
+    <UnusedProperty>
+      <code><![CDATA[$user]]></code>
+    </UnusedProperty>
+  </file>
+  <file src="src/Flags/Entity/Score.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$date]]></code>
+      <code><![CDATA[$id]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Flags/Entity/User.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function eraseCredentials()]]></code>
+      <code><![CDATA[public function getRoles(): array]]></code>
+      <code><![CDATA[public function getUserIdentifier(): string]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getAnswers]]></code>
+      <code><![CDATA[getBestTime]]></code>
+      <code><![CDATA[getFirstName]]></code>
+      <code><![CDATA[getGamesTotal]]></code>
+      <code><![CDATA[getHighScore]]></code>
+      <code><![CDATA[getLastName]]></code>
+      <code><![CDATA[getPassword]]></code>
+      <code><![CDATA[getSalt]]></code>
+      <code><![CDATA[getSub]]></code>
+      <code><![CDATA[getTelegramPhotoUrl]]></code>
+      <code><![CDATA[getTelegramUsername]]></code>
+      <code><![CDATA[getTimeTotal]]></code>
+      <code><![CDATA[getUsername]]></code>
+      <code><![CDATA[removeAnswer]]></code>
+      <code><![CDATA[setBestTime]]></code>
+      <code><![CDATA[setGamesTotal]]></code>
+      <code><![CDATA[setHighScore]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Flags/Repository/AnswerRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[findIncorrectGuesses]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$registry]]></code>
+      <code><![CDATA[$userId]]></code>
+      <code><![CDATA[$userId]]></code>
+      <code><![CDATA[$userId]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Flags/Repository/CapitalRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Flags/Repository/CapitalsStatRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getHighScores]]></code>
+      <code><![CDATA[getHighScores2]]></code>
+      <code><![CDATA[getHighScores3]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$gameType]]></code>
+      <code><![CDATA[$gameType]]></code>
+      <code><![CDATA[$gameType]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Flags/Repository/FlagRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Flags/Repository/GameRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Flags/Repository/ScoreRepository.php">
+    <PossiblyUnusedParam>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+    <UnusedClass>
+      <code><![CDATA[ScoreRepository]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/Repository/UserRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getAnyUser]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$registry]]></code>
+      <code><![CDATA[$userInfo]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Flags/Security/HqAuthAuthenticator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function authenticate(Request $request): Passport]]></code>
+      <code><![CDATA[public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response]]></code>
+      <code><![CDATA[public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response]]></code>
+      <code><![CDATA[public function supports(Request $request): ?bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[HqAuthAuthenticator]]></code>
+    </UnusedClass>
+    <UnusedVariable>
+      <code><![CDATA[$expiresIn]]></code>
+    </UnusedVariable>
+  </file>
+  <file src="src/Flags/Serializer/UserNormalizer.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function normalize(mixed $object, $format = null, array $context = [])]]></code>
+      <code><![CDATA[public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[UserNormalizer]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Flags/Service/CapitalsGameService.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UnhandledMatchCondition>
+      <code><![CDATA[$game->getType()->value]]></code>
+    </UnhandledMatchCondition>
+  </file>
+  <file src="src/Flags/Service/HqAuthProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function createResourceOwner(array $response, AccessToken $token): GenericResourceOwner]]></code>
+      <code><![CDATA[protected function getScopeSeparator(): string]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[HqAuthProvider]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Kernel.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function registerBundles(): iterable]]></code>
+    </MissingOverrideAttribute>
+  </file>
+</files>
