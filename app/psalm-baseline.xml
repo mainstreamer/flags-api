@@ -280,6 +280,15 @@
       <code><![CDATA[$expiresIn]]></code>
     </UnusedVariable>
   </file>
+  <file src="src/Flags/Security/JwksJwtEncoder.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function decode($token): array]]></code>
+      <code><![CDATA[public function encode(array $data): string]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[JwksJwtEncoder]]></code>
+    </UnusedClass>
+  </file>
   <file src="src/Flags/Serializer/UserNormalizer.php">
     <MissingOverrideAttribute>
       <code><![CDATA[public function normalize(mixed $object, $format = null, array $context = [])]]></code>
@@ -305,6 +314,11 @@
     <UnusedClass>
       <code><![CDATA[HqAuthProvider]]></code>
     </UnusedClass>
+  </file>
+  <file src="src/Flags/Service/JwksService.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="src/Kernel.php">
     <MissingOverrideAttribute>
