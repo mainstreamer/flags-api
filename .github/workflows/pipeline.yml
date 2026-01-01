@@ -9,7 +9,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME_PHP: ${{ github.repository }}-php
+  IMAGE_NAME_CADDY: ${{ github.repository }}-caddy
 
 jobs:
   version:
@@ -133,29 +134,50 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata
-        id: meta
+      - name: Extract PHP metadata
+        id: meta-php
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PHP }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=v${{ needs.version.outputs.new_version }}
             type=sha,prefix=,format=short
 
-      - name: Build and push
+      - name: Extract Caddy metadata
+        id: meta-caddy
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_CADDY }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=v${{ needs.version.outputs.new_version }}
+            type=sha,prefix=,format=short
+
+      - name: Build and push PHP
         uses: docker/build-push-action@v5
         with:
           context: .
           file: .docker/php-fpm/Dockerfile
           target: production
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta-php.outputs.tags }}
+          labels: ${{ steps.meta-php.outputs.labels }}
           build-args: |
             SENTRY_RELEASE=${{ vars.SENTRY_PROJECT }}@${{ needs.version.outputs.new_version }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PHP }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PHP }}:buildcache,mode=max
+
+      - name: Build and push Caddy
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .docker/caddy/Dockerfile.prod
+          push: true
+          tags: ${{ steps.meta-caddy.outputs.tags }}
+          labels: ${{ steps.meta-caddy.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_CADDY }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_CADDY }}:buildcache,mode=max
 
       - name: Create git tag
         run: |
@@ -187,10 +209,19 @@ jobs:
       packages: write
 
     steps:
-      - name: Delete old container images
+      - name: Delete old PHP container images
         uses: actions/delete-package-versions@v5
         with:
-          package-name: ${{ github.event.repository.name }}
+          package-name: ${{ github.event.repository.name }}-php
+          package-type: container
+          min-versions-to-keep: 6
+          delete-only-untagged-versions: false
+          ignore-versions: '^(latest|v\\d+\\.\\d+\\.\\d+)$'
+
+      - name: Delete old Caddy container images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ github.event.repository.name }}-caddy
           package-type: container
           min-versions-to-keep: 6
           delete-only-untagged-versions: false
