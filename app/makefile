@@ -1,4 +1,5 @@
 include .env
+
 default: welcome
 init: build-containers run-containers composer import-db run-api
 run: run-containers run-api 
