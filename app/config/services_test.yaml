@@ -1,0 +1,9 @@
+services:
+    App\Tests\Support\Security\TestJwtEncoder:
+        public: true
+
+    Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface:
+        alias: App\Tests\Support\Security\TestJwtEncoder
+
+    lexik_jwt_authentication.encoder:
+        alias: App\Tests\Support\Security\TestJwtEncoder

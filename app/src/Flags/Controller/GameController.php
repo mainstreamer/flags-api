@@ -10,7 +10,7 @@ use App\Flags\Entity\User;
 use App\Flags\Repository\AnswerRepository;
 use App\Flags\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
+use Rteeom\FlagsGenerator\Exceptions\IsoFlagGeneratorException;
 use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,38 +35,6 @@ class GameController extends AbstractController
         $this->flagsGenerator = new FlagsGenerator();
     }
 
-    #[Route('/check', name: 'checkaaaa', methods: ['GET'])]
-    public function check(): JsonResponse
-    {
-        return $this->json(['ok']);
-    }
-
-    #[Route('/test', name: 'test', methods: ['GET'])]
-    public function getQuestion(): JsonResponse
-    {
-        $flags = [];
-
-        while (count($flags) < 4) {
-            $countryCode = chr(rand(97, 122)).chr(rand(97, 122));
-            $flag = $this->flagsGenerator->getEmojiFlagOrNull($countryCode);
-            if ($flag) {
-                $flags[$countryCode] = $flag;
-            }
-        }
-
-        $number = rand(0, 3);
-
-        return $this->json([
-            'APP_ENV' => getenv('APP_ENV'),
-            'version' => getenv('VERSION_HASH'),
-            'flags' => $flags,
-            // questionText
-            'ques' => Countries::getName(strtoupper(array_keys($flags)[$number])),
-            'answer' => $flags[array_keys($flags)[$number]],
-            'answerCode' => array_keys($flags)[$number],
-        ]);
-    }
-
     #[Route('/correct/{flag}', name: 'submit_correct', methods: ['POST'])]
     public function correct(
         #[MapEntity(mapping: ['flag' => 'code'])] Flag $flag,
@@ -76,55 +44,6 @@ class GameController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(null, Response::HTTP_OK);
-    }
-
-    #[Route('/api/login', name: 'telegramLogin', methods: ['POST'])]
-    public function authAction(Request $request, JWTEncoderInterface $encoder): Response
-    {
-        $data = json_decode($request->getContent(), true);
-        $hash = $data['hash'];
-        unset($data['hash']);
-
-        $data_check_arr = [];
-        foreach ($data as $key => $value) {
-            $data_check_arr[] = $key.'='.$value;
-        }
-
-        sort($data_check_arr);
-        $data_check_string = implode("\n", $data_check_arr);
-        $bot_token = $this->botToken;
-        $check_hash = $hash;
-        $secret_key = hash('sha256', $bot_token, true);
-        $hash = hash_hmac('sha256', $data_check_string, $secret_key);
-
-        if (0 !== strcmp($hash, $check_hash)) {
-            throw new \Exception('Data is NOT from Telegram');
-        }
-
-        if ((time() - $data['auth_date']) > 86400) {
-            throw new \Exception('Data is outdated');
-        }
-
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneByTelegramId($data['id']);
-
-        if (null === $user) {
-            $user = new User();
-            $user->setTelegramId($data['id']);
-            $user->setFirstName($data['first_name']);
-            $user->setLastName($data['last_name']);
-            $user->setTelegramUsername($data['username'] ?? null);
-            $user->setTelegramPhotoUrl($data['photo_url'] ?? null);
-            $this->getDoctrine()->getManager()->persist($user);
-            $this->getDoctrine()->getManager()->flush();
-        }
-
-        $token = $encoder
-            ->encode([
-                'username' => $user->getTelegramId(),
-                'exp' => time() + 6000000 + getenv('JWT_TOKEN_TTL'),
-            ]);
-
-        return new JsonResponse(['token' => $token]);
     }
 
     #[Route('/protected', name: 'get_profile', methods: ['GET', 'OPTIONS'])]
@@ -169,6 +88,9 @@ class GameController extends AbstractController
         return new Response($flag);
     }
 
+    /**
+     * @throws IsoFlagGeneratorException
+     */
     #[Route('/incorrect', name: 'incorrect', methods: ['GET', 'OPTIONS'])]
     public function getStat(#[CurrentUser] $user, AnswerRepository $repository): Response
     {

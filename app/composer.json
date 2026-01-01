@@ -81,7 +81,9 @@
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3.92",
         "phpunit/phpunit": "^9.6",
+        "symfony/browser-kit": "6.*",
         "symfony/contracts": "*",
+        "symfony/css-selector": "6.*",
         "symfony/phpunit-bridge": "^6.3",
         "vimeo/psalm": "^6.0"
     }

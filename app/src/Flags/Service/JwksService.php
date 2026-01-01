@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Flags\Service;
 
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class JwksService
 {
-    private const CACHE_KEY = 'jwks_public_key';
-    private const CACHE_TTL = 3600; // 1 hour
-    private const PUBLIC_KEY_PATH = '/config/jwt/public.pem';
+    private const string CACHE_KEY = 'jwks_public_key';
+    private const int CACHE_TTL = 3600; // 1 hour
+    private const string PUBLIC_KEY_PATH = '/config/jwt/public.pem';
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
@@ -36,6 +37,9 @@ class JwksService
         });
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function refreshPublicKey(): ?string
     {
         $this->cache->delete(self::CACHE_KEY);
