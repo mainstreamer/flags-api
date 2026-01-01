@@ -16,6 +16,10 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
 
+    health:
+      pattern: ^/health
+      security: false
+
     # NEW: Dedicated firewall to handle API Preflights (OPTIONS)
     api_preflight:
       pattern: ^/api

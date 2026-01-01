@@ -24,7 +24,7 @@ class JwksJwtEncoder implements JWTEncoderInterface
 
     public function decode($token): array
     {
-        $this->logger?->debug('JwksJwtEncoder: Starting token decode');
+        $this->logger?->notice('JwksJwtEncoder: CUSTOM ENCODER ACTIVE - decoding token');
 
         $publicKey = $this->jwksService->getPublicKey();
 
@@ -107,9 +107,8 @@ class JwksJwtEncoder implements JWTEncoderInterface
             );
         }
 
-        $this->logger?->info('JwksJwtEncoder: Token decoded successfully', [
+        $this->logger?->notice('JwksJwtEncoder: CUSTOM ENCODER - Token verified successfully', [
             'sub' => $payload['sub'] ?? 'missing',
-            'exp' => $payload['exp'] ?? 'missing',
         ]);
 
         return $payload;

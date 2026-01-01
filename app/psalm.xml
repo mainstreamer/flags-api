@@ -13,4 +13,13 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <UnusedClass>
+            <errorLevel type="suppress">
+                <directory name="src/Flags/Controller" />
+                <directory name="src/Flags/ConsoleCommand" />
+            </errorLevel>
+        </UnusedClass>
+    </issueHandlers>
 </psalm>
