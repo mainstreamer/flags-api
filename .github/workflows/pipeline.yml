@@ -49,8 +49,11 @@ jobs:
     needs: symfony-tests
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build the Docker image
         env:
           GITH_KEY: ${{ secrets.GITH_KEY }}
@@ -122,8 +125,11 @@ jobs:
     needs: symfony-tests
     if: github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build the Docker image
         env:
           GITH_KEY: ${{ secrets.GITH_KEY }}
