@@ -1,112 +1,169 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+name: CI/CD Pipeline
 
-name: TEST-DEPLOY
-on: [push, pull_request]
-permissions:
-  contents: read
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+    branches: [main, master]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  symfony-tests:
+  version:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
+    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
+    outputs:
+      new_version: ${{ steps.bump.outputs.new_version }}
+      bump_type: ${{ steps.bump.outputs.bump_type }}
+
+    steps:
+      - name: Checkout with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Calculate semantic version
+        id: bump
+        run: |
+          # Get latest tag or default to v0.0.0
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "Latest tag: $LATEST_TAG"
+
+          # Parse version numbers
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          # Get commit message
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Commit message: $COMMIT_MSG"
+
+          # Determine bump type from commit message
+          if echo "$COMMIT_MSG" | grep -qiE '\[major\]|BREAKING:|BREAKING CHANGE:'; then
+            BUMP_TYPE="major"
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif echo "$COMMIT_MSG" | grep -qiE '\[minor\]|^feat:|^feat\('; then
+            BUMP_TYPE="minor"
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          else
+            BUMP_TYPE="patch"
+            PATCH=$((PATCH + 1))
+          fi
+
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "Bump type: $BUMP_TYPE"
+          echo "New version: $NEW_VERSION"
+
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+
+  test:
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
           extensions: pdo_mysql, intl, gd, xml, mbstring, zip
           coverage: none
+
       - name: Setup test environment
+        working-directory: app
         run: cp .env.test .env
+
       - name: Get Composer cache directory
         id: composer-cache
+        working-directory: app
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
       - name: Cache Composer packages
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('app/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
+
       - name: Install Dependencies
+        working-directory: app
         run: composer install --prefer-dist --no-progress
+
       - name: Create Database
+        working-directory: app
         run: |
           mkdir -p data
           touch data/database.sqlite
+
       - name: Execute tests (Unit and Feature tests) via PHPUnit
+        working-directory: app
         env:
           DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
         run: vendor/bin/phpunit
+
       - name: Execute psalm
+        working-directory: app
         run: vendor/bin/psalm
 
-  deploy:
-    needs: symfony-tests
-    if: github.ref == 'refs/heads/master'
+  build:
+    needs: [test, version]
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+
+    permissions:
+      contents: write
+      packages: write
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Build the Docker image
-        env:
-          GITH_KEY: ${{ secrets.GITH_KEY }}
-          SENTRY_RELEASE: ${{ vars.SENTRY_PROJECT }}@${{ github.sha }}
-        run: docker compose build --build-arg SENTRY_RELEASE=${SENTRY_RELEASE} php
-      - name: Tag Docker image
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=v${{ needs.version.outputs.new_version }}
+            type=sha,prefix=,format=short
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .docker/php-fpm/Dockerfile
+          target: production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            SENTRY_RELEASE=${{ vars.SENTRY_PROJECT }}@${{ needs.version.outputs.new_version }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+      - name: Create git tag
         run: |
-          docker tag app-php swiftcode/flags:php-latest
-          docker tag app-php swiftcode/flags:php-${{ github.sha }}
-      - name: Login to DockerHub
-        env:
-          DH_KEY: ${{ secrets.DH_KEY }}
-          DH_LOGIN: ${{ secrets.DH_LOGIN }}
-        run: docker login -u ${DH_LOGIN} -p ${DH_KEY}
-      - name: Push Images
-        run: docker push swiftcode/flags --all-tags
-      - name: Write Secrets
-        run: |
-          echo "${{ secrets.DD_KEY }}" | base64 --decode > ${HOME}/key.pem
-          echo "${{ secrets.DD_CA }}" | base64 --decode > ${HOME}/ca.pem
-          echo "${{ secrets.DD_CERT }}" | base64 --decode > ${HOME}/cert.pem
-          cd ${HOME} && ls -la
-          docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=${HOME}/ca.pem,cert=${HOME}/cert.pem,key=${HOME}/key.pem"
-      - name: Check context
-        run: docker context list
-      - name: Use context
-        run: docker context use icu
-      - name: Pull Images
-        run: docker compose --env-file .env.prod -f docker-compose-prod.yml pull
-      - name: Deploy Images
-        env:
-          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose --env-file .env.prod -f docker-compose-prod.yml up -d
-      - name: Create DB (if not exists)
-        env:
-          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml exec -e SYMFONY_DECRYPTION_SECRET=${SYMFONY_DECRYPTION_SECRET} php bin/console d:d:c --if-not-exists --env=prod
-      - name: Deploy jwt keys
-        run: |
-          echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
-          echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode | docker compose -f docker-compose-prod.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/public.pem'
-      - name: Run Migrations
-        env:
-          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml exec php bin/console d:m:m -n --env=prod
-      - name: Validate Schema
-        env:
-          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-prod.yml exec php bin/console d:s:v --env=prod
-      - name: Prune Images
-        run: docker image prune --force
-      - name: Remove keys
-        run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ needs.version.outputs.new_version }}" -m "Release v${{ needs.version.outputs.new_version }}"
+          git push origin "v${{ needs.version.outputs.new_version }}"
+
       - name: Create Sentry release
         if: ${{ vars.SENTRY_ORG != '' && vars.SENTRY_PROJECT != '' }}
         env:
@@ -115,69 +172,32 @@ jobs:
           SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
-          VERSION="${{ vars.SENTRY_PROJECT }}@${{ github.sha }}"
+          VERSION="${{ vars.SENTRY_PROJECT }}@${{ needs.version.outputs.new_version }}"
           sentry-cli releases new "$VERSION"
           sentry-cli releases set-commits "$VERSION" --auto --ignore-missing
           sentry-cli releases finalize "$VERSION"
           sentry-cli releases deploys "$VERSION" new -e production
 
-  deploy-staging:
-    needs: symfony-tests
-    if: github.ref == 'refs/heads/staging'
+  cleanup:
+    needs: build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
+    permissions:
+      packages: write
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Build the Docker image
-        env:
-          GITH_KEY: ${{ secrets.GITH_KEY }}
-        run: printenv && docker compose build php
-      - name: Tag Docker image
-        run: |
-          docker tag app-php swiftcode/flags:php-staging
-      - name: Login to DockerHub
-        env:
-          DH_KEY: ${{ secrets.DH_KEY }}
-          DH_LOGIN: ${{ secrets.DH_LOGIN }}
-        run: docker login -u ${DH_LOGIN} -p ${DH_KEY}
-      - name: Push Images
-        run: docker push swiftcode/flags --all-tags
-      - name: Write Secrets
-        run: |
-          echo "${{ secrets.DD_KEY }}" | base64 --decode > ${HOME}/key.pem
-          echo "${{ secrets.DD_CA }}" | base64 --decode > ${HOME}/ca.pem
-          echo "${{ secrets.DD_CERT }}" | base64 --decode > ${HOME}/cert.pem
-          cd ${HOME} && ls -la
-          docker context create icu --docker "host=tcp://138.68.184.69:2376,ca=${HOME}/ca.pem,cert=${HOME}/cert.pem,key=${HOME}/key.pem"
-      - name: Check context
-        run: docker context list
-      - name: Use context
-        run: docker context use icu
-      - name: Pull Images
-        run: docker compose -f docker-compose-staging.yml --env-file .env.staging pull
-      - name: Deploy Images
-        env:
-          SYMFONY_DECRYPTION_SECRET: ${{ secrets.SYMFONY_DECRYPTION_SECRET }}
-        run: docker compose -f docker-compose-staging.yml --env-file .env.staging up -d
-      - name: Create DB (if not exists)
-        run: docker compose -f docker-compose-staging.yml exec php bin/console d:d:c --if-not-exists
-      - name: Deploy jwt keys
-        run: |
-          echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 --decode | docker compose -f docker-compose-staging.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/private.pem'
-          echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 --decode | docker compose -f docker-compose-staging.yml exec php sh -c 'cat > /var/www/webapp/config/jwt/public.pem'
-      - name: Run Migrations
-        run: docker compose -f docker-compose-staging.yml exec php bin/console d:m:m -n
-      - name: Validate Schema
-        run: docker compose -f docker-compose-staging.yml exec php bin/console d:s:v
-      - name: Prune Images
-        run: docker image prune --force
-      - name: Remove keys
-        run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
+      - name: Delete old container images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ github.event.repository.name }}
+          package-type: container
+          min-versions-to-keep: 6
+          delete-only-untagged-versions: false
+          ignore-versions: '^(latest|v\\d+\\.\\d+\\.\\d+)$'
 
   notify:
-    needs: [symfony-tests, deploy, deploy-staging]
+    needs: [test, build]
     runs-on: ubuntu-latest
     if: always() && github.event_name == 'push'
 
@@ -186,7 +206,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          if [ "${{ needs.symfony-tests.result }}" == "failure" ] || [ "${{ needs.deploy.result }}" == "failure" ] || [ "${{ needs.deploy-staging.result }}" == "failure" ]; then
+          if [ "${{ needs.test.result }}" == "failure" ] || [ "${{ needs.build.result }}" == "failure" ]; then
             COLOR=15158332  # Red
             STATUS="FAILED"
             EMOJI=":x:"
