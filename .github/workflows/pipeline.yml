@@ -114,8 +114,8 @@ jobs:
           bin/console d:d:c -n --if-not-exists 
           bin/console d:m:m -n -vvv
           bin/console app:populate:users
-          bin/console app:populate:capitals -n
-          bin/console app:populate:flags -n
+          bin/console app:populate:capitals -n --purge
+          bin/console app:populate:flags -n --purge
 
       - name: Execute tests
         working-directory: app
