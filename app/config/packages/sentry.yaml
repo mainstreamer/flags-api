@@ -1,0 +1,6 @@
+when@prod:
+    sentry:
+        dsn: '%env(SENTRY_DSN)%'
+        options:
+            release: '%env(default::SENTRY_RELEASE)%'
+            environment: 'production'

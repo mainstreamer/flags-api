@@ -16,8 +16,6 @@ import-db:
 	@bin/console d:d:i flags.sql
 composer:
 	@docker compose exec php composer install
-psalm:
-	@docker compose exec php vendor/bin/psalm --no-cache
 cache:
 	@docker compose exec php bin/console c:c
 welcome:
