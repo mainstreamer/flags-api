@@ -65,6 +65,16 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    # Define the MySQL service
+    services:
+      mysql:
+        image: mysql:9.5
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: symfony_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - uses: actions/checkout@v4
@@ -95,19 +105,23 @@ jobs:
         working-directory: app
         run: composer install --prefer-dist --no-progress
 
-      - name: Create Database
+      - name: Create Database and Run Migrations
         working-directory: app
+        env:
+          # Use 127.0.0.1 for GitHub Actions services
+          DATABASE_URL: mysql://root@127.0.0.1:3306/symfony_test?serverVersion=9.5
         run: |
           bin/console d:d:c -n --if-not-exists 
           bin/console d:m:m -n -vvv
           bin/console app:populate:users
           bin/console app:populate:capitals -n
           bin/console app:populate:flags -n
-          
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
+
+      - name: Execute tests
         working-directory: app
         env:
-          DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
+          # Keep the same DATABASE_URL here
+          DATABASE_URL: mysql://root@127.0.0.1:3306/symfony_test?serverVersion=9.5
         run: vendor/bin/phpunit
 
       - name: Execute psalm
