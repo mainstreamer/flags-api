@@ -139,8 +139,12 @@ RUN { \
 # Copy from builder
 COPY --from=builder --chown=www-data:www-data /var/www/html ./
 
-# Remove dev files
-RUN rm -rf tests/ .git/ .github/ .env.local .env.*.local \
+ARG SENTRY_RELEASE=""
+ENV APP_ENV=prod APP_DEBUG=0 SENTRY_RELEASE=${SENTRY_RELEASE}
+
+# Create minimal .env for Symfony bootstrap, remove dev files, warmup cache
+RUN echo "APP_ENV=prod" > .env \
+    && rm -rf tests/ .git/ .github/ .env.local .env.*.local \
     docker-compose.yml Dockerfile Makefile *.md phpunit.xml* \
     /usr/local/bin/composer \
     && mkdir -p var/cache var/log \
@@ -151,9 +155,6 @@ RUN rm -rf tests/ .git/ .github/ .env.local .env.*.local \
 # Add entrypoint
 COPY .docker/php-fpm/docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-ARG SENTRY_RELEASE=""
-ENV APP_ENV=prod APP_DEBUG=0 SENTRY_RELEASE=${SENTRY_RELEASE}
 
 # Warmup cache as root before switching to www-data
 #RUN php bin/console cache:clear --no-warmup \
