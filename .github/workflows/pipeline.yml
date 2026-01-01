@@ -61,8 +61,8 @@ jobs:
         run: docker compose build --build-arg SENTRY_RELEASE=${SENTRY_RELEASE} php
       - name: Tag Docker image
         run: |
-          docker tag flags-api-php swiftcode/flags:php-latest
-          docker tag flags-api-php swiftcode/flags:php-${{ github.sha }}
+          docker tag app-php swiftcode/flags:php-latest
+          docker tag app-php swiftcode/flags:php-${{ github.sha }}
       - name: Login to DockerHub
         env:
           DH_KEY: ${{ secrets.DH_KEY }}
@@ -136,7 +136,7 @@ jobs:
         run: printenv && docker compose build php
       - name: Tag Docker image
         run: |
-          docker tag flags-api-php swiftcode/flags:php-staging
+          docker tag app-php swiftcode/flags:php-staging
       - name: Login to DockerHub
         env:
           DH_KEY: ${{ secrets.DH_KEY }}
