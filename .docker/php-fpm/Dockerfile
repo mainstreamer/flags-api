@@ -109,8 +109,8 @@ COPY --chown=www-data:www-data app/ .
 
 RUN composer dump-autoload --optimize --classmap-authoritative
 
-# Skip cache warmup - do it at runtime instead (saves build time)
-RUN chown -R www-data:www-data var/
+# Create var directory and set permissions
+RUN mkdir -p var && chown -R www-data:www-data var/
 
 # ==========================================
 # Production stage
