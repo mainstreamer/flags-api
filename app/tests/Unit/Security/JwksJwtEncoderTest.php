@@ -33,6 +33,7 @@ class JwksJwtEncoderTest extends TestCase
     {
         $jwksService = $this->createMock(JwksService::class);
         $jwksService->method('getPublicKey')->willReturn($this->publicKey);
+        $jwksService->method('refreshPublicKey')->willReturn($this->publicKey);
 
         $encoder = new JwksJwtEncoder($jwksService);
 

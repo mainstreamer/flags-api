@@ -142,13 +142,15 @@ COPY --from=builder --chown=www-data:www-data /var/www/html ./
 ARG SENTRY_RELEASE=""
 ENV APP_ENV=prod APP_DEBUG=0 SENTRY_RELEASE=${SENTRY_RELEASE}
 
-# Create minimal .env for Symfony bootstrap, remove dev files
+# Create minimal .env for Symfony bootstrap, placeholder for public key, remove dev files
 RUN printf "APP_ENV=prod\nSENTRY_DSN=\nJWKS_URI=https://auth.izeebot.top/.well-known/jwks.json\n" > .env \
+    && mkdir -p config/jwt \
+    && touch config/jwt/public.pem \
     && rm -rf tests/ .git/ .github/ .env.local .env.*.local \
     docker-compose.yml Dockerfile Makefile *.md phpunit.xml* \
     /usr/local/bin/composer \
     && mkdir -p var/cache var/log \
-    && chown -R www-data:www-data var/
+    && chown -R www-data:www-data var/ config/jwt/
 
 # Add entrypoint
 COPY .docker/php-fpm/docker-entrypoint.sh /entrypoint.sh

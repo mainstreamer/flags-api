@@ -12,11 +12,13 @@ class JwksService
 {
     private const CACHE_KEY = 'jwks_public_key';
     private const CACHE_TTL = 3600; // 1 hour
+    private const PUBLIC_KEY_PATH = '/config/jwt/public.pem';
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $cache,
         private readonly string $jwksUri,
+        private readonly string $projectDir,
     ) {
     }
 
@@ -25,7 +27,12 @@ class JwksService
         return $this->cache->get(self::CACHE_KEY, function (ItemInterface $item): ?string {
             $item->expiresAfter(self::CACHE_TTL);
 
-            return $this->fetchPublicKeyFromJwks();
+            $key = $this->fetchPublicKeyFromJwks();
+            if ($key) {
+                $this->savePublicKeyToFile($key);
+            }
+
+            return $key;
         });
     }
 
@@ -34,6 +41,18 @@ class JwksService
         $this->cache->delete(self::CACHE_KEY);
 
         return $this->getPublicKey();
+    }
+
+    private function savePublicKeyToFile(string $publicKey): void
+    {
+        $path = $this->projectDir . self::PUBLIC_KEY_PATH;
+        $dir = \dirname($path);
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        file_put_contents($path, $publicKey);
     }
 
     private function fetchPublicKeyFromJwks(): ?string

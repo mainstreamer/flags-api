@@ -49,6 +49,7 @@ services:
     App\Flags\Service\JwksService:
       arguments:
         $jwksUri: '%jwks_uri%'
+        $projectDir: '%kernel.project_dir%'
 
     App\Flags\Security\JwksJwtEncoder: ~
 

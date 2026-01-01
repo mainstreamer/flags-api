@@ -1,5 +1,5 @@
 lexik_jwt_authentication:
-    # We use a custom JWKS-based encoder, no local keys needed
-    # The public key is fetched from the auth server's JWKS endpoint
+    # Public key is fetched from JWKS endpoint and cached to this file
+    public_key: '%kernel.project_dir%/config/jwt/public.pem'
     user_id_claim: sub
     token_ttl: 3600
