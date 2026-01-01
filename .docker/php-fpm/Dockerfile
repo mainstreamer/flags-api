@@ -143,7 +143,7 @@ ARG SENTRY_RELEASE=""
 ENV APP_ENV=prod APP_DEBUG=0 SENTRY_RELEASE=${SENTRY_RELEASE}
 
 # Create minimal .env for Symfony bootstrap, remove dev files
-RUN printf "APP_ENV=prod\nSENTRY_DSN=\n" > .env \
+RUN printf "APP_ENV=prod\nSENTRY_DSN=\nJWKS_URI=https://auth.izeebot.top/.well-known/jwks.json\n" > .env \
     && rm -rf tests/ .git/ .github/ .env.local .env.*.local \
     docker-compose.yml Dockerfile Makefile *.md phpunit.xml* \
     /usr/local/bin/composer \

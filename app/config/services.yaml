@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    jwks_uri: '%env(JWKS_URI)%'
 
 services:
     # default configuration for services in *this* file
@@ -44,3 +45,12 @@ services:
     App\EventListener\JwtAuthenticationFailureListener:
       tags:
         - { name: kernel.event_subscriber }
+
+    App\Flags\Service\JwksService:
+      arguments:
+        $jwksUri: '%jwks_uri%'
+
+    App\Flags\Security\JwksJwtEncoder: ~
+
+    Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface:
+      alias: App\Flags\Security\JwksJwtEncoder

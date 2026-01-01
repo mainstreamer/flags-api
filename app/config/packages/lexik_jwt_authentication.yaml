@@ -1,7 +1,5 @@
 lexik_jwt_authentication:
-  #    secret_key: '%env(resolve:JWT_SECRET_KEY)%'
-  public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
-  pass_phrase: '%env(JWT_PASSPHRASE)%'
-  token_ttl: '%env(JWT_TOKEN_TTL)%'
-  user_id_claim: sub
-  # TODO - add public key from oauth server to reuse their accesstokens!
+    # We use a custom JWKS-based encoder, no local keys needed
+    # The public key is fetched from the auth server's JWKS endpoint
+    user_id_claim: sub
+    token_ttl: 3600
