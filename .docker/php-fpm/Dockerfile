@@ -142,14 +142,12 @@ COPY --from=builder --chown=www-data:www-data /var/www/html ./
 ARG SENTRY_RELEASE=""
 ENV APP_ENV=prod APP_DEBUG=0 SENTRY_RELEASE=${SENTRY_RELEASE}
 
-# Create minimal .env for Symfony bootstrap, remove dev files, warmup cache
-RUN echo "APP_ENV=prod" > .env \
+# Create minimal .env for Symfony bootstrap, remove dev files
+RUN printf "APP_ENV=prod\nSENTRY_DSN=\n" > .env \
     && rm -rf tests/ .git/ .github/ .env.local .env.*.local \
     docker-compose.yml Dockerfile Makefile *.md phpunit.xml* \
     /usr/local/bin/composer \
     && mkdir -p var/cache var/log \
-    && bin/console cache:clear --env=prod --no-warmup \
-    && php bin/console cache:warmup --env=prod \
     && chown -R www-data:www-data var/
 
 # Add entrypoint

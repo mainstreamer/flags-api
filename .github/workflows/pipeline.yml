@@ -165,8 +165,7 @@ jobs:
           labels: ${{ steps.meta-php.outputs.labels }}
           build-args: |
             SENTRY_RELEASE=${{ vars.SENTRY_PROJECT }}@${{ needs.version.outputs.new_version }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PHP }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PHP }}:buildcache,mode=max
+          no-cache: true
 
       - name: Build and push Caddy
         uses: docker/build-push-action@v5
