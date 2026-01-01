@@ -152,7 +152,8 @@ RUN rm -rf tests/ .git/ .github/ .env.local .env.*.local \
 COPY .docker/php-fpm/docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-ENV APP_ENV=prod APP_DEBUG=0
+ARG SENTRY_RELEASE=""
+ENV APP_ENV=prod APP_DEBUG=0 SENTRY_RELEASE=${SENTRY_RELEASE}
 
 # Warmup cache as root before switching to www-data
 #RUN php bin/console cache:clear --no-warmup \

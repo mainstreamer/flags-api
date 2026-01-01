@@ -11,28 +11,27 @@ permissions:
 jobs:
   symfony-tests:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     steps:
-      #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
-      # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
-      # uses: shivammathur/setup-php@v2
-      - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-      - uses: actions/checkout@v3
-      - name: Copy .env.test.local
-        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.test', '.env');"
-      - name: Cache Composer packages
+          php-version: '8.4'
+          extensions: pdo_mysql, intl, gd, xml, mbstring, zip
+          coverage: none
+      - name: Get Composer cache directory
         id: composer-cache
-        uses: actions/cache@v3
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache Composer packages
+        uses: actions/cache@v4
         with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('app/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --ignore-platform-reqs
+        run: composer install --prefer-dist --no-progress
       - name: Create Database
         run: |
           mkdir -p data
@@ -53,7 +52,8 @@ jobs:
       - name: Build the Docker image
         env:
           GITH_KEY: ${{ secrets.GITH_KEY }}
-        run: printenv && docker compose build php
+          SENTRY_RELEASE: ${{ vars.SENTRY_PROJECT }}@${{ github.sha }}
+        run: docker compose build --build-arg SENTRY_RELEASE=${SENTRY_RELEASE} php
       - name: Tag Docker image
         run: |
           docker tag flags-api-php swiftcode/flags:php-latest
@@ -102,6 +102,19 @@ jobs:
         run: docker image prune --force
       - name: Remove keys
         run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
+      - name: Create Sentry release
+        if: ${{ vars.SENTRY_ORG != '' && vars.SENTRY_PROJECT != '' }}
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+        run: |
+          curl -sL https://sentry.io/get-cli/ | bash
+          VERSION="${{ vars.SENTRY_PROJECT }}@${{ github.sha }}"
+          sentry-cli releases new "$VERSION"
+          sentry-cli releases set-commits "$VERSION" --auto --ignore-missing
+          sentry-cli releases finalize "$VERSION"
+          sentry-cli releases deploys "$VERSION" new -e production
 
   deploy-staging:
     needs: symfony-tests
@@ -154,3 +167,37 @@ jobs:
         run: docker image prune --force
       - name: Remove keys
         run: rm ${HOME}/ca.pem ${HOME}/cert.pem ${HOME}/key.pem
+
+  notify:
+    needs: [symfony-tests, deploy, deploy-staging]
+    runs-on: ubuntu-latest
+    if: always() && github.event_name == 'push'
+
+    steps:
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          if [ "${{ needs.symfony-tests.result }}" == "failure" ] || [ "${{ needs.deploy.result }}" == "failure" ] || [ "${{ needs.deploy-staging.result }}" == "failure" ]; then
+            COLOR=15158332  # Red
+            STATUS="FAILED"
+            EMOJI=":x:"
+          else
+            COLOR=3066993  # Green
+            STATUS="SUCCESS"
+            EMOJI=":white_check_mark:"
+          fi
+
+          curl -H "Content-Type: application/json" \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"$EMOJI ${{ github.repository }} - ${STATUS}\",
+                \"description\": \"**Branch:** ${{ github.ref_name }}\n**Commit:** [\`${GITHUB_SHA::7}\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\n**Author:** ${{ github.actor }}\",
+                \"color\": ${COLOR},
+                \"footer\": {
+                  \"text\": \"GitHub Actions\"
+                },
+                \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+              }]
+            }" \
+            $DISCORD_WEBHOOK
