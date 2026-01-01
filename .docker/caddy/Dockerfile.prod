@@ -1,24 +1,11 @@
 FROM caddy:2.7-alpine
 
-# Install necessary packages
-RUN apk add --no-cache \
-    shadow \
-    && rm -rf /var/cache/apk/*
-
-# Modify existing www-data group/user to match PHP-FPM (UID/GID 1000)
-RUN deluser www-data 2>/dev/null || true && \
-    delgroup www-data 2>/dev/null || true && \
-    addgroup -g 1000 www-data && \
-    adduser -D -u 1000 -G www-data www-data
-
 # Copy Caddyfile
 COPY .docker/caddy/Caddyfile.prod /etc/caddy/Caddyfile
 
-COPY ../../app /var/www/webapp
-
 # Create log directory
 RUN mkdir -p /var/log/caddy && \
-    chown -R www-data:www-data /var/log/caddy
+    chown -R nobody:nobody /var/log/caddy
 
 # Expose ports
 EXPOSE 80 443

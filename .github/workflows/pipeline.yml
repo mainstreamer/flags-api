@@ -214,6 +214,7 @@ jobs:
     steps:
       - name: Delete old PHP container images
         uses: actions/delete-package-versions@v5
+        continue-on-error: true
         with:
           package-name: ${{ github.event.repository.name }}-php
           package-type: container
@@ -223,6 +224,7 @@ jobs:
 
       - name: Delete old Caddy container images
         uses: actions/delete-package-versions@v5
+        continue-on-error: true
         with:
           package-name: ${{ github.event.repository.name }}-caddy
           package-type: container
