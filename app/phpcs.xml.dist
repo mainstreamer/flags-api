@@ -6,7 +6,19 @@
     <arg name="extensions" value="php"/>
 
     <!-- Include PSR-12 standard -->
-    <rule ref="PSR12"/>
+    <rule ref="PSR12">
+        <!-- Disable rules that conflict with PHP CS Fixer -->
+        <exclude name="PSR12.Operators.OperatorSpacing"/>
+        <exclude name="PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword"/>
+    </rule>
+
+    <!-- Disable rules broken with PHP 8.4 property hooks -->
+    <rule ref="PSR2.Classes.PropertyDeclaration.Multiple">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
+    <rule ref="PSR2.Classes.PropertyDeclaration.ScopeMissing">
+        <exclude-pattern>*</exclude-pattern>
+    </rule>
 
     <!-- Line length rule - warn at 120 chars, error at 120 chars -->
     <rule ref="Generic.Files.LineLength">
