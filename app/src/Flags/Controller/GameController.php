@@ -46,6 +46,31 @@ class GameController extends AbstractController
         return new JsonResponse(null, Response::HTTP_OK);
     }
 
+    #[Route('/test', name: 'test', methods: ['GET'])]
+    public function getQuestion(): JsonResponse
+    {
+        $flags = [];
+
+        while (count($flags) < 4) {
+            $countryCode = chr(rand(97, 122)).chr(rand(97, 122));
+            $flag = $this->flagsGenerator->getEmojiFlagOrNull($countryCode);
+            if ($flag) {
+                $flags[$countryCode] = $flag;
+            }
+        }
+
+        $number = rand(0, 3);
+
+        return $this->json([
+            'APP_ENV' => getenv('APP_ENV'),
+            'version' => getenv('VERSION_HASH'),
+            'flags' => $flags,
+            'ques' => Countries::getName(strtoupper(array_keys($flags)[$number])),
+            'answer' => $flags[array_keys($flags)[$number]],
+            'answerCode' => array_keys($flags)[$number],
+        ]);
+    }
+
     #[Route('/protected', name: 'get_profile', methods: ['GET', 'OPTIONS'])]
     public function getProfile(): Response
     {
