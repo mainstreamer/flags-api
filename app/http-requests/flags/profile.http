@@ -1,0 +1,9 @@
+### Get user profile (protected endpoint)
+GET {{url}}/api/flags/protected
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Get user profile with OPTIONS
+OPTIONS {{url}}/api/flags/protected
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json

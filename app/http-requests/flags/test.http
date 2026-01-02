@@ -1,0 +1,19 @@
+### Get random flag question
+GET {{url}}/api/flags/test
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Get emoji for specific flag code
+GET {{url}}/api/flags/test/au
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Get emoji for flag - Germany
+GET {{url}}/api/flags/test/de
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Get emoji for flag - France
+GET {{url}}/api/flags/test/fr
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json

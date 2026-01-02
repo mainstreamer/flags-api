@@ -91,11 +91,23 @@ pipeline: ## Run full CI pipeline locally (like GitHub Actions)
 psalm: ## Run Psalm static analysis
 	@docker compose exec php vendor/bin/psalm --no-cache
 
-cs-fix: ## Fix code style (PHP CS Fixer)
+cs-fix: ## Fix code style (PHP CS Fixer + PHPCS)
+	@echo "Fixing code style with PHP CS Fixer..."
 	@docker compose exec php vendor/bin/php-cs-fixer fix
+	@echo "Auto-fixing code standards with PHPCS..."
+	@docker compose exec php vendor/bin/phpcbf src/ tests/ --standard=phpcs.xml.dist
 
-cs-check: ## Check code style without fixing
+cs-check: ## Check code style without fixing (PHP CS Fixer + PHPCS)
+	@echo "Checking code style with PHP CS Fixer..."
 	@docker compose exec php vendor/bin/php-cs-fixer check
+	@echo "Checking code standards with PHPCS..."
+	@docker compose exec php vendor/bin/phpcs src/ tests/ --standard=phpcs.xml.dist
+
+phpcs-check: ## Check line length and PSR-12 standards (PHPCS only)
+	@docker compose exec php vendor/bin/phpcs src/ tests/ --standard=phpcs.xml.dist
+
+phpcs-fix: ## Auto-fix line length and PSR-12 standards (PHPCS only)
+	@docker compose exec php vendor/bin/phpcbf src/ tests/ --standard=phpcs.xml.dist
 
 sh: ## Access PHP container shell
 	@docker compose exec php sh
