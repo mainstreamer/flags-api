@@ -95,15 +95,6 @@
     </PossiblyUnusedProperty>
   </file>
   <file src="src/Flags/Entity/Answer.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getAnswerOptions]]></code>
-      <code><![CDATA[getDate]]></code>
-      <code><![CDATA[getFlagCode]]></code>
-      <code><![CDATA[getId]]></code>
-      <code><![CDATA[getTimer]]></code>
-      <code><![CDATA[getUser]]></code>
-      <code><![CDATA[isCorrect]]></code>
-    </PossiblyUnusedMethod>
   </file>
   <file src="src/Flags/Entity/Capital.php">
     <PossiblyUnusedMethod>
@@ -139,10 +130,6 @@
     </UnusedProperty>
   </file>
   <file src="src/Flags/Entity/Score.php">
-    <PossiblyUnusedProperty>
-      <code><![CDATA[$date]]></code>
-      <code><![CDATA[$id]]></code>
-    </PossiblyUnusedProperty>
   </file>
   <file src="src/Flags/Entity/User.php">
     <MissingOverrideAttribute>

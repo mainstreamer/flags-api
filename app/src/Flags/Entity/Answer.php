@@ -2,10 +2,11 @@
 
 namespace App\Flags\Entity;
 
+use App\Flags\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-#[ORM\Entity(repositoryClass: "App\Flags\Repository\AnswerRepository")]
+#[ORM\Entity(repositoryClass: AnswerRepository::class)]
 class Answer
 {
     #[ORM\Id]
