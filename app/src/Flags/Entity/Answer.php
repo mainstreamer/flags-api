@@ -41,7 +41,7 @@ class Answer
     #[ORM\Column(type: 'string', length: 255)]
     protected private(set) string $answerOptions {
         get => $this->answerOptions;
-        set(array | string $value) {
+        set(array|string $value) {
             $this->answerOptions = is_array($value) ? json_encode($value, JSON_THROW_ON_ERROR) : $value;
         }
     }

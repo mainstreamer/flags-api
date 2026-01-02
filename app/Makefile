@@ -94,8 +94,6 @@ psalm: ## Run Psalm static analysis
 cs-fix: ## Fix code style (PHP CS Fixer + PHPCS)
 	@echo "Fixing code style with PHP CS Fixer..."
 	@docker compose exec php vendor/bin/php-cs-fixer fix
-	@echo "Auto-fixing code standards with PHPCS..."
-	@docker compose exec php vendor/bin/phpcbf src/ tests/ --standard=phpcs.xml.dist
 
 cs-check: ## Check code style without fixing (PHP CS Fixer only)
 	@echo "Checking code style with PHP CS Fixer..."

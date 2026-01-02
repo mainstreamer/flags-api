@@ -54,7 +54,7 @@ final class UserFactory
 
     public function withHighScore(int $score): self
     {
-        return new class ($this, ['highScore' => $score]) extends UserFactory {
+        return new class($this, ['highScore' => $score]) extends UserFactory {
             public function __construct(
                 private readonly UserFactory $parent,
                 private readonly array $defaults,
