@@ -46,6 +46,8 @@ final class FlagFactory
 
     public function createMany(array $isoCodes): array
     {
+        $this->em->getConnection()->executeStatement('DELETE FROM flag');
+
         $flags = [];
         foreach ($isoCodes as $code) {
             $flags[] = $this->make(['code' => strtolower($code)]);

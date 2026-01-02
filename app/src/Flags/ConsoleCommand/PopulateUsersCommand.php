@@ -80,9 +80,9 @@ HELP)
 
         $existing = $this->userRepository->findOneBy(['telegramId' => $telegramId]);
         if (null !== $existing) {
-            $io->error(sprintf('User with telegramId "%s" already exists (id: %d).', $telegramId, $existing->getId()));
+            $io->warning(sprintf('User with telegramId "%s" already exists (id: %d). Skipping.', $telegramId, $existing->getId()));
 
-            return Command::FAILURE;
+            return Command::SUCCESS;
         }
 
         $user = $this->buildUser([

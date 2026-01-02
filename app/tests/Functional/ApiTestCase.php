@@ -11,6 +11,7 @@ use App\Tests\Support\Factory\UserFactory;
 use App\Tests\Support\Fixture\FixtureLoader;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class ApiTestCase extends WebTestCase
@@ -67,6 +68,9 @@ abstract class ApiTestCase extends WebTestCase
         parent::tearDown();
     }
 
+    /**
+     * @throws ORMException
+     */
     protected function refreshEntity(object $entity): object
     {
         $this->em->refresh($entity);

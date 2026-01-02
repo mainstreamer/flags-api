@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Flags;
 
+use App\Flags\Entity\Flag;
 use App\Tests\Functional\ApiTestCase;
 use App\Tests\Support\DataProvider\FlagDataProvider;
+use Doctrine\ORM\Exception\ORMException;
 
 final class CorrectFlagEndpointTest extends ApiTestCase
 {
@@ -54,14 +56,22 @@ final class CorrectFlagEndpointTest extends ApiTestCase
             ->assertUnauthorized();
     }
 
+    /**
+     * @throws ORMException
+     */
     public function test_correct_endpoint_increments_counter(): void
     {
-        $flag = $this->flags->create(['code' => 'de']);
+        $flag = $this->em->getRepository(Flag::class)->findOneBy(criteria: []);
+        $this->assertInstanceOf(Flag::class, $flag);
+        $code = $flag->getCode();
         $initialCount = $flag->getCorrectGuesses();
 
-        $this->api->asNewUser()->post('/api/flags/correct/de')->assertOk();
+        $this->api
+            ->asNewUser()
+            ->post(sprintf('/api/flags/correct/%s', $code))
+            ->assertOk();
 
-        $this->refreshEntity($flag);
+        $flag = $this->refreshEntity($flag);
         $this->assertSame($initialCount + 1, $flag->getCorrectGuesses());
     }
 
