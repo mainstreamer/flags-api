@@ -37,4 +37,12 @@ final class HealthController extends AbstractController
             ],
         ], $status);
     }
+
+    #[Route('/robots.txt', name: 'robots_txt', methods: ['GET'])]
+    public function robots(): Response
+    {
+        return new Response("User-agent: *\nDisallow: /\n", Response::HTTP_OK, [
+            'Content-Type' => 'text/plain',
+        ]);
+    }
 }
