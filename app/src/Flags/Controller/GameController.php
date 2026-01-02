@@ -62,8 +62,6 @@ class GameController extends AbstractController
         $number = rand(0, 3);
 
         return $this->json([
-            'APP_ENV' => getenv('APP_ENV'),
-            'version' => getenv('VERSION_HASH'),
             'flags' => $flags,
             'ques' => Countries::getName(strtoupper(array_keys($flags)[$number])),
             'answer' => $flags[array_keys($flags)[$number]],

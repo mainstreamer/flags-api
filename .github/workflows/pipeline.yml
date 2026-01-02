@@ -15,7 +15,7 @@ env:
 jobs:
   version:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') && !startsWith(github.ref, 'refs/tags/')
     outputs:
       new_version: ${{ steps.bump.outputs.new_version }}
       bump_type: ${{ steps.bump.outputs.bump_type }}
@@ -63,7 +63,7 @@ jobs:
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
 
-  test:
+  check:
     runs-on: ubuntu-latest
     # Define the MySQL service
     services:
@@ -105,13 +105,21 @@ jobs:
         working-directory: app
         run: composer install --prefer-dist --no-progress
 
+      - name: Check Code Style
+        working-directory: app
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+      - name: Execute psalm
+        working-directory: app
+        run: vendor/bin/psalm
+
       - name: Create Database and Run Migrations
         working-directory: app
         env:
           # Use 127.0.0.1 for GitHub Actions services
           DATABASE_URL: mysql://root@127.0.0.1:3306/symfony_test?serverVersion=9.5
         run: |
-          bin/console d:d:c -n --if-not-exists 
+          bin/console d:d:c -n --if-not-exists
           bin/console d:m:m -n -vvv
           bin/console app:populate:users
           bin/console app:populate:capitals -n --purge
@@ -124,12 +132,8 @@ jobs:
           DATABASE_URL: mysql://root@127.0.0.1:3306/symfony_test?serverVersion=9.5
         run: vendor/bin/phpunit
 
-      - name: Execute psalm
-        working-directory: app
-        run: vendor/bin/psalm
-
   build:
-    needs: [test, version]
+    needs: [check, version]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
 
@@ -250,16 +254,16 @@ jobs:
           ignore-versions: '^(latest|v\\d+\\.\\d+\\.\\d+)$'
 
   notify:
-    needs: [test, build]
+    needs: [check, build]
     runs-on: ubuntu-latest
-    if: always() && github.event_name == 'push'
+    if: always() && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
 
     steps:
       - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          if [ "${{ needs.test.result }}" == "failure" ] || [ "${{ needs.build.result }}" == "failure" ]; then
+          if [ "${{ needs.check.result }}" == "failure" ] || [ "${{ needs.build.result }}" == "failure" ]; then
             COLOR=15158332  # Red
             STATUS="FAILED"
             EMOJI=":x:"
