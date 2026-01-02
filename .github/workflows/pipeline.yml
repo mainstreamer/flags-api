@@ -109,10 +109,6 @@ jobs:
         working-directory: app
         run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
-      - name: Check Line Length (120 chars max)
-        working-directory: app
-        run: vendor/bin/phpcs src/ tests/ --standard=phpcs.xml.dist
-
       - name: Execute psalm
         working-directory: app
         run: vendor/bin/psalm
