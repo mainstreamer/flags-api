@@ -122,7 +122,7 @@ class CapitalsStatRepository extends ServiceEntityRepository
                         ->where('subT.user = t.user')
                         ->andWhere('subT.gameType = :gameType')
                         ->groupBy('subT.user, subT.gameType')
-//                        ->where('subT.sessionTimer = sessionTimer')
+                    //                        ->where('subT.sessionTimer = sessionTimer')
                         ->getDQL()
                 )
             )

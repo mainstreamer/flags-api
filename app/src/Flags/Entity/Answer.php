@@ -42,7 +42,7 @@ class Answer
     protected private(set) string $answerOptions {
         get => $this->answerOptions;
         set(array|string $value) {
-            $this->answerOptions = is_array($value) ? json_encode($value) : $value;
+            $this->answerOptions = is_array($value) ? json_encode($value, JSON_THROW_ON_ERROR) : $value;
         }
     }
 
@@ -79,12 +79,13 @@ class Answer
     public function fromArray(array $array): self
     {
         $item = new static();
-        $item->answerOptions = $array['options'];
-        $item->flagCode = $array['answerCode'];
-        $item->timer = $array['time'];
-        $item->correct = $array['correct'];
+        $item->answerOptions = $array['options'] ?? '';
+        $item->flagCode = $array['answerCode'] ?? '';
+        $item->timer = $array['time'] ?? 0;
+        $item->correct = $array['correct'] ?? true;
         $item->date = isset($array['answerDateTime']) ? new \DateTime()->setTimestamp(
-            round($array['answerDateTime'] / 1000))
+            round($array['answerDateTime'] / 1000)
+        )
         : new \DateTime();
 
         return $item;

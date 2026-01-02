@@ -11,7 +11,7 @@ class ScoreDTO
     public function __construct(array $requestArray)
     {
         $this->date = new \DateTime();
-        $this->score = $requestArray['score'];
-        $this->sessionTimer = $requestArray['sessionTimer'];
+        $this->score = $requestArray['score'] ?? 0;
+        $this->sessionTimer = $requestArray['sessionTimer'] ?? 999;
     }
 }

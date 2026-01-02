@@ -10,6 +10,7 @@ use App\Flags\Entity\User;
 use App\Flags\Repository\AnswerRepository;
 use App\Flags\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Random\RandomException;
 use Rteeom\FlagsGenerator\Exceptions\IsoFlagGeneratorException;
 use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -46,27 +47,38 @@ class GameController extends AbstractController
         return new JsonResponse(null, Response::HTTP_OK);
     }
 
+    /**
+     * @throws RandomException
+     */
     #[Route('/test', name: 'test', methods: ['GET'])]
     public function getQuestion(): JsonResponse
     {
         $flags = [];
 
         while (count($flags) < 4) {
-            $countryCode = chr(rand(97, 122)) . chr(rand(97, 122));
+            $countryCode = chr(random_int(97, 122)) . chr(random_int(97, 122));
             $flag = $this->flagsGenerator->getEmojiFlagOrNull($countryCode);
             if ($flag) {
                 $flags[$countryCode] = $flag;
             }
         }
 
-        $number = rand(0, 3);
+        $number = random_int(0, 3);
 
         return $this->json([
             'flags' => $flags,
-            'ques' => Countries::getName(strtoupper(array_keys($flags)[$number])),
+            'ques' => $this->getCountryName(strtoupper(array_keys($flags)[$number])),
             'answer' => $flags[array_keys($flags)[$number]],
             'answerCode' => array_keys($flags)[$number],
         ]);
+    }
+
+    private function getCountryName(string $countryCode): string
+    {
+        return match ($countryCode) {
+            'XK' => 'Kosovo',
+            default => Countries::getName($countryCode),
+        };
     }
 
     #[Route('/protected', name: 'get_profile', methods: ['GET', 'OPTIONS'])]
@@ -82,10 +94,13 @@ class GameController extends AbstractController
         return $this->json($repository->getHighScores());
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/scores', name: 'submit_game_results', methods: ['POST'])]
     public function postScore(Request $request, EntityManagerInterface $entityManager, #[CurrentUser] User $user): Response
     {
-        $requestArray = json_decode($request->getContent(), true);
+        $requestArray = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $scoreDTO = new ScoreDTO($requestArray);
         $score = new Score()->fromDTO($scoreDTO);
 
@@ -137,7 +152,7 @@ class GameController extends AbstractController
 
             if (!isset($result[$key]['rate'])) {
                 $result[$key]['rate'] = 100;
-                $result[$key]['times'] = $result[$key]['times'] . '/' . $result[$key]['times'];
+                $result[$key]['times'] .= '/' . $result[$key]['times'];
             }
         }
 

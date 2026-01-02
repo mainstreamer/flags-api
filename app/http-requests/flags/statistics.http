@@ -1,0 +1,9 @@
+### Get correct guesses statistics
+GET {{url}}/api/flags/correct
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Get incorrect guesses statistics
+GET {{url}}/api/flags/incorrect
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json

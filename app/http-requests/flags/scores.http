@@ -1,0 +1,91 @@
+### Get high scores (public)
+GET {{url}}/api/flags/scores
+Content-Type: application/json
+
+### Submit game results
+POST {{url}}/api/flags/scores
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+{
+  "score": 850,
+  "date": "2026-01-02T15:30:00Z",
+  "answers": [
+    {
+      "flagCode": "au",
+      "correct": true,
+      "answerDateTime": 1735834200000,
+      "time": 2500,
+      "answerOptions": ["au", "nz", "fj", "pg"],
+      "sessionTimer" : 100
+    },
+    {
+      "flagCode": "de",
+      "correct": true,
+      "answerDateTime": 1735834202500,
+      "time": 1800,
+      "answerOptions": ["de", "at", "ch", "nl"],
+      "sessionTimer" : 100
+    },
+    {
+      "flagCode": "fr",
+      "correct": false,
+      "answerDateTime": 1735834204300,
+      "time": 3200,
+      "answerOptions": ["fr", "it", "es", "pt"],
+      "sessionTimer" : 100
+    }
+  ]
+}
+
+### Submit game results - Extended example with more answers
+POST {{url}}/api/flags/scores
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+{
+  "score": 1200,
+  "date": "2026-01-02T16:00:00Z",
+  "answers": [
+    {
+      "flagCode": "jp",
+      "correct": true,
+      "answerDateTime": 1735836000000,
+      "time": 2000,
+      "answerOptions": ["jp", "kr", "cn", "mn"],
+      "sessionTimer" : 100
+    },
+    {
+      "flagCode": "us",
+      "correct": true,
+      "answerDateTime": 1735836002000,
+      "time": 1500,
+      "answerOptions": ["us", "ca", "mx", "br"],
+      "sessionTimer" : 100
+    },
+    {
+      "flagCode": "gb",
+      "correct": true,
+      "answerDateTime": 1735836003500,
+      "time": 2200,
+      "answerOptions": ["gb", "ie", "fr", "nl"],
+      "sessionTimer" : 100
+    },
+    {
+      "flagCode": "ru",
+      "correct": false,
+      "answerDateTime": 1735836005700,
+      "time": 3500,
+      "answerOptions": ["ru", "ua", "by", "kz"],
+      "sessionTimer" : 100
+    },
+    {
+      "flagCode": "in",
+      "correct": true,
+      "answerDateTime": 1735836009200,
+      "time": 2800,
+      "answerOptions": ["in", "pk", "bd", "lk"],
+      "sessionTimer" : 1001
+    }
+  ]
+}

@@ -46,7 +46,8 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
                 ->where(
                     $criteria
                         ->expr()
-                        ->gt('id', 0))
+                    ->gt('id', 0)
+                )
                 ->setMaxResults(1)
         )->get(0);
     }

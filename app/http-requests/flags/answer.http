@@ -1,0 +1,65 @@
+### Submit correct flag answer - Australia
+# Increments the correct answers counter for the AU flag
+POST {{url}}/api/flags/correct/cw
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - Germany
+# Increments the correct answers counter for the DE flag
+POST {{url}}/api/flags/correct/xk
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - France
+# Increments the correct answers counter for the FR flag
+POST {{url}}/api/flags/correct/sx
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - Japan
+# Increments the correct answers counter for the JP flag
+POST {{url}}/api/flags/correct/jp
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - United States
+# Increments the correct answers counter for the US flag
+POST {{url}}/api/flags/correct/us
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - United Kingdom
+# Increments the correct answers counter for the GB flag
+POST {{url}}/api/flags/correct/gb
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - Canada
+# Increments the correct answers counter for the CA flag
+POST {{url}}/api/flags/correct/ca
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - India
+# Increments the correct answers counter for the IN flag
+POST {{url}}/api/flags/correct/in
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - Brazil
+# Increments the correct answers counter for the BR flag
+POST {{url}}/api/flags/correct/br
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - Mexico
+# Increments the correct answers counter for the MX flag
+POST {{url}}/api/flags/correct/mx
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
+
+### Submit correct flag answer - China
+# Increments the correct answers counter for the CN flag
+POST {{url}}/api/flags/correct/cn
+Authorization: Bearer {{0xNTK_token}}
+Content-Type: application/json
