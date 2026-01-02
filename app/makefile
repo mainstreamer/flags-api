@@ -97,11 +97,9 @@ cs-fix: ## Fix code style (PHP CS Fixer + PHPCS)
 	@echo "Auto-fixing code standards with PHPCS..."
 	@docker compose exec php vendor/bin/phpcbf src/ tests/ --standard=phpcs.xml.dist
 
-cs-check: ## Check code style without fixing (PHP CS Fixer + PHPCS)
+cs-check: ## Check code style without fixing (PHP CS Fixer only)
 	@echo "Checking code style with PHP CS Fixer..."
 	@docker compose exec php vendor/bin/php-cs-fixer check
-	@echo "Checking code standards with PHPCS..."
-	@docker compose exec php vendor/bin/phpcs src/ tests/ --standard=phpcs.xml.dist
 
 phpcs-check: ## Check line length and PSR-12 standards (PHPCS only)
 	@docker compose exec php vendor/bin/phpcs src/ tests/ --standard=phpcs.xml.dist
