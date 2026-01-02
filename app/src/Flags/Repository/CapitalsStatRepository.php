@@ -50,7 +50,7 @@ class CapitalsStatRepository extends ServiceEntityRepository
         $qb->select('u.firstName, u.lastName, u.id, t.score, t.gameType, t.sessionTimer')
             ->innerJoin('t.user', 'u')
             ->innerJoin(
-                '('.$subQuery->getDQL().')',
+                '(' . $subQuery->getDQL() . ')',
                 'maxScores',
                 'WITH',
                 't.user = maxScores.user AND t.gameType = maxScores.gameType AND t.score = maxScores.maxScore'

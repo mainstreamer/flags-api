@@ -12,7 +12,7 @@ use Symfony\Component\Intl\Countries;
 
 final class FlagDataConsistencyTest extends ApiTestCase
 {
-    public function test_all_json_iso_codes_are_valid_iso_3166(): void
+    public function testAllJsonIsoCodesAreValidIso3166(): void
     {
         // XK (Kosovo) is a user-assigned code, not in official ISO 3166-1
         // but widely used and recognized
@@ -49,13 +49,13 @@ final class FlagDataConsistencyTest extends ApiTestCase
         $this->assertTrue(true, 'All ISO codes are valid');
     }
 
-    public function test_no_duplicate_iso_codes_across_regions(): void
+    public function testNoDuplicateIsoCodesAcrossRegions(): void
     {
         $seenCodes = [];
         $duplicates = [];
 
         foreach (FlagDataProvider::flagsByRegion() as $fileName => [$codes, $file, $status]) {
-            if ($status !== 'OK') {
+            if ('OK' !== $status) {
                 continue;
             }
 
@@ -83,7 +83,7 @@ final class FlagDataConsistencyTest extends ApiTestCase
         $this->assertTrue(true, 'No duplicates found');
     }
 
-    public function test_populate_command_creates_flags_matching_json(): void
+    public function testPopulateCommandCreatesFlagsMatchingJson(): void
     {
         // Simulate what PopulateFlagsCommand does
         $jsonCodes = FlagDataProvider::getAllIsoCodes();
@@ -94,7 +94,7 @@ final class FlagDataConsistencyTest extends ApiTestCase
 
         // Verify all were created
         $dbFlags = $this->em->getRepository(Flag::class)->findAll();
-        $dbCodes = array_map(fn(Flag $f) => $f->getCode(), $dbFlags);
+        $dbCodes = array_map(fn (Flag $f) => $f->getCode(), $dbFlags);
 
         sort($jsonCodesLower);
         sort($dbCodes);
@@ -109,11 +109,11 @@ final class FlagDataConsistencyTest extends ApiTestCase
     /**
      * @dataProvider flagDataProvider
      */
-    public function test_flag_emoji_can_be_generated(
+    public function testFlagEmojiCanBeGenerated(
         string $isoCode,
         string $countryName,
         string $region,
-        string $sourceFile
+        string $sourceFile,
     ): void {
         $flagsGenerator = new FlagsGenerator();
         $emoji = $flagsGenerator->getEmojiFlagOrNull(strtolower($isoCode));

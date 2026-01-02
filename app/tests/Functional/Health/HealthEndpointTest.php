@@ -8,14 +8,14 @@ use App\Tests\Functional\ApiTestCase;
 
 final class HealthEndpointTest extends ApiTestCase
 {
-    public function test_health_returns_ok(): void
+    public function testHealthReturnsOk(): void
     {
         $this->api->get('/health')
             ->assertOk()
             ->assertJsonPath('status', 'ok');
     }
 
-    public function test_ready_returns_database_status(): void
+    public function testReadyReturnsDatabaseStatus(): void
     {
         $this->api->get('/health/ready')
             ->assertOk()

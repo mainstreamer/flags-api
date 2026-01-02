@@ -79,7 +79,7 @@ final class ApiClient
     private function request(string $method, string $uri, array $data = []): ResponseAssertion
     {
         $content = in_array($method, ['POST', 'PUT', 'PATCH']) ? json_encode($data) : null;
-        $parameters = $method === 'GET' ? $data : [];
+        $parameters = 'GET' === $method ? $data : [];
 
         $this->browser->request($method, $uri, $parameters, [], [], $content);
 

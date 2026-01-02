@@ -33,7 +33,7 @@ class SmokeTest extends KernelTestCase
             if (file_exists($fileName)) {
                 ['countries' => $countries] = json_decode(file_get_contents($fileName), true);
                 foreach ($countries ?? [] as $country) {
-                    $this->assertNotNull($flagsGenerator->getEmojiFlagOrNull($country['isoCode']), 'Error with '.$country['isoCode']);
+                    $this->assertNotNull($flagsGenerator->getEmojiFlagOrNull($country['isoCode']), 'Error with ' . $country['isoCode']);
                 }
             }
         }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Flags\ConsoleCommand;
 
 use App\Flags\Service\JwksService;
-use Override;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +23,7 @@ final class WarmupJwksCommand extends Command
         parent::__construct();
     }
 
-    #[Override]
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

@@ -104,7 +104,7 @@ class JwksService
 
         return "-----BEGIN PUBLIC KEY-----\n"
             . chunk_split(base64_encode($rsaPublicKeySequence), 64, "\n")
-            . "-----END PUBLIC KEY-----";
+            . '-----END PUBLIC KEY-----';
     }
 
     private function base64UrlDecode(string $data): string

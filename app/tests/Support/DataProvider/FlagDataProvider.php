@@ -21,7 +21,7 @@ final class FlagDataProvider
 
     /**
      * Returns all ISO codes from all JSON files.
-     * Format: ['isoCode' => ['isoCode', 'countryName', 'region', 'sourceFile']]
+     * Format: ['isoCode' => ['isoCode', 'countryName', 'region', 'sourceFile']].
      */
     public static function allFlags(): array
     {

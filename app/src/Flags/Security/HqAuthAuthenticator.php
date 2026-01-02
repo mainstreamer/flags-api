@@ -180,8 +180,8 @@ class HqAuthAuthenticator extends OAuth2Authenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         // DEBUG: Log the actual error
-        error_log('OAuth authentication failed: '.$exception->getMessage());
-        error_log('Previous exception: '.($exception->getPrevious() ? $exception->getPrevious()->getMessage() : 'none'));
+        error_log('OAuth authentication failed: ' . $exception->getMessage());
+        error_log('Previous exception: ' . ($exception->getPrevious() ? $exception->getPrevious()->getMessage() : 'none'));
 
         // Temporarily return error instead of redirect loop
         return new JsonResponse([

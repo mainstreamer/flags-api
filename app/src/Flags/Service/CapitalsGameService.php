@@ -133,7 +133,7 @@ readonly class CapitalsGameService
     {
         return array_map(
             fn (array $item) => [
-                'userName' => $item['firstName'].' '.$item['lastName'], 'score' => $item['score'],
+                'userName' => $item['firstName'] . ' ' . $item['lastName'], 'score' => $item['score'],
                 'sessionTimer' => $item['sessionTimer'],
             ],
             $this->entityManager->getRepository(CapitalsStat::class)->getHighScores($gameType)

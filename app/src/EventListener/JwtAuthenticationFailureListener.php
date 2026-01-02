@@ -26,7 +26,7 @@ class JwtAuthenticationFailureListener implements EventSubscriberInterface
     public function onJwtInvalid(JWTInvalidEvent $event): void
     {
         $exception = $event->getException();
-        $this->logger->error('JWT Invalid: '.$exception->getMessage(), [
+        $this->logger->error('JWT Invalid: ' . $exception->getMessage(), [
             'previous' => $exception->getPrevious()?->getMessage(),
         ]);
     }
@@ -34,12 +34,12 @@ class JwtAuthenticationFailureListener implements EventSubscriberInterface
     public function onJwtNotFound(JWTNotFoundEvent $event): void
     {
         $exception = $event->getException();
-        $this->logger->warning('JWT Not Found: '.$exception->getMessage());
+        $this->logger->warning('JWT Not Found: ' . $exception->getMessage());
     }
 
     public function onJwtExpired(JWTExpiredEvent $event): void
     {
         $exception = $event->getException();
-        $this->logger->warning('JWT Expired: '.$exception->getMessage());
+        $this->logger->warning('JWT Expired: ' . $exception->getMessage());
     }
 }

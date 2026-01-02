@@ -52,7 +52,7 @@ class GameController extends AbstractController
         $flags = [];
 
         while (count($flags) < 4) {
-            $countryCode = chr(rand(97, 122)).chr(rand(97, 122));
+            $countryCode = chr(rand(97, 122)) . chr(rand(97, 122));
             $flag = $this->flagsGenerator->getEmojiFlagOrNull($countryCode);
             if ($flag) {
                 $flags[$countryCode] = $flag;
@@ -129,7 +129,7 @@ class GameController extends AbstractController
                     $guessed = (int) $value['times'];
                     $res = $shown - $guessed;
                     $result[$key]['rate'] = (int) (round($res / $shown, 2) * 100);
-                    $result[$key]['times'] = $res."/$shown";
+                    $result[$key]['times'] = $res . "/$shown";
 
                     break;
                 }
@@ -137,7 +137,7 @@ class GameController extends AbstractController
 
             if (!isset($result[$key]['rate'])) {
                 $result[$key]['rate'] = 100;
-                $result[$key]['times'] = $result[$key]['times'].'/'.$result[$key]['times'];
+                $result[$key]['times'] = $result[$key]['times'] . '/' . $result[$key]['times'];
             }
         }
 
@@ -168,7 +168,7 @@ class GameController extends AbstractController
 
             if (!isset($result[$key]['rate'])) {
                 $result[$key]['rate'] = 0;
-                $result[$key]['times'] = '0/'.$result[$key]['times'];
+                $result[$key]['times'] = '0/' . $result[$key]['times'];
             }
         }
 

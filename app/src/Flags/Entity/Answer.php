@@ -83,7 +83,7 @@ class Answer
         $item->timer = $array['time'];
         $item->correct = $array['correct'];
         $item->date = isset($array['answerDateTime']) ? new \DateTime()->setTimestamp(
-            round($array['answerDateTime']/ 1000))
+            round($array['answerDateTime'] / 1000))
         : new \DateTime();
 
         return $item;
