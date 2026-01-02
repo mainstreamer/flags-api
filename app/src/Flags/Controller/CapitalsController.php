@@ -128,7 +128,7 @@ class CapitalsController extends AbstractController
 
             $data_check_arr = [];
             foreach ($data as $key => $value) {
-                $data_check_arr[] = $key.'='.$value;
+                $data_check_arr[] = $key . '=' . $value;
             }
 
             sort($data_check_arr);

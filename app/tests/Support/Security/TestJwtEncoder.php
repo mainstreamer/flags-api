@@ -24,7 +24,7 @@ final class TestJwtEncoder implements JWTEncoderInterface
     public function decode($token): array
     {
         $parts = explode('.', $token);
-        if (count($parts) !== 3) {
+        if (3 !== count($parts)) {
             throw new \InvalidArgumentException('Invalid token format');
         }
 

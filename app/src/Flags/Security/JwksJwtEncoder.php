@@ -30,20 +30,14 @@ class JwksJwtEncoder implements JWTEncoderInterface
 
         if (!$publicKey) {
             $this->logger?->error('JwksJwtEncoder: Unable to fetch public key from JWKS endpoint');
-            throw new JWTDecodeFailureException(
-                JWTDecodeFailureException::INVALID_TOKEN,
-                'Unable to fetch public key from JWKS endpoint'
-            );
+            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, 'Unable to fetch public key from JWKS endpoint');
         }
 
         $this->logger?->debug('JwksJwtEncoder: Public key fetched successfully');
 
         $parts = explode('.', $token);
-        if (\count($parts) !== 3) {
-            throw new JWTDecodeFailureException(
-                JWTDecodeFailureException::INVALID_TOKEN,
-                'Invalid token format'
-            );
+        if (3 !== \count($parts)) {
+            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, 'Invalid token format');
         }
 
         [$headerB64, $payloadB64, $signatureB64] = $parts;
@@ -51,10 +45,7 @@ class JwksJwtEncoder implements JWTEncoderInterface
         // Decode header
         $header = json_decode($this->base64UrlDecode($headerB64), true);
         if (!$header || ($header['alg'] ?? '') !== 'RS256') {
-            throw new JWTDecodeFailureException(
-                JWTDecodeFailureException::INVALID_TOKEN,
-                'Unsupported algorithm or invalid header'
-            );
+            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, 'Unsupported algorithm or invalid header');
         }
 
         // Verify signature
@@ -63,15 +54,12 @@ class JwksJwtEncoder implements JWTEncoderInterface
 
         $publicKeyResource = openssl_pkey_get_public($publicKey);
         if (!$publicKeyResource) {
-            throw new JWTDecodeFailureException(
-                JWTDecodeFailureException::INVALID_TOKEN,
-                'Invalid public key'
-            );
+            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, 'Invalid public key');
         }
 
         $isValid = openssl_verify($dataToVerify, $signature, $publicKeyResource, OPENSSL_ALGO_SHA256);
 
-        if ($isValid !== 1) {
+        if (1 !== $isValid) {
             // Try refreshing the key in case it was rotated
             $publicKey = $this->jwksService->refreshPublicKey();
             if ($publicKey) {
@@ -81,30 +69,21 @@ class JwksJwtEncoder implements JWTEncoderInterface
                 }
             }
 
-            if ($isValid !== 1) {
-                throw new JWTDecodeFailureException(
-                    JWTDecodeFailureException::INVALID_TOKEN,
-                    'Invalid token signature'
-                );
+            if (1 !== $isValid) {
+                throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, 'Invalid token signature');
             }
         }
 
         // Decode payload
         $payload = json_decode($this->base64UrlDecode($payloadB64), true);
         if (!$payload) {
-            throw new JWTDecodeFailureException(
-                JWTDecodeFailureException::INVALID_TOKEN,
-                'Invalid payload'
-            );
+            throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, 'Invalid payload');
         }
 
         // Check expiration
         if (isset($payload['exp']) && $payload['exp'] < time()) {
             $this->logger?->warning('JwksJwtEncoder: Token has expired', ['exp' => $payload['exp']]);
-            throw new JWTDecodeFailureException(
-                JWTDecodeFailureException::EXPIRED_TOKEN,
-                'Token has expired'
-            );
+            throw new JWTDecodeFailureException(JWTDecodeFailureException::EXPIRED_TOKEN, 'Token has expired');
         }
 
         $this->logger?->notice('JwksJwtEncoder: CUSTOM ENCODER - Token verified successfully', [

@@ -26,7 +26,7 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * Override in subclass to load fixtures once per test class.
-     * Example: return [UserFixture::class, GameFixture::class];
+     * Example: return [UserFixture::class, GameFixture::class];.
      */
     protected function fixtures(): array
     {

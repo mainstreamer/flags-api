@@ -28,10 +28,10 @@ final class HealthController extends AbstractController
             $dbStatus = 'error';
         }
 
-        $status = $dbStatus === 'ok' ? Response::HTTP_OK : Response::HTTP_SERVICE_UNAVAILABLE;
+        $status = 'ok' === $dbStatus ? Response::HTTP_OK : Response::HTTP_SERVICE_UNAVAILABLE;
 
         return new JsonResponse([
-            'status' => $dbStatus === 'ok' ? 'ok' : 'degraded',
+            'status' => 'ok' === $dbStatus ? 'ok' : 'degraded',
             'checks' => [
                 'database' => $dbStatus,
             ],

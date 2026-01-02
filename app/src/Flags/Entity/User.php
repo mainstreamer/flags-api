@@ -201,13 +201,13 @@ class User implements UserInterface
 
     public function addAnswer(Answer $answer): void
     {
-        $answer->setUser($this);
+        $answer->user = $this;
         $this->answers[] = $answer;
     }
 
     public function removeAnswer(Answer $answer): void
     {
-        $answer->setUser(null);
+        $answer->user = null;
         $this->answers->removeElement($answer);
     }
 

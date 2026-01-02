@@ -2,113 +2,91 @@
 
 namespace App\Flags\Entity;
 
+use App\Flags\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-#[ORM\Entity(repositoryClass: "App\Flags\Repository\AnswerRepository")]
+#[ORM\Entity(repositoryClass: AnswerRepository::class)]
 class Answer
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    protected int $id;
+    protected int $id {
+        get {
+            return $this->id;
+        }
+    }
 
     #[ORM\Column(type: 'integer')]
-    protected int $timer;
+    protected int $timer {
+        get {
+            return $this->timer;
+        }
+        set {
+            $this->timer = $value;
+        }
+    }
 
     #[ORM\Column(type: 'string', length: 255)]
-    protected string $flagCode;
+    protected string $flagCode {
+        get {
+            return $this->flagCode;
+        }
+        set {
+            $this->flagCode = $value;
+        }
+    }
 
     #[ORM\Column(type: 'string', length: 255)]
-    protected string $answerOptions;
+    protected private(set) string $answerOptions {
+        get => $this->answerOptions;
+        set(array|string $value) {
+            $this->answerOptions = is_array($value) ? json_encode($value) : $value;
+        }
+    }
 
     #[ORM\Column(type: 'boolean')]
-    protected bool $correct;
+    protected bool $correct {
+        get {
+            return $this->correct;
+        }
+        set {
+            $this->correct = $value;
+        }
+    }
 
     #[ORM\Column(type: 'datetime')]
-    protected \DateTime $date;
+    protected \DateTime $date {
+        get {
+            return $this->date;
+        }
+        set {
+            $this->date = $value;
+        }
+    }
 
     #[ORM\ManyToOne(targetEntity: 'User', inversedBy: 'answers')]
     #[Ignore]
-    protected ?User $user;
+    public ?User $user {
+        get => $this->user;
 
-    public function getTimer(): int
-    {
-        return $this->timer;
-    }
-
-    public function setTimer(int $timer): void
-    {
-        $this->timer = $timer;
-    }
-
-    public function getFlagCode(): string
-    {
-        return $this->flagCode;
-    }
-
-    public function setFlagCode(string $flagCode): void
-    {
-        $this->flagCode = $flagCode;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAnswerOptions(): string
-    {
-        return $this->answerOptions;
-    }
-
-    public function setAnswerOptions(array $answerOptions): void
-    {
-        $this->answerOptions = json_encode($answerOptions);
-    }
-
-    public function isCorrect(): bool
-    {
-        return $this->correct;
-    }
-
-    public function setCorrect(bool $correct): void
-    {
-        $this->correct = $correct;
-    }
-
-    public function getDate(): \DateTime
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTime $date): void
-    {
-        $this->date = $date;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
+        set {
+            $this->user = $value;
+        }
     }
 
     public function fromArray(array $array): self
     {
         $item = new static();
-        $item->setAnswerOptions($array['options']);
-        $item->setFlagCode($array['answerCode']);
-        $item->setTimer($array['time']);
-        $item->setCorrect($array['correct']);
-        $item->setDate((new \DateTime())->setTimestamp(round($array['answerDateTime'] / 1000)));
+        $item->answerOptions = $array['options'];
+        $item->flagCode = $array['answerCode'];
+        $item->timer = $array['time'];
+        $item->correct = $array['correct'];
+        $item->date = isset($array['answerDateTime']) ? new \DateTime()->setTimestamp(
+            round($array['answerDateTime'] / 1000))
+        : new \DateTime();
 
         return $item;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): void
-    {
-        $this->user = $user;
     }
 }

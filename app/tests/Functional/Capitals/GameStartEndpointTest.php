@@ -9,14 +9,14 @@ use App\Tests\Functional\ApiTestCase;
 
 final class GameStartEndpointTest extends ApiTestCase
 {
-    public function test_guest_cannot_start_game(): void
+    public function testGuestCannotStartGame(): void
     {
         $this->api->asGuest()
             ->get('/capitals/game-start/' . GameType::CAPITALS_EUROPE->value)
             ->assertUnauthorized();
     }
 
-    public function test_authenticated_user_can_start_game(): void
+    public function testAuthenticatedUserCanStartGame(): void
     {
         $this->api->asNewUser()
             ->get('/capitals/game-start/' . GameType::CAPITALS_EUROPE->value)
@@ -24,7 +24,7 @@ final class GameStartEndpointTest extends ApiTestCase
             ->assertJsonPathExists('gameId');
     }
 
-    public function test_game_is_persisted_with_correct_type(): void
+    public function testGameIsPersistedWithCorrectType(): void
     {
         $user = $this->users->create();
 

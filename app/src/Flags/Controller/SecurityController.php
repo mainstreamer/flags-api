@@ -65,7 +65,7 @@ class SecurityController extends AbstractController
         }
 
         try {
-            $response = $this->httpClient->request('POST', $_ENV['OAUTH_SERVER_URL'].'/oauth2/token', [
+            $response = $this->httpClient->request('POST', $_ENV['OAUTH_SERVER_URL'] . '/oauth2/token', [
                 'body' => [
                     'grant_type' => 'refresh_token',
                     'refresh_token' => $refreshToken,

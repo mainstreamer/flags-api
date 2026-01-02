@@ -14,11 +14,11 @@ final class CorrectFlagEndpointTest extends ApiTestCase
     /**
      * @dataProvider flagDataProvider
      */
-    public function test_correct_endpoint_accepts_valid_flag_code(
+    public function testCorrectEndpointAcceptsValidFlagCode(
         string $isoCode,
         string $countryName,
         string $region,
-        string $sourceFile
+        string $sourceFile,
     ): void {
         // Create flag in DB with lowercase code (as PopulateFlagsCommand does)
         $this->flags->createFromIsoCode($isoCode);
@@ -40,14 +40,14 @@ final class CorrectFlagEndpointTest extends ApiTestCase
         );
     }
 
-    public function test_correct_endpoint_returns_404_for_unknown_flag(): void
+    public function testCorrectEndpointReturns404ForUnknownFlag(): void
     {
         $this->api->asNewUser()
             ->post('/api/flags/correct/xx')
             ->assertNotFound();
     }
 
-    public function test_correct_endpoint_requires_authentication(): void
+    public function testCorrectEndpointRequiresAuthentication(): void
     {
         $this->flags->create(['code' => 'de']);
 
@@ -59,7 +59,7 @@ final class CorrectFlagEndpointTest extends ApiTestCase
     /**
      * @throws ORMException
      */
-    public function test_correct_endpoint_increments_counter(): void
+    public function testCorrectEndpointIncrementsCounter(): void
     {
         $flag = $this->em->getRepository(Flag::class)->findOneBy(criteria: []);
         $this->assertInstanceOf(Flag::class, $flag);

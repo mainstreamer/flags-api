@@ -8,14 +8,14 @@ use App\Tests\Functional\ApiTestCase;
 
 final class ScoresEndpointTest extends ApiTestCase
 {
-    public function test_scores_endpoint_is_public(): void
+    public function testScoresEndpointIsPublic(): void
     {
         $this->api->asGuest()
             ->get('/api/flags/scores')
             ->assertOk();
     }
 
-    public function test_scores_returns_users_ordered_by_high_score(): void
+    public function testScoresReturnsUsersOrderedByHighScore(): void
     {
         $this->users->create(['highScore' => 100, 'firstName' => 'Low']);
         $this->users->create(['highScore' => 500, 'firstName' => 'High']);
@@ -31,14 +31,14 @@ final class ScoresEndpointTest extends ApiTestCase
         $this->assertSame('Low', $scores[2]['firstName']);
     }
 
-    public function test_protected_endpoint_requires_auth(): void
+    public function testProtectedEndpointRequiresAuth(): void
     {
         $this->api->asGuest()
             ->get('/api/flags/protected')
             ->assertUnauthorized();
     }
 
-    public function test_authenticated_user_can_access_protected_endpoint(): void
+    public function testAuthenticatedUserCanAccessProtectedEndpoint(): void
     {
         $user = $this->users->create(['firstName' => 'John']);
 

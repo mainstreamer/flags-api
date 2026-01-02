@@ -21,5 +21,11 @@
                 <directory name="src/Flags/ConsoleCommand" />
             </errorLevel>
         </UnusedClass>
+
+        <PossiblyUnusedProperty>
+            <errorLevel type="suppress">
+                <directory name="src/Flags/Entity" />
+            </errorLevel>
+        </PossiblyUnusedProperty>
     </issueHandlers>
 </psalm>
