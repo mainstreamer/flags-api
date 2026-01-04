@@ -7,11 +7,11 @@ namespace App\Tests\Support\DataProvider;
 final class FlagDataProvider
 {
     private const array JSON_FILES = [
-        'capitals-africa.json',
-        'capitals-americas.json',
-        'capitals-asia.json',
-        'capitals-europe.json',
-        'capitals-oceania.json',
+        'africa_extended.json',
+        'americas.json',
+        'asia_extended.json',
+        'europe_extended.json',
+        'oceania.json',
     ];
 
     public static function getProjectDir(): string
@@ -29,7 +29,7 @@ final class FlagDataProvider
         $projectDir = self::getProjectDir();
 
         foreach (self::JSON_FILES as $fileName) {
-            $filePath = $projectDir . '/' . $fileName;
+            $filePath = $projectDir . '/src/Common/Resources/' . $fileName;
 
             if (!file_exists($filePath)) {
                 continue;
@@ -38,11 +38,11 @@ final class FlagDataProvider
             $content = file_get_contents($filePath);
             $json = json_decode($content, true);
 
-            if (!isset($json['countries']) || !is_array($json['countries'])) {
+            if (!is_array($json)) {
                 continue;
             }
 
-            foreach ($json['countries'] as $country) {
+            foreach ($json as $country) {
                 if (!isset($country['isoCode'])) {
                     continue;
                 }
@@ -69,7 +69,7 @@ final class FlagDataProvider
         $projectDir = self::getProjectDir();
 
         foreach (self::JSON_FILES as $fileName) {
-            $filePath = $projectDir . '/' . $fileName;
+            $filePath = $projectDir . '/src/Common/Resources/' . $fileName;
 
             if (!file_exists($filePath)) {
                 $data[$fileName] = [[], $fileName, 'File not found'];
@@ -79,13 +79,13 @@ final class FlagDataProvider
             $content = file_get_contents($filePath);
             $json = json_decode($content, true);
 
-            if (!isset($json['countries']) || !is_array($json['countries'])) {
+            if (!is_array($json)) {
                 $data[$fileName] = [[], $fileName, 'Invalid JSON structure'];
                 continue;
             }
 
             $codes = [];
-            foreach ($json['countries'] as $country) {
+            foreach ($json as $country) {
                 if (isset($country['isoCode'])) {
                     $codes[] = [
                         'isoCode' => $country['isoCode'],

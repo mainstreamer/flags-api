@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Flags;
 use App\Flags\Entity\Flag;
 use App\Tests\Functional\ApiTestCase;
 use App\Tests\Support\DataProvider\FlagDataProvider;
+use Rteeom\FlagsGenerator\Enums\CodeSet;
 use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Component\Intl\Countries;
 
@@ -14,9 +15,16 @@ final class FlagDataConsistencyTest extends ApiTestCase
 {
     public function testAllJsonIsoCodesAreValidIso3166(): void
     {
-        // XK (Kosovo) is a user-assigned code, not in official ISO 3166-1
-        // but widely used and recognized
-        $allowedNonStandardCodes = ['XK'];
+        // Extended ISO codes from FlagsGenerator CodeSet::EXTENDED
+        // These are valid extended territory codes, not in official ISO 3166-1
+        $allowedNonStandardCodes = [
+            'XK', // Kosovo (user-assigned, widely recognized)
+            'AC', // Ascension Island
+            'EA', // Ceuta & Melilla
+            'IC', // Canary Islands
+            'TA', // Tristan da Cunha
+            'DG', // Diego Garcia
+        ];
 
         $invalidCodes = [];
         $allFlags = FlagDataProvider::allFlags();
@@ -116,7 +124,8 @@ final class FlagDataConsistencyTest extends ApiTestCase
         string $sourceFile,
     ): void {
         $flagsGenerator = new FlagsGenerator();
-        $emoji = $flagsGenerator->getEmojiFlagOrNull(strtolower($isoCode));
+        // Use EXTENDED CodeSet to support non-standard ISO codes
+        $emoji = $flagsGenerator->getEmojiFlagOrNull(strtolower($isoCode), CodeSet::EXTENDED);
 
         $this->assertNotNull(
             $emoji,

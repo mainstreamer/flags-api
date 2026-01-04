@@ -61,17 +61,30 @@ final class CorrectFlagEndpointTest extends ApiTestCase
      */
     public function testCorrectEndpointIncrementsCounter(): void
     {
-        $flag = $this->em->getRepository(Flag::class)->findOneBy(criteria: []);
-        $this->assertInstanceOf(Flag::class, $flag);
+        $flag = $this->flags->create(['code' => 'de']);
         $code = $flag->getCode();
         $initialCount = $flag->getCorrectGuesses();
+
+        // Flush to ensure the flag is persisted
+        $this->em->flush();
+
+        // Get the connection from entity manager and commit/restart transaction
+        $connection = $this->em->getConnection();
+        if ($connection->isTransactionActive()) {
+            $connection->commit();
+            $connection->beginTransaction();
+        }
 
         $this->api
             ->asNewUser()
             ->post(sprintf('/api/flags/correct/%s', $code))
             ->assertOk();
 
-        $flag = $this->refreshEntity($flag);
+        // Clear entity manager and reload from database to see changes
+        $this->em->clear();
+        $flag = $this->em->getRepository(Flag::class)->findOneBy(['code' => $code]);
+
+        $this->assertNotNull($flag, 'Flag should still exist after increment');
         $this->assertSame($initialCount + 1, $flag->getCorrectGuesses());
     }
 

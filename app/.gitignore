@@ -21,6 +21,8 @@
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
+/coverage/
+/.phpunit.cache/
 ###< phpunit/phpunit ###
 
 deploy.php

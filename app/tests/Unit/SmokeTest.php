@@ -3,6 +3,7 @@
 namespace App\Tests\Unit;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Rteeom\FlagsGenerator\Enums\CodeSet;
 use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -33,7 +34,11 @@ class SmokeTest extends KernelTestCase
             if (file_exists($fileName)) {
                 ['countries' => $countries] = json_decode(file_get_contents($fileName), true);
                 foreach ($countries ?? [] as $country) {
-                    $this->assertNotNull($flagsGenerator->getEmojiFlagOrNull($country['isoCode']), 'Error with ' . $country['isoCode']);
+                    // Use EXTENDED CodeSet to support XK (Kosovo) which is in capitals dataset
+                    $this->assertNotNull(
+                        $flagsGenerator->getEmojiFlagOrNull($country['isoCode'], CodeSet::EXTENDED),
+                        'Error with ' . $country['isoCode']
+                    );
                 }
             }
         }

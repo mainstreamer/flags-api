@@ -68,10 +68,38 @@ test-down: ## Stop test containers
 test-sh: ## Shell into test PHP container
 	@$(TEST_COMPOSE) exec php sh
 
-pipeline: ## Run full CI pipeline locally (like GitHub Actions)
-	@echo "=== Running CI Pipeline ==="
+coverage: ## Generate code coverage report (HTML) - requires PCOV or Xdebug
+	@echo "Checking for coverage driver..."
+	@docker compose exec php php -r "if (!extension_loaded('pcov') && !extension_loaded('xdebug')) { echo 'Error: No coverage driver found. Install PCOV or Xdebug.\n'; echo 'In Docker, add to Dockerfile: RUN install-php-extensions pcov\n'; exit(1); }"
+	@echo "Starting test environment..."
+	@$(TEST_COMPOSE) up -d --build --wait
+	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
+	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:capitals --purge -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:flags --purge -n
+	@echo "Generating coverage report..."
+	@$(TEST_COMPOSE) exec php php -d pcov.enabled=1 vendor/bin/phpunit --coverage-html coverage/html --coverage-text
+	@echo "Coverage report: coverage/html/index.html"
+	@$(TEST_COMPOSE) down
+
+coverage-text: ## Show code coverage in terminal
+	@echo "Checking for coverage driver..."
+	@docker compose exec php php -r "if (!extension_loaded('pcov') && !extension_loaded('xdebug')) { echo '\nError: No coverage driver found.\n'; echo 'Install PCOV: In Docker, add to Dockerfile: RUN install-php-extensions pcov\n'; exit(1); }"
+	@echo "Starting test environment..."
+	@$(TEST_COMPOSE) up -d --build --wait
+	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
+	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:capitals --purge -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:flags --purge -n
+	@$(TEST_COMPOSE) exec php php -d pcov.enabled=1 vendor/bin/phpunit --coverage-text
+	@$(TEST_COMPOSE) down
+
+qa: ## Run full quality assurance pipeline CS-FIXER PSALM PHPUNIT
+	@echo "=== Running Quality Assurance Pipeline ==="
 	@echo ""
-	@echo "1/3 Starting test environment..."
+	@echo "1/5 Starting test environment..."
 	@$(TEST_COMPOSE) up -d --build --wait
 	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
 	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
@@ -79,14 +107,22 @@ pipeline: ## Run full CI pipeline locally (like GitHub Actions)
 	@$(TEST_COMPOSE) exec php bin/console app:populate:capitals --purge -n
 	@$(TEST_COMPOSE) exec php bin/console app:populate:flags --purge -n
 	@echo ""
-	@echo "2/3 Running PHPUnit tests..."
-	@$(TEST_COMPOSE) exec php vendor/bin/phpunit
+	@echo "2/5 Checking code style (PHP CS Fixer)..."
+	@$(TEST_COMPOSE) exec php vendor/bin/php-cs-fixer fix --dry-run --diff
 	@echo ""
-	@echo "3/3 Running Psalm static analysis..."
+	@echo "3/5 Checking PSR-12 compliance (PHPCS)..."
+	@$(TEST_COMPOSE) exec php vendor/bin/phpcs src/ tests/ --standard=phpcs.xml.dist
+	@echo ""
+	@echo "4/5 Running Psalm static analysis..."
 	@$(TEST_COMPOSE) exec php vendor/bin/psalm
 	@echo ""
-	@echo "=== Pipeline Complete ==="
+	@echo "5/5 Running PHPUnit tests..."
+	@$(TEST_COMPOSE) exec php vendor/bin/phpunit
+	@echo ""
+	@echo "=== Quality Assurance Complete ==="
 	@$(TEST_COMPOSE) down
+
+pipeline: qa ## Alias for qa (run full pipeline like GitHub Actions)
 
 psalm: ## Run Psalm static analysis
 	@docker compose exec php vendor/bin/psalm --no-cache
@@ -104,6 +140,12 @@ phpcs-check: ## Check line length and PSR-12 standards (PHPCS only)
 
 phpcs-fix: ## Auto-fix line length and PSR-12 standards (PHPCS only)
 	@docker compose exec php vendor/bin/phpcbf src/ tests/ --standard=phpcs.xml.dist
+
+clean: ## Clean generated files
+	@rm -rf coverage/
+	@rm -rf .phpunit.cache/
+	@rm -f .php-cs-fixer.cache
+	@echo "Cleaned generated files"
 
 sh: ## Access PHP container shell
 	@docker compose exec php sh
