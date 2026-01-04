@@ -132,13 +132,33 @@ jobs:
           DATABASE_URL: mysql://root@127.0.0.1:3306/symfony_test?serverVersion=9.5
         run: vendor/bin/phpunit
 
-  build:
+  tag:
     needs: [check, version]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
 
     permissions:
       contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create git tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ needs.version.outputs.new_version }}" -m "Release v${{ needs.version.outputs.new_version }}"
+          git push origin "v${{ needs.version.outputs.new_version }}"
+
+  build:
+    needs: [check, version, tag]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+
+    permissions:
       packages: write
       attestations: write
       id-token: write
@@ -203,13 +223,6 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_CADDY }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_CADDY }}:buildcache,mode=max
 
-      - name: Create git tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v${{ needs.version.outputs.new_version }}" -m "Release v${{ needs.version.outputs.new_version }}"
-          git push origin "v${{ needs.version.outputs.new_version }}"
-
       - name: Create Sentry release
         if: ${{ vars.SENTRY_ORG != '' && vars.SENTRY_PROJECT != '' }}
         env:
@@ -254,7 +267,7 @@ jobs:
           ignore-versions: '^(latest|v\\d+\\.\\d+\\.\\d+)$'
 
   notify:
-    needs: [check, build]
+    needs: [check, build, version]
     runs-on: ubuntu-latest
     if: always() && github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
 
@@ -273,11 +286,17 @@ jobs:
             EMOJI=":white_check_mark:"
           fi
 
+          # Build version info if available
+          VERSION_INFO=""
+          if [ -n "${{ needs.version.outputs.new_version }}" ]; then
+            VERSION_INFO="\n**Version:** \`v${{ needs.version.outputs.new_version }}\` (${{ needs.version.outputs.bump_type }})"
+          fi
+
           curl -H "Content-Type: application/json" \
             -d "{
               \"embeds\": [{
                 \"title\": \"$EMOJI ${{ github.repository }} - ${STATUS}\",
-                \"description\": \"**Branch:** ${{ github.ref_name }}\n**Commit:** [\`${GITHUB_SHA::7}\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\n**Author:** ${{ github.actor }}\",
+                \"description\": \"**Branch:** ${{ github.ref_name }}${VERSION_INFO}\n**Commit:** [\`${GITHUB_SHA::7}\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\n**Author:** ${{ github.actor }}\",
                 \"color\": ${COLOR},
                 \"footer\": {
                   \"text\": \"GitHub Actions\"
