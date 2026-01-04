@@ -64,6 +64,7 @@ abstract class ApiTestCase extends WebTestCase
         }
 
         $this->em->clear();
+        $this->connection->close();
 
         parent::tearDown();
     }

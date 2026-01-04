@@ -11,7 +11,8 @@ use App\Flags\Repository\AnswerRepository;
 use App\Flags\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Random\RandomException;
-use Rteeom\FlagsGenerator\Exceptions\IsoFlagGeneratorException;
+use Rteeom\FlagsGenerator\Enums\CodeSet;
+use Rteeom\FlagsGenerator\Exceptions\FlagsGeneratorException;
 use Rteeom\FlagsGenerator\FlagsGenerator;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +26,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/flags')]
-class GameController extends AbstractController
+class FlagsController extends AbstractController
 {
     protected FlagsGenerator $flagsGenerator;
 
@@ -57,7 +58,7 @@ class GameController extends AbstractController
 
         while (count($flags) < 4) {
             $countryCode = chr(random_int(97, 122)) . chr(random_int(97, 122));
-            $flag = $this->flagsGenerator->getEmojiFlagOrNull($countryCode);
+            $flag = $this->flagsGenerator->getEmojiFlagOrNull($countryCode, CodeSet::EXTENDED);
             if ($flag) {
                 $flags[$countryCode] = $flag;
             }
@@ -127,7 +128,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @throws IsoFlagGeneratorException
+     * @throws FlagsGeneratorException
      */
     #[Route('/incorrect', name: 'incorrect', methods: ['GET', 'OPTIONS'])]
     public function getStat(#[CurrentUser] $user, AnswerRepository $repository): Response

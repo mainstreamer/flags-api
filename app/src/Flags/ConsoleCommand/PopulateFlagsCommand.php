@@ -20,12 +20,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class PopulateFlagsCommand extends Command
 {
-    private const array COUNTRY_FILES = [
-        'capitals-africa.json',
-        'capitals-americas.json',
-        'capitals-asia.json',
-        'capitals-europe.json',
-        'capitals-oceania.json',
+   private const array COUNTRY_FILES = [
+        'africa_extended.json',
+        'americas.json',
+        'asia_extended.json',
+        'europe_extended.json',
+        'oceania.json',
     ];
 
     public function __construct(
@@ -88,7 +88,7 @@ class PopulateFlagsCommand extends Command
 
     private function purgeExistingFlags(SymfonyStyle $io): void
     {
-        $existingCount = $this->flagRepository->count([]);
+        $existingCount = $this->flagRepository->count();
 
         if ($existingCount > 0) {
             $this->entityManager->createQuery('DELETE FROM App\Flags\Entity\Flag')->execute();
@@ -98,38 +98,43 @@ class PopulateFlagsCommand extends Command
 
     /**
      * @return string[]
+     * @throws \JsonException
      */
     private function collectAllCodes(SymfonyStyle $io): array
     {
         $codes = [];
 
         foreach (self::COUNTRY_FILES as $fileName) {
-            if (!file_exists($fileName)) {
-                $io->warning(sprintf('File not found: %s', $fileName));
-                continue;
-            }
 
-            $content = file_get_contents($fileName);
-            if (false === $content) {
-                $io->warning(sprintf('Could not read file: %s', $fileName));
-                continue;
-            }
+            $countries = $this->loadFromJson($fileName);
 
-            $data = json_decode($content, true);
-            if (!isset($data['countries']) || !is_array($data['countries'])) {
-                $io->warning(sprintf('Invalid JSON structure in: %s', $fileName));
-                continue;
-            }
-
-            foreach ($data['countries'] as $country) {
+            foreach ($countries as $country) {
                 if (isset($country['isoCode'])) {
                     $codes[] = strtolower($country['isoCode']);
                 }
             }
 
-            $io->info(sprintf('Read %d codes from %s', count($data['countries']), $fileName));
+            $io->info(sprintf('Read %d codes from %s', count($countries), $fileName));
         }
 
         return array_unique($codes);
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    private function loadFromJson(string $fileName): array
+    {
+        $path = __DIR__ . '/../../Common/Resources/' . $fileName;
+
+        if (!file_exists($path)) {
+            throw new \RuntimeException("Resource missing: $fileName");
+        }
+
+        return json_decode(
+            json: file_get_contents($path),
+            associative: true,
+            flags: JSON_THROW_ON_ERROR,
+        );
     }
 }

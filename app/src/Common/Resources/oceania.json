@@ -1,0 +1,188 @@
+[
+    {
+      "name": "Australia",
+      "capital": "Canberra",
+      "region": "Oceania",
+      "isoCode": "AU"
+    },
+    {
+      "name": "Fiji",
+      "capital": "Suva",
+      "region": "Oceania",
+      "isoCode": "FJ"
+    },
+    {
+      "name": "Kiribati",
+      "capital": "South Tarawa",
+      "region": "Oceania",
+      "isoCode": "KI"
+    },
+    {
+      "name": "Marshall Islands",
+      "capital": "Majuro",
+      "region": "Oceania",
+      "isoCode": "MH"
+    },
+    {
+      "name": "Micronesia",
+      "capital": "Palikir",
+      "region": "Oceania",
+      "isoCode": "FM"
+    },
+    {
+      "name": "Nauru",
+      "capital": "Yaren",
+      "region": "Oceania",
+      "isoCode": "NR"
+    },
+    {
+      "name": "New Zealand",
+      "capital": "Wellington",
+      "region": "Oceania",
+      "isoCode": "NZ"
+    },
+    {
+      "name": "Palau",
+      "capital": "Ngerulmud",
+      "region": "Oceania",
+      "isoCode": "PW"
+    },
+    {
+      "name": "Papua New Guinea",
+      "capital": "Port Moresby",
+      "region": "Oceania",
+      "isoCode": "PG"
+    },
+    {
+      "name": "Samoa",
+      "capital": "Apia",
+      "region": "Oceania",
+      "isoCode": "WS"
+    },
+    {
+      "name": "Solomon Islands",
+      "capital": "Honiara",
+      "region": "Oceania",
+      "isoCode": "SB"
+    },
+    {
+      "name": "Tonga",
+      "capital": "Nuku'alofa",
+      "region": "Oceania",
+      "isoCode": "TO"
+    },
+    {
+      "name": "Tuvalu",
+      "capital": "Funafuti",
+      "region": "Oceania",
+      "isoCode": "TV"
+    },
+    {
+      "name": "Vanuatu",
+      "capital": "Port Vila",
+      "region": "Oceania",
+      "isoCode": "VU"
+    },
+    {
+      "name": "American Samoa",
+      "capital": "Pago Pago",
+      "region": "Oceania",
+      "isoCode": "AS"
+    },
+    {
+      "name": "Antarctica",
+      "capital": "N/A",
+      "region": "Oceania",
+      "isoCode": "AQ"
+    },
+    {
+      "name": "Bouvet Island",
+      "capital": "N/A",
+      "region": "Oceania",
+      "isoCode": "BV"
+    },
+    {
+      "name": "Cook Islands",
+      "capital": "Avarua",
+      "region": "Oceania",
+      "isoCode": "CK"
+    },
+    {
+      "name": "French Polynesia",
+      "capital": "Papeete",
+      "region": "Oceania",
+      "isoCode": "PF"
+    },
+    {
+      "name": "French Southern Territories",
+      "capital": "Port-aux-Francais",
+      "region": "Oceania",
+      "isoCode": "TF"
+    },
+    {
+      "name": "Guam",
+      "capital": "Hagatna",
+      "region": "Oceania",
+      "isoCode": "GU"
+    },
+    {
+      "name": "Heard Island and McDonald Islands",
+      "capital": "N/A",
+      "region": "Oceania",
+      "isoCode": "HM"
+    },
+    {
+      "name": "New Caledonia",
+      "capital": "Noumea",
+      "region": "Oceania",
+      "isoCode": "NC"
+    },
+    {
+      "name": "Niue",
+      "capital": "Alofi",
+      "region": "Oceania",
+      "isoCode": "NU"
+    },
+    {
+      "name": "Norfolk Island",
+      "capital": "Kingston",
+      "region": "Oceania",
+      "isoCode": "NF"
+    },
+    {
+      "name": "Northern Mariana Islands",
+      "capital": "Saipan",
+      "region": "Oceania",
+      "isoCode": "MP"
+    },
+    {
+      "name": "Pitcairn Islands",
+      "capital": "Adamstown",
+      "region": "Oceania",
+      "isoCode": "PN"
+    },
+    {
+      "name": "South Georgia and the South Sandwich Islands",
+      "capital": "King Edward Point",
+      "region": "Oceania",
+      "isoCode": "GS"
+    },
+    {
+      "name": "Tokelau",
+      "capital": "Nukunonu",
+      "region": "Oceania",
+      "isoCode": "TK"
+    },
+    {
+      "name": "United States Minor Outlying Islands",
+      "capital": "N/A",
+      "region": "Oceania",
+      "isoCode": "UM"
+    },
+    {
+      "name": "Wallis and Futuna",
+      "capital": "Mata-Utu",
+      "region": "Oceania",
+      "isoCode": "WF"
+    }
+  ]
