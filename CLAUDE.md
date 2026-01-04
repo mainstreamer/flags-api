@@ -19,10 +19,17 @@ make build              # Docker build
 make run-containers     # Start containers (docker compose up -d)
 make run-api            # Start Symfony server
 
-# Testing and code quality
+# Quality Assurance
+make qa                 # Run full QA pipeline (code style, psalm, tests)
+make pipeline           # Alias for qa
 make test               # Run PHPUnit tests
-make psalm              # Static analysis
-make fix                # Format code with php-cs-fixer
+make coverage           # Generate code coverage report (HTML)
+make coverage-text      # Show coverage in terminal
+make psalm              # Run Psalm static analysis
+make cs-fix             # Fix code style with PHP CS Fixer
+make cs-check           # Check code style without fixing
+make phpcs-check        # Check PSR-12 standards
+make clean              # Clean coverage and cache files
 
 # Utilities
 make sh                 # Shell into PHP container
@@ -93,8 +100,32 @@ CAPITALS_EUROPE, CAPITALS_ASIA, CAPITALS_AFRICA, CAPITALS_AMERICAS, CAPITALS_OCE
 # Run all tests
 make test
 
+# Run QA pipeline (like CI - code style, psalm, tests)
+make qa
+
+# Generate code coverage (requires PCOV)
+make coverage           # HTML report in coverage/html/index.html
+make coverage-text      # Terminal output
+
 # Run single test file
 docker compose exec php vendor/bin/phpunit tests/Unit/Entity/GameTest.php
+
+# Quick test filter
+make t -- CorrectFlagEndpointTest
 ```
 
-Test files in `app/tests/Unit/`. HTTP request examples in `app/http-requests/` for IDE testing.
+Test files in `app/tests/Unit/` and `app/tests/Functional/`. HTTP request examples in `app/http-requests/` for IDE testing.
+
+### Code Coverage
+
+PCOV extension is installed in Docker images. Coverage reports include:
+- HTML report: `coverage/html/index.html`
+- Clover XML: `coverage/clover.xml`
+- Terminal output with `--coverage-text`
+
+### Quality Assurance Pipeline
+
+The `make qa` command runs the same checks as CI/CD:
+1. Code style check (PHP CS Fixer)
+2. Static analysis (Psalm)
+3. Unit and functional tests (PHPUnit)

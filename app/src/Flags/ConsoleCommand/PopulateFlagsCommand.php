@@ -20,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class PopulateFlagsCommand extends Command
 {
-   private const array COUNTRY_FILES = [
+    private const array COUNTRY_FILES = [
         'africa_extended.json',
         'americas.json',
         'asia_extended.json',
@@ -98,6 +98,7 @@ class PopulateFlagsCommand extends Command
 
     /**
      * @return string[]
+     *
      * @throws \JsonException
      */
     private function collectAllCodes(SymfonyStyle $io): array
@@ -105,7 +106,6 @@ class PopulateFlagsCommand extends Command
         $codes = [];
 
         foreach (self::COUNTRY_FILES as $fileName) {
-
             $countries = $this->loadFromJson($fileName);
 
             foreach ($countries as $country) {

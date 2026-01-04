@@ -15,7 +15,8 @@ RUN install-php-extensions \
     xml \
     mbstring \
     zip \
-    redis
+    redis \
+    pcov
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
