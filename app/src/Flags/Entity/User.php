@@ -2,22 +2,20 @@
 
 namespace App\Flags\Entity;
 
+use App\Flags\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-#[ORM\Entity(repositoryClass: "App\Flags\Repository\UserRepository")]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $id;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $telegramId;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $firstName;
@@ -58,18 +56,6 @@ class User implements UserInterface
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTelegramId(): ?string
-    {
-        return $this->telegramId;
-    }
-
-    public function setTelegramId(string $telegramId): self
-    {
-        $this->telegramId = $telegramId;
-
-        return $this;
     }
 
     public function getFirstName(): ?string
@@ -137,7 +123,7 @@ class User implements UserInterface
 
     public function getUsername(): ?string
     {
-        return $this->getTelegramId();
+        return $this->sub ?? (string) $this->id;
     }
 
     public function eraseCredentials()
@@ -181,16 +167,21 @@ class User implements UserInterface
     }
 
     /**
-     * @param array[App\Entity\Answer] $answers
+     * @param Score $score
+     * @param Answer[] $answers
      */
     public function finalizeGame(Score $score, array $answers): void
     {
+        // TODO move to game entity
         ++$this->gamesTotal;
         $this->timeTotal += $score->getSessionTimer();
-        if ($this->highScore <= $score->getScore()) {
+        if ($this->highScore < $score->getScore()) {
             $this->highScore = $score->getScore();
             $this->bestTime = $score->getSessionTimer();
-        } elseif ($this->highScore == $score->getScore() && ($this->bestTime > $score->getSessionTimer())) {
+        } elseif (
+            $this->highScore === $score->getScore()
+            && ($this->bestTime > $score->getSessionTimer())
+        ) {
             $this->bestTime = $score->getSessionTimer();
         }
 
@@ -221,7 +212,7 @@ class User implements UserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->sub ?? $this->telegramId ?? $this->id;
+        return $this->sub ?? (string) $this->id;
     }
 
     public function getSub(): ?string

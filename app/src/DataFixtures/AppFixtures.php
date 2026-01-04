@@ -11,12 +11,13 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $repo = $manager->getRepository(User::class);
-        $user = $repo->findOneByTelegramId('994310081');
+        $user = $repo->findOneBy(['sub' => '1']);
 
         if (!$user) {
             $user = new User();
-            $user->setTelegramId('994310081');
             $user->setSub('1');
+            $user->setFirstName('Test');
+            $user->setLastName('User');
             $manager->persist($user);
             $manager->flush();
         }

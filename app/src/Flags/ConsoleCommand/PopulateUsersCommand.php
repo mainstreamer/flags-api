@@ -31,32 +31,32 @@ class PopulateUsersCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('telegramId', InputArgument::OPTIONAL, 'Telegram ID for single user creation', '0')
+            ->addArgument('sub', InputArgument::OPTIONAL, 'User subject identifier (sub) for single user creation')
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'Telegram username')
             ->addOption('first-name', 'f', InputOption::VALUE_OPTIONAL, 'First name')
             ->addOption('last-name', 'l', InputOption::VALUE_OPTIONAL, 'Last name')
             ->addOption('json', 'j', InputOption::VALUE_REQUIRED, 'Path to JSON file for batch creation')
-            ->addOption('skip-existing', null, InputOption::VALUE_NONE, 'Skip users that already exist (by telegramId)')
+            ->addOption('skip-existing', null, InputOption::VALUE_NONE, 'Skip users that already exist (by sub)')
             ->setHelp(<<<'HELP'
 Create users individually or in batch from a JSON file.
 
 <info>Single user:</info>
-  bin/console app:populate:users 123456 -u johndoe -f John -l Doe
+  bin/console app:populate:users user123 -u johndoe -f John -l Doe
 
 <info>Batch from JSON:</info>
   bin/console app:populate:users --json users.json --skip-existing
 
 <info>JSON file format:</info>
   [
-    {"telegramId": "123456", "telegramUsername": "johndoe", "firstName": "John", "lastName": "Doe"},
-    {"telegramId": "789012", "firstName": "Jane"}
+    {"sub": "user123", "telegramUsername": "johndoe", "firstName": "John", "lastName": "Doe"},
+    {"sub": "user456", "firstName": "Jane"}
   ]
 
   Or with wrapper:
   {"users": [...]}
 
 <info>Available fields:</info>
-  telegramId (required), telegramUsername, firstName, lastName, telegramPhotoUrl, sub
+  sub (required), telegramUsername, firstName, lastName, telegramPhotoUrl
 HELP)
         ;
     }
@@ -76,17 +76,22 @@ HELP)
 
     private function createSingleUser(InputInterface $input, SymfonyStyle $io): int
     {
-        $telegramId = $input->getArgument('telegramId');
+        $sub = $input->getArgument('sub');
 
-        $existing = $this->userRepository->findOneBy(['telegramId' => $telegramId]);
+        if (empty($sub)) {
+            $io->error('User subject identifier (sub) is required for single user creation.');
+            return Command::FAILURE;
+        }
+
+        $existing = $this->userRepository->findOneBy(['sub' => $sub]);
         if (null !== $existing) {
-            $io->warning(sprintf('User with telegramId "%s" already exists (id: %d). Skipping.', $telegramId, $existing->getId()));
+            $io->warning(sprintf('User with sub "%s" already exists (id: %d). Skipping.', $sub, $existing->getId()));
 
             return Command::SUCCESS;
         }
 
         $user = $this->buildUser([
-            'telegramId' => $telegramId,
+            'sub' => $sub,
             'telegramUsername' => $input->getOption('username'),
             'firstName' => $input->getOption('first-name'),
             'lastName' => $input->getOption('last-name'),
@@ -95,7 +100,7 @@ HELP)
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $io->success(sprintf('Created user: telegramId=%s, id=%d', $telegramId, $user->getId()));
+        $io->success(sprintf('Created user: sub=%s, id=%d', $sub, $user->getId()));
 
         return Command::SUCCESS;
     }
@@ -136,21 +141,21 @@ HELP)
         $errorCount = 0;
 
         foreach ($users as $index => $userData) {
-            if (!isset($userData['telegramId'])) {
-                $io->warning(sprintf('Entry %d missing telegramId, skipped.', $index));
+            if (!isset($userData['sub'])) {
+                $io->warning(sprintf('Entry %d missing sub (subject identifier), skipped.', $index));
                 ++$errorCount;
                 continue;
             }
 
-            $telegramId = (string) $userData['telegramId'];
-            $existing = $this->userRepository->findOneBy(['telegramId' => $telegramId]);
+            $sub = (string) $userData['sub'];
+            $existing = $this->userRepository->findOneBy(['sub' => $sub]);
 
             if (null !== $existing) {
                 if ($skipExisting) {
                     ++$skippedCount;
                     continue;
                 }
-                $io->warning(sprintf('User telegramId=%s already exists, skipped.', $telegramId));
+                $io->warning(sprintf('User sub=%s already exists, skipped.', $sub));
                 ++$skippedCount;
                 continue;
             }
@@ -178,7 +183,7 @@ HELP)
     private function buildUser(array $data): User
     {
         $user = new User();
-        $user->setTelegramId((string) $data['telegramId']);
+        $user->setSub((string) $data['sub']);
 
         if (!empty($data['telegramUsername'])) {
             $user->setTelegramUsername($data['telegramUsername']);
@@ -191,9 +196,6 @@ HELP)
         }
         if (!empty($data['telegramPhotoUrl'])) {
             $user->setTelegramPhotoUrl($data['telegramPhotoUrl']);
-        }
-        if (!empty($data['sub'])) {
-            $user->setSub($data['sub']);
         }
 
         return $user;

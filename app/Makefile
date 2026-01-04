@@ -47,7 +47,7 @@ test: ## Run PHPUnit tests (isolated test containers)
 	@echo "Setting up test database..."
 	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
 	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
-	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:users test_user_1 -f Test -l User
 	@$(TEST_COMPOSE) exec php bin/console app:populate:capitals --purge -n
 	@$(TEST_COMPOSE) exec php bin/console app:populate:flags --purge -n
 	@echo "Running tests..."
