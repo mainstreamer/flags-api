@@ -30,16 +30,10 @@ final class UserFactory
         ++$this->sequence;
 
         $user = new User();
-        $user->setTelegramId($attributes['telegramId'] ?? 'test_telegram_' . $this->sequence);
+        $user->setSub($attributes['sub'] ?? 'test_sub_' . $this->sequence);
         $user->setFirstName($attributes['firstName'] ?? 'Test');
         $user->setLastName($attributes['lastName'] ?? 'User ' . $this->sequence);
         $user->setTelegramUsername($attributes['telegramUsername'] ?? 'testuser' . $this->sequence);
-
-        if (isset($attributes['sub'])) {
-            $user->setSub($attributes['sub']);
-        } else {
-            $user->setSub('test_sub_' . $this->sequence);
-        }
 
         if (isset($attributes['highScore'])) {
             $user->setHighScore($attributes['highScore']);

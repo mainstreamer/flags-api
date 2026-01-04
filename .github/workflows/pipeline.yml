@@ -121,7 +121,7 @@ jobs:
         run: |
           bin/console d:d:c -n --if-not-exists
           bin/console d:m:m -n -vvv
-          bin/console app:populate:users
+          bin/console app:populate:users 1 -f Test -l User
           bin/console app:populate:capitals -n --purge
           bin/console app:populate:flags -n --purge
 

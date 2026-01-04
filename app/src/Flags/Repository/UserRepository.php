@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
@@ -83,28 +82,29 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
 
     public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
-        return $this->findOneBySub($identifier) ?? $this->findOneByTelegramId($identifier);
+        return $this->findOneBy(['sub' => $identifier]) ?? $this->find($identifier);
     }
 
     public function loadOrCreateFromOAuth(GenericResourceOwner $userInfo): User
     {
-        // Assuming your OAuth server returns "sub" as unique identifier
-        $sub = $userInfo->getId();     // or ->getUid(), ->getEmail(), depending on your provider
-        //        $email = $userInfo->getEmail();
+        // OAuth server returns "sub" as unique identifier (required)
+        $sub = $userInfo->getId();
 
-        // Try to find existing user
+        // Try to find existing user by sub
         $user = $this->findOneBy(['sub' => $sub]);
 
         if ($user) {
             return $user;
         }
 
-        //        $userInfoArray = $userInfo->toArray()
-        // Create new user
+        // Create new user with minimal required data
+        $userInfoArray = $userInfo->toArray();
         $user = new User();
         $user->setSub($sub);
-        //        $user->setEmail($userInfoArray['email'] ?? null);
-        //        $user->setRoles(['ROLE_USER']);
+
+        // Optional fields - names can be null
+        $user->setFirstName($userInfoArray['first_name'] ?? null);
+        $user->setLastName($userInfoArray['last_name'] ?? null);
 
         $em = $this->getEntityManager();
         $em->persist($user);
