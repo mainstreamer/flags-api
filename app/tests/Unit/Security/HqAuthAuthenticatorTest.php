@@ -15,7 +15,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Unit tests for HqAuthAuthenticator
- * Note: Full OAuth flow testing requires integration tests due to protected parent methods
+ * Note: Full OAuth flow testing requires integration tests due to protected parent methods.
  */
 class HqAuthAuthenticatorTest extends TestCase
 {
@@ -67,7 +67,7 @@ class HqAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * Test repository's loadOrCreateFromOAuth with complete OAuth data
+     * Test repository's loadOrCreateFromOAuth with complete OAuth data.
      */
     public function testRepositoryLoadsOrCreatesUserWithCompleteData(): void
     {
@@ -97,7 +97,7 @@ class HqAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * Test repository's loadOrCreateFromOAuth with minimal OAuth data
+     * Test repository's loadOrCreateFromOAuth with minimal OAuth data.
      */
     public function testRepositoryLoadsOrCreatesUserWithMinimalData(): void
     {
@@ -125,7 +125,7 @@ class HqAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * Test repository's loadOrCreateFromOAuth with partial names
+     * Test repository's loadOrCreateFromOAuth with partial names.
      */
     public function testRepositoryLoadsOrCreatesUserWithPartialNames(): void
     {

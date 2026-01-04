@@ -167,7 +167,6 @@ class User implements UserInterface
     }
 
     /**
-     * @param Score $score
      * @param Answer[] $answers
      */
     public function finalizeGame(Score $score, array $answers): void

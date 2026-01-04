@@ -79,9 +79,9 @@ class UserRepositoryTest extends TestCase
             ->method('persist')
             ->with($this->callback(function ($user) {
                 return $user instanceof User
-                    && $user->getSub() === 'new_sub_456'
-                    && $user->getFirstName() === 'New'
-                    && $user->getLastName() === 'User';
+                    && 'new_sub_456' === $user->getSub()
+                    && 'New' === $user->getFirstName()
+                    && 'User' === $user->getLastName();
             }));
 
         $this->entityManager->expects($this->once())->method('flush');
@@ -114,9 +114,9 @@ class UserRepositoryTest extends TestCase
             ->method('persist')
             ->with($this->callback(function ($user) {
                 return $user instanceof User
-                    && $user->getSub() === 'minimal_sub_789'
-                    && $user->getFirstName() === null
-                    && $user->getLastName() === null;
+                    && 'minimal_sub_789' === $user->getSub()
+                    && null === $user->getFirstName()
+                    && null === $user->getLastName();
             }));
 
         $this->entityManager->expects($this->once())->method('flush');
@@ -150,9 +150,9 @@ class UserRepositoryTest extends TestCase
             ->method('persist')
             ->with($this->callback(function ($user) {
                 return $user instanceof User
-                    && $user->getSub() === 'partial_sub_999'
-                    && $user->getFirstName() === 'OnlyFirst'
-                    && $user->getLastName() === null;
+                    && 'partial_sub_999' === $user->getSub()
+                    && 'OnlyFirst' === $user->getFirstName()
+                    && null === $user->getLastName();
             }));
 
         $this->entityManager->expects($this->once())->method('flush');
@@ -187,9 +187,9 @@ class UserRepositoryTest extends TestCase
             ->method('persist')
             ->with($this->callback(function ($user) {
                 return $user instanceof User
-                    && $user->getSub() === 'empty_names_sub'
-                    && $user->getFirstName() === ''
-                    && $user->getLastName() === '';
+                    && 'empty_names_sub' === $user->getSub()
+                    && '' === $user->getFirstName()
+                    && '' === $user->getLastName();
             }));
 
         $this->entityManager->expects($this->once())->method('flush');

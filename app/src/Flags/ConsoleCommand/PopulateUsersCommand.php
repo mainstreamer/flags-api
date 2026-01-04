@@ -80,6 +80,7 @@ HELP)
 
         if (empty($sub)) {
             $io->error('User subject identifier (sub) is required for single user creation.');
+
             return Command::FAILURE;
         }
 
