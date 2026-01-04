@@ -77,7 +77,7 @@ class FlagsController extends AbstractController
     private function getCountryName(string $countryCode): string
     {
         return match ($countryCode) {
-        // Extended ISO codes not in Symfony Intl component
+            // Extended ISO codes not in Symfony Intl component
             'XK' => 'Kosovo',
             'AC' => 'Ascension Island',
             'DG' => 'Diego Garcia',
