@@ -64,21 +64,29 @@ class FlagsController extends AbstractController
             }
         }
 
-        $number = random_int(0, 3);
+        $key = random_int(0, 3);
 
         return $this->json([
             'flags' => $flags,
-            'ques' => $this->getCountryName(strtoupper(array_keys($flags)[$number])),
-            'answer' => $flags[array_keys($flags)[$number]],
-            'answerCode' => array_keys($flags)[$number],
+            'ques' => $this->getCountryName(strtoupper(array_keys($flags)[$key])),
+            'answer' => $flags[array_keys($flags)[$key]],
+            'answerCode' => array_keys($flags)[$key],
         ]);
     }
 
     private function getCountryName(string $countryCode): string
     {
         return match ($countryCode) {
+        // Extended ISO codes not in Symfony Intl component
             'XK' => 'Kosovo',
-            default => Countries::getName($countryCode),
+            'AC' => 'Ascension Island',
+            'DG' => 'Diego Garcia',
+            'EA' => 'Ceuta & Melilla',
+            'IC' => 'Canary Islands',
+            'TA' => 'Tristan da Cunha',
+            default => Countries::exists($countryCode)
+                ? Countries::getName($countryCode)
+                : throw new \InvalidArgumentException("Unknown country code: $countryCode"),
         };
     }
 
