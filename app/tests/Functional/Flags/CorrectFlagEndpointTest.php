@@ -7,7 +7,7 @@ namespace App\Tests\Functional\Flags;
 use App\Flags\Entity\Flag;
 use App\Tests\Functional\ApiTestCase;
 use App\Tests\Support\DataProvider\FlagDataProvider;
-use Doctrine\ORM\Exception\ORMException;
+use Doctrine\DBAL\Exception;
 
 final class CorrectFlagEndpointTest extends ApiTestCase
 {
@@ -57,7 +57,7 @@ final class CorrectFlagEndpointTest extends ApiTestCase
     }
 
     /**
-     * @throws ORMException
+     * @throws Exception
      */
     public function testCorrectEndpointIncrementsCounter(): void
     {
