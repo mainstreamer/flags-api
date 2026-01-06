@@ -35,7 +35,10 @@ readonly class JwksJwtEncoder implements JWTEncoderInterface
         $publicKey = $this->jwksService->getPublicKey();
 
         if (!$publicKey) {
-            $this->logger?->error('JwksJwtEncoder: Unable to fetch public key from JWKS endpoint');
+            $this->logger?->error(
+                'JwksJwtEncoder: Unable to fetch public key from JWKS endpoint',
+            );
+
             throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, 'Unable to fetch public key from JWKS endpoint');
         }
 
@@ -86,7 +89,12 @@ readonly class JwksJwtEncoder implements JWTEncoderInterface
         }
 
         // Decode payload
-        $payload = json_decode($this->base64UrlDecode($payloadB64), true);
+        $payload = json_decode(
+            $this->base64UrlDecode($payloadB64),
+            true,
+            512,
+            JSON_THROW_ON_ERROR,
+        );
         if (!$payload) {
             throw new JWTDecodeFailureException(JWTDecodeFailureException::INVALID_TOKEN, 'Invalid payload');
         }

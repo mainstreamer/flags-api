@@ -20,6 +20,7 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
+    /** @psalm-suppress PossiblyUnusedParam */
     public function getById(int $id): Game
     {
         return $this->findOneBy(['id' => $id])

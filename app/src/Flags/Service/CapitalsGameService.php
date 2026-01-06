@@ -152,7 +152,7 @@ readonly class CapitalsGameService
     public function getHighScores(string $gameType): array
     {
         return array_map(
-            fn (array $item) => [
+            static fn (array $item) => [
                 'userName' => $item['firstName'] . ' ' . $item['lastName'], 'score' => $item['score'],
                 'sessionTimer' => $item['sessionTimer'],
             ],

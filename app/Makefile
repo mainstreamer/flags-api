@@ -129,6 +129,9 @@ pipeline: qa ## Alias for qa (run full pipeline like GitHub Actions)
 psalm: ## Run Psalm static analysis
 	@docker compose exec php vendor/bin/psalm --no-cache
 
+psalm-baseline-update: ## Update baseline file (new errors will not be added)
+	@docker compose exec php vendor/bin/psalm --no-cache --update-baseline
+
 cs-fix: ## Fix code style (PHP CS Fixer + PHPCS)
 	@echo "Fixing code style with PHP CS Fixer..."
 	@docker compose exec php vendor/bin/php-cs-fixer fix
