@@ -3,9 +3,10 @@
 namespace App\Flags\Entity;
 
 use App\Flags\Entity\Enum\GameType;
+use App\Flags\Repository\CapitalsStatRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: "App\Flags\Repository\CapitalsStatRepository")]
+#[ORM\Entity(repositoryClass: CapitalsStatRepository::class)]
 class CapitalsStat
 {
     #[ORM\Id]
@@ -19,7 +20,7 @@ class CapitalsStat
     #[ORM\Column(type: 'integer', length: 255)]
     protected int $score;
 
-    #[ORM\ManyToOne(targetEntity: "App\Flags\Entity\User")]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     protected readonly User $user;
 
     #[ORM\Column(type: 'string', length: 255)]

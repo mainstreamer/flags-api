@@ -56,7 +56,7 @@ class SetWebhookCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $arg1 = $input->getArgument('arg1');
         //        $r = $this->client->request(
-        //Request::METHOD_GET, 'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1);
+        // Request::METHOD_GET, 'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1);
         $r = $this->client->request(
             Request::METHOD_GET,
             'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1,

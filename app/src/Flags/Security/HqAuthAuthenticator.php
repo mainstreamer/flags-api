@@ -59,10 +59,10 @@ class HqAuthAuthenticator extends OAuth2Authenticator
     }
 
     //    public function onAuthenticationSuccess(R
-    //equest $request,
+    // equest $request,
     // TokenInterface $token,
     // string $firewallName
-    //): ?Response
+    // ): ?Response
     //    {
     //        return new JsonResponse([$token->getUser()->getUserIdentifier(), implode($token->getUser()->getRoles())]);
     // //        return new RedirectResponse($this->router->generate('app_dashboard'));
