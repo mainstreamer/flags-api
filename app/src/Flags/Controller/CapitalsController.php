@@ -59,8 +59,12 @@ class CapitalsController extends AbstractController
     }
 
     #[Route('/capitals/answer/{game}/{countryCode}/{answer}', name: 'get_question_for_game', methods: ['GET'])]
-    public function getQuestion(Game $game, string $countryCode, string $answer, CapitalsGameService $service): JsonResponse
-    {
+    public function getQuestion(
+        Game $game,
+        string $countryCode,
+        string $answer,
+        CapitalsGameService $service,
+    ): JsonResponse {
         return $this->json($service->giveAnswer($countryCode, base64_decode($answer), $game));
     }
 

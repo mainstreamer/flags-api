@@ -41,9 +41,11 @@ composer: ## Install PHP dependencies
 cache: ## Clear Symfony cache
 	@docker compose exec php bin/console c:c
 
+test-build:
+	@$(TEST_COMPOSE) build
 test: ## Run PHPUnit tests (isolated test containers)
 	@echo "Starting test containers..."
-	@$(TEST_COMPOSE) up -d --build --wait
+	@$(TEST_COMPOSE) up -d
 	@echo "Setting up test database..."
 	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
 	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
@@ -55,7 +57,7 @@ test: ## Run PHPUnit tests (isolated test containers)
 	@$(TEST_COMPOSE) down
 
 test-up: ## Start test containers (keep running)
-	@$(TEST_COMPOSE) up -d --build --wait
+	@$(TEST_COMPOSE) up -d
 	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
 	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
 	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n
@@ -90,7 +92,7 @@ coverage-text: ## Show code coverage in terminal
 	@$(TEST_COMPOSE) up -d --build --wait
 	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
 	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
-	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n 1 -f Test -l User
 	@$(TEST_COMPOSE) exec php bin/console app:populate:capitals --purge -n
 	@$(TEST_COMPOSE) exec php bin/console app:populate:flags --purge -n
 	@$(TEST_COMPOSE) exec php php -d pcov.enabled=1 vendor/bin/phpunit --coverage-text
@@ -103,7 +105,7 @@ qa: ## Run full quality assurance pipeline CS-FIXER PSALM PHPUNIT
 	@$(TEST_COMPOSE) up -d --build --wait
 	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
 	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
-	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n 1 -f Test -l User
 	@$(TEST_COMPOSE) exec php bin/console app:populate:capitals --purge -n
 	@$(TEST_COMPOSE) exec php bin/console app:populate:flags --purge -n
 	@echo ""

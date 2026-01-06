@@ -44,7 +44,7 @@ readonly class CapitalsGameService
 
         $countries = $this->repository->findBy(['region' => $region], ['id' => 'ASC']);
         if (!$countries) {
-            throw new \Exception('no countries found');
+            throw new \RuntimeException('no countries found');
         }
 
         $totalQuestions = count($countries);
@@ -74,10 +74,26 @@ readonly class CapitalsGameService
         $correct = array_pop($options);
 
         $options = [
-            ['option' => $correct->getName(), 'country' => $correct->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($correct->getCode()))],
-            ['option' => ($entry = array_pop($options))->getName(), 'country' => $entry->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode()))],
-            ['option' => ($entry = array_pop($options))->getName(), 'country' => $entry->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode()))],
-            ['option' => ($entry = array_pop($options))->getName(), 'country' => $entry->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode()))],
+            [
+                'option' => $correct->getName(),
+                'country' => $correct->getCountry(),
+                'flag' => $this->isoFlags->getEmojiFlag(strtolower($correct->getCode())),
+            ],
+            [
+                'option' => ($entry = array_pop($options))->getName(),
+                'country' => $entry->getCountry(),
+                'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode())),
+            ],
+            [
+                'option' => ($entry = array_pop($options))->getName(),
+                'country' => $entry->getCountry(),
+                'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode())),
+            ],
+            [
+                'option' => ($entry = array_pop($options))->getName(),
+                'country' => $entry->getCountry(),
+                'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode())),
+            ],
         ];
         shuffle($options);
         try {

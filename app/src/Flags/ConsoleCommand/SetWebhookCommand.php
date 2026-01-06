@@ -9,6 +9,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SetWebhookCommand extends Command
@@ -41,12 +45,22 @@ class SetWebhookCommand extends Command
         ;
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $arg1 = $input->getArgument('arg1');
-        //        $r = $this->client->request(Request::METHOD_GET, 'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1);
-        $r = $this->client->request(Request::METHOD_GET, 'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1);
+        //        $r = $this->client->request(
+        //Request::METHOD_GET, 'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1);
+        $r = $this->client->request(
+            Request::METHOD_GET,
+            'https://api.telegram.org/bot' . $this->botToken . '/setWebhook?url=' . $arg1,
+        );
         if ($arg1) {
             $io->note(sprintf('You passed an argument: %s', $arg1));
         }
