@@ -5,7 +5,6 @@ namespace App\Flags\Security;
 use App\Flags\Repository\UserRepository;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
-use Override;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,7 +68,7 @@ class HqAuthAuthenticator extends OAuth2Authenticator
     // //        return new RedirectResponse($this->router->generate('app_dashboard'));
     //    }
 
-    #[Override]
+    #[\Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         //        dd($request->toArray());
@@ -101,7 +100,7 @@ class HqAuthAuthenticator extends OAuth2Authenticator
         //        ]);
     }
 
-    #[Override]
+    #[\Override]
     public function onAuthenticationFailure(
         Request $request,
         AuthenticationException $exception,
