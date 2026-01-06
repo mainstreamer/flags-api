@@ -94,8 +94,6 @@
       <code><![CDATA[$date]]></code>
     </PossiblyUnusedProperty>
   </file>
-  <file src="src/Flags/Entity/Answer.php">
-  </file>
   <file src="src/Flags/Entity/Capital.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[getId]]></code>
@@ -128,8 +126,6 @@
     <UnusedProperty>
       <code><![CDATA[$user]]></code>
     </UnusedProperty>
-  </file>
-  <file src="src/Flags/Entity/Score.php">
   </file>
   <file src="src/Flags/Entity/User.php">
     <MissingOverrideAttribute>
@@ -180,7 +176,6 @@
   <file src="src/Flags/Repository/CapitalsStatRepository.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[__construct]]></code>
-      <code><![CDATA[getHighScores]]></code>
       <code><![CDATA[getHighScores2]]></code>
       <code><![CDATA[getHighScores3]]></code>
     </PossiblyUnusedMethod>
@@ -218,7 +213,6 @@
   <file src="src/Flags/Repository/UserRepository.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[__construct]]></code>
-      <code><![CDATA[getAnyUser]]></code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedParam>
       <code><![CDATA[$registry]]></code>
@@ -228,8 +222,6 @@
   <file src="src/Flags/Security/HqAuthAuthenticator.php">
     <MissingOverrideAttribute>
       <code><![CDATA[public function authenticate(Request $request): Passport]]></code>
-      <code><![CDATA[public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response]]></code>
-      <code><![CDATA[public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response]]></code>
       <code><![CDATA[public function supports(Request $request): ?bool]]></code>
     </MissingOverrideAttribute>
     <UnusedClass>

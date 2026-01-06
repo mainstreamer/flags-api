@@ -107,8 +107,11 @@ class FlagsController extends AbstractController
      * @throws \JsonException
      */
     #[Route('/scores', name: 'submit_game_results', methods: ['POST'])]
-    public function postScore(Request $request, EntityManagerInterface $entityManager, #[CurrentUser] User $user): Response
-    {
+    public function postScore(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        #[CurrentUser] User $user,
+    ): Response {
         $requestArray = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $scoreDTO = new ScoreDTO($requestArray);
         $score = new Score()->fromDTO($scoreDTO);

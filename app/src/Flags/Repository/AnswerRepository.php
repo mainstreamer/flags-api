@@ -22,7 +22,8 @@ class AnswerRepository extends ServiceEntityRepository
 
     public function findIncorrectGuesses(string $userId): array
     {
-        //        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
+        //        SELECT COUNT(answer.flag_code) as incorrect,
+        // answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
         // GROUP BY answer.flag_code ORDER BY incorrect DESC;
 
         return $this->createQueryBuilder('a')
@@ -41,7 +42,8 @@ class AnswerRepository extends ServiceEntityRepository
 
     public function findCorrectGuesses(string $userId): array
     {
-        //        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
+        //        SELECT COUNT(answer.flag_code) as incorrect,
+        // answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
         // GROUP BY answer.flag_code ORDER BY incorrect DESC;
 
         return $this->createQueryBuilder('a')
@@ -60,7 +62,8 @@ class AnswerRepository extends ServiceEntityRepository
 
     public function findAllGuesses(string $userId): array
     {
-        //        SELECT COUNT(answer.flag_code) as incorrect, answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
+        //        SELECT COUNT(answer.flag_code) as incorrect,
+        // answer.flag_code FROM answer WHERE answer.user_id = 6 AND answer.correct = 0
         // GROUP BY answer.flag_code ORDER BY incorrect DESC;
 
         return $this->createQueryBuilder('a')
@@ -74,33 +77,4 @@ class AnswerRepository extends ServiceEntityRepository
             ->getArrayResult()
         ;
     }
-
-    // /**
-    //  * @return Flag[] Returns an array of Flag objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Flag
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

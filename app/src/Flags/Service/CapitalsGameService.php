@@ -8,6 +8,7 @@ use App\Flags\Entity\Enum\GameType;
 use App\Flags\Entity\Game;
 use App\Flags\Entity\User;
 use App\Flags\Repository\CapitalRepository;
+use App\Flags\Repository\CapitalsStatRepository;
 use App\Flags\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Rteeom\FlagsGenerator\FlagsGenerator;
@@ -21,6 +22,7 @@ readonly class CapitalsGameService
     public function __construct(
         private CapitalRepository $repository,
         private GameRepository $gameRepository,
+        private CapitalsStatRepository $capitalsStatRepository,
         private TokenStorageInterface $tokenStorage,
         private EntityManagerInterface $entityManager,
     ) {
@@ -44,7 +46,7 @@ readonly class CapitalsGameService
 
         $countries = $this->repository->findBy(['region' => $region], ['id' => 'ASC']);
         if (!$countries) {
-            throw new \Exception('no countries found');
+            throw new \RuntimeException('no countries found');
         }
 
         $totalQuestions = count($countries);
@@ -74,10 +76,26 @@ readonly class CapitalsGameService
         $correct = array_pop($options);
 
         $options = [
-            ['option' => $correct->getName(), 'country' => $correct->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($correct->getCode()))],
-            ['option' => ($entry = array_pop($options))->getName(), 'country' => $entry->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode()))],
-            ['option' => ($entry = array_pop($options))->getName(), 'country' => $entry->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode()))],
-            ['option' => ($entry = array_pop($options))->getName(), 'country' => $entry->getCountry(), 'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode()))],
+            [
+                'option' => $correct->getName(),
+                'country' => $correct->getCountry(),
+                'flag' => $this->isoFlags->getEmojiFlag(strtolower($correct->getCode())),
+            ],
+            [
+                'option' => ($entry = array_pop($options))->getName(),
+                'country' => $entry->getCountry(),
+                'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode())),
+            ],
+            [
+                'option' => ($entry = array_pop($options))->getName(),
+                'country' => $entry->getCountry(),
+                'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode())),
+            ],
+            [
+                'option' => ($entry = array_pop($options))->getName(),
+                'country' => $entry->getCountry(),
+                'flag' => $this->isoFlags->getEmojiFlag(strtolower($entry->getCode())),
+            ],
         ];
         shuffle($options);
         try {
@@ -109,18 +127,20 @@ readonly class CapitalsGameService
         ];
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function handleGameOver(Request $request): array
     {
         [
             'sessionTimer' => $sessionTimer,
             'score' => $score,
             'gameId' => $gameId,
-        ] = json_decode($request->getContent(), true);
+        ] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
-        /** @var Game $game */
-        $game = $this->gameRepository->findOneById((int) $gameId);
+        $user = $this->tokenStorage->getToken()?->getUser();
+        $game = $this->gameRepository->getById((int) $gameId);
 
         $entity = new CapitalsStat($sessionTimer, $score, $user, $game->getType());
         $this->entityManager->persist($entity);
@@ -132,18 +152,18 @@ readonly class CapitalsGameService
     public function getHighScores(string $gameType): array
     {
         return array_map(
-            fn (array $item) => [
+            static fn (array $item) => [
                 'userName' => $item['firstName'] . ' ' . $item['lastName'], 'score' => $item['score'],
                 'sessionTimer' => $item['sessionTimer'],
             ],
-            $this->entityManager->getRepository(CapitalsStat::class)->getHighScores($gameType)
+            $this->capitalsStatRepository->getHighScores($gameType)
         );
     }
 
     public function startGame(GameType $gameType): Game
     {
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
         $this->entityManager->persist($game = new Game($user, $gameType));
         $this->entityManager->flush();
 

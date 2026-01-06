@@ -4,7 +4,6 @@ namespace App\Flags\Repository;
 
 use App\Flags\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 use League\OAuth2\Client\Provider\GenericResourceOwner;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -13,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User[]    findAll()
+ * @method User|null findOneBy(array $criteria)
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class UserRepository extends ServiceEntityRepository implements UserLoaderInterface
@@ -22,7 +22,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
         parent::__construct($registry, User::class);
     }
 
-    public function getHighScores()
+    public function getHighScores(): array
     {
         return $this->createQueryBuilder('u')
             ->select('u.firstName')
@@ -32,53 +32,11 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->addSelect('u.gamesTotal')
             ->addOrderBy('u.highScore', 'DESC')
             ->addOrderBy('u.bestTime', 'ASC')
-            ->setMaxResults(5)
+            ->setMaxResults(10)
             ->getQuery()
             ->getScalarResult()
         ;
     }
-
-    public function getAnyUser(): User
-    {
-        return $this->matching(
-            ($criteria = new Criteria())
-                ->where(
-                    $criteria
-                        ->expr()
-                    ->gt('id', 0)
-                )
-                ->setMaxResults(1)
-        )->get(0);
-    }
-
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 
     public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
