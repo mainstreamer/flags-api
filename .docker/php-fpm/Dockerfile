@@ -141,7 +141,8 @@ RUN { \
 COPY --from=builder --chown=www-data:www-data /var/www/html ./
 
 ARG SENTRY_RELEASE=""
-ENV APP_ENV=prod APP_DEBUG=0 SENTRY_RELEASE=${SENTRY_RELEASE}
+ARG APP_VERSION=""
+ENV APP_ENV=prod APP_DEBUG=0 SENTRY_RELEASE=${SENTRY_RELEASE} APP_VERSION=${APP_VERSION}
 
 # Create minimal .env for Symfony bootstrap, placeholder for public key, remove dev files
 RUN printf "APP_ENV=prod\nSENTRY_DSN=\nJWKS_URI=https://auth.izeebot.top/.well-known/jwks.json\n" > .env \

@@ -15,7 +15,10 @@ final class HealthController extends AbstractController
     #[Route('/health', name: 'health_check', methods: ['GET'])]
     public function health(): JsonResponse
     {
-        return new JsonResponse(['status' => 'ok'], Response::HTTP_OK);
+        return new JsonResponse([
+            'status' => 'ok',
+            'version' => $this->getVersion(),
+        ], Response::HTTP_OK);
     }
 
     #[Route('/health/ready', name: 'health_ready', methods: ['GET'])]
@@ -32,10 +35,19 @@ final class HealthController extends AbstractController
 
         return new JsonResponse([
             'status' => 'ok' === $dbStatus ? 'ok' : 'degraded',
+            'version' => $this->getVersion(),
             'checks' => [
                 'database' => $dbStatus,
             ],
         ], $status);
+    }
+
+    private function getVersion(): array
+    {
+        return [
+            'version' => $_ENV['APP_VERSION'] ?? null,
+            'environment' => $this->getParameter('kernel.environment'),
+        ];
     }
 
     #[Route('/robots.txt', name: 'robots_txt', methods: ['GET'])]

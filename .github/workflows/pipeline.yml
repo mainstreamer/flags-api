@@ -210,6 +210,7 @@ jobs:
           labels: ${{ steps.meta-php.outputs.labels }}
           build-args: |
             SENTRY_RELEASE=${{ vars.SENTRY_PROJECT }}@${{ needs.version.outputs.new_version }}
+            APP_VERSION=v${{ needs.version.outputs.new_version }}
           no-cache: true
 
       - name: Build and push Caddy
