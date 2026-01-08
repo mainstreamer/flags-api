@@ -41,7 +41,7 @@ composer: ## Install PHP dependencies
 cache: ## Clear Symfony cache
 	@docker compose exec php bin/console c:c
 
-test-build:
+test-build: ## Build test images
 	@$(TEST_COMPOSE) build
 test: ## Run PHPUnit tests (isolated test containers)
 	@echo "Starting test containers..."
@@ -166,6 +166,9 @@ network: ## Create Docker network
 
 t: ## Quick test filter (uses test containers): make t -- CorrectFlagEndpointTest
 	@$(TEST_COMPOSE) exec php vendor/bin/phpunit --filter "$(filter-out $@,$(MAKECMDGOALS) $(MAKEFLAGS))"
+
+cc: ## Delete all cache folders
+	rm -rf var/cache
 
 %:
 	@

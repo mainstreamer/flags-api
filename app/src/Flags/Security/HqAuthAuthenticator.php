@@ -71,7 +71,6 @@ class HqAuthAuthenticator extends OAuth2Authenticator
     #[\Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        //        dd($request->toArray());
         // Get the JWT access token
         $accessToken = $request->attributes->get('oauth_access_token');
         $refreshToken = $request->attributes->get('oauth_refresh_token');
@@ -81,23 +80,11 @@ class HqAuthAuthenticator extends OAuth2Authenticator
             window.opener.postMessage({
                 type: 'oauth_success',
                 access_token: '$accessToken',
-                refresh_token: '$refreshToken'
+                refresh_token: '$refreshToken',
+                expires_in: '$expiresIn',
             }, '*');
             window.close();
         </script>");
-
-        // Return JSON with the tokens for the frontend
-        //        return new JsonResponse([
-        //            'success' => true,
-        //            'access_token' => $accessToken,
-        //            'refresh_token' => $refreshToken,
-        //            'expires_in' => $expiresIn,
-        //            'token_type' => 'Bearer',
-        //            'user' => [
-        // //                'email' => $token->getUser()->getEmail(),
-        //                'roles' => $token->getUser()->getRoles(),
-        //            ]
-        //        ]);
     }
 
     #[\Override]
