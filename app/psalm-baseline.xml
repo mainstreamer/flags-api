@@ -227,9 +227,6 @@
     <UnusedClass>
       <code><![CDATA[HqAuthAuthenticator]]></code>
     </UnusedClass>
-    <UnusedVariable>
-      <code><![CDATA[$expiresIn]]></code>
-    </UnusedVariable>
   </file>
   <file src="src/Flags/Security/JwksJwtEncoder.php">
     <MissingOverrideAttribute>
