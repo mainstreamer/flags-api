@@ -45,7 +45,7 @@ final class HealthController extends AbstractController
     private function getVersion(): array
     {
         return [
-            'version' => $_ENV['APP_VERSION'] ?? null,
+            'version' => $this->getParameter('app.version'),
             'environment' => $this->getParameter('kernel.environment'),
         ];
     }
