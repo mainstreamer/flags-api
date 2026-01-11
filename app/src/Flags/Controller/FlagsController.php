@@ -179,15 +179,20 @@ class FlagsController extends AbstractController
         $correctResults = $repository->findCorrectGuesses($user->getId());
         $result = $repository->findAllGuesses($user->getId());
         // TODO move this logic to service
+        // OMG rewrite this poop asap
         foreach ($result as $key => $item) {
+            $result[$key]['times_shown'] = 0;
+            $result[$key]['times_guessed'] = 0;
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode'], CodeSet::EXTENDED);
             $result[$key]['country'] = $this->getCountryName(strtoupper($item['flagCode']));
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
                     $shown = (int) $result[$key]['times'];
-                    $errors = (int) $value['times'];
-                    $result[$key]['rate'] = (int) (round($errors / $shown, 2) * 100);
-                    $result[$key]['times'] = "$errors/$shown";
+                    $guesses = (int) $value['times'];
+                    $result[$key]['rate'] = (int) (round($guesses / $shown, 2) * 100);
+                    $result[$key]['times'] = "$guesses/$shown";
+                    $result[$key]['times_shown'] = $shown;
+                    $result[$key]['times_guessed'] = $guesses;
 
                     break;
                 }
