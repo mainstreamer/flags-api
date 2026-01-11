@@ -7,7 +7,7 @@ namespace App\Tests\Support\Factory;
 use App\Flags\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class UserFactory
+class UserFactory
 {
     private int $sequence = 0;
 
