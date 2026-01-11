@@ -148,8 +148,8 @@ class FlagsController extends AbstractController
         $result = $repository->findAllGuesses($user->getId());
         // TODO move this logic to service
         foreach ($result as $key => $item) {
-            $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
-            $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+            $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode'], CodeSet::EXTENDED);
+            $result[$key]['country'] = $this->getCountryName(strtoupper($item['flagCode']));
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
                     $shown = (int) $result[$key]['times'];
@@ -180,8 +180,8 @@ class FlagsController extends AbstractController
         $result = $repository->findAllGuesses($user->getId());
         // TODO move this logic to service
         foreach ($result as $key => $item) {
-            $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode']);
-            $result[$key]['country'] = Countries::getName(strtoupper($item['flagCode']));
+            $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode'], CodeSet::EXTENDED);
+            $result[$key]['country'] = $this->getCountryName(strtoupper($item['flagCode']));
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
                     $shown = (int) $result[$key]['times'];
@@ -199,7 +199,14 @@ class FlagsController extends AbstractController
             }
         }
 
-        array_multisort($result, SORT_DESC, SORT_NUMERIC, array_column($result, 'rate'), SORT_DESC, SORT_NUMERIC);
+        array_multisort(
+            $result,
+            SORT_DESC,
+            SORT_NUMERIC,
+            array_column($result, 'rate'),
+            SORT_DESC,
+            SORT_NUMERIC,
+        );
 
         return $this->json($result);
     }

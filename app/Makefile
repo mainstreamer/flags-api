@@ -60,7 +60,7 @@ test-up: ## Start test containers (keep running)
 	@$(TEST_COMPOSE) up -d
 	@$(TEST_COMPOSE) exec php bin/console d:d:c -n --if-not-exists
 	@$(TEST_COMPOSE) exec php bin/console d:m:m -n
-	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n
+	@$(TEST_COMPOSE) exec php bin/console app:populate:users -n test_user_1 -f Test -l User
 	@$(TEST_COMPOSE) exec php bin/console app:populate:capitals --purge -n
 	@$(TEST_COMPOSE) exec php bin/console app:populate:flags --purge -n
 
