@@ -173,6 +173,9 @@ class FlagsController extends AbstractController
         return $this->json($result);
     }
 
+    /**
+     * @throws FlagsGeneratorException
+     */
     #[Route('/correct', name: 'correct', methods: ['GET', 'OPTIONS'])]
     public function getRight(#[CurrentUser] $user, AnswerRepository $repository): Response
     {
@@ -181,17 +184,16 @@ class FlagsController extends AbstractController
         // TODO move this logic to service
         // OMG rewrite this poop asap
         foreach ($result as $key => $item) {
-            $result[$key]['times_shown'] = 0;
+            $shown = (int) $item['times_shown'];
+            $result[$key]['times_shown'] = (int) $item['times_shown'];
             $result[$key]['times_guessed'] = 0;
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode'], CodeSet::EXTENDED);
             $result[$key]['country'] = $this->getCountryName(strtoupper($item['flagCode']));
             foreach ($correctResults as $value) {
                 if ($value['flagCode'] === $result[$key]['flagCode']) {
-                    $shown = (int) $result[$key]['times'];
                     $guesses = (int) $value['times'];
                     $result[$key]['rate'] = (int) (round($guesses / $shown, 2) * 100);
                     $result[$key]['times'] = "$guesses/$shown";
-                    $result[$key]['times_shown'] = $shown;
                     $result[$key]['times_guessed'] = $guesses;
 
                     break;
