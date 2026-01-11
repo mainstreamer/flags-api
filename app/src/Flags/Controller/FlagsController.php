@@ -184,8 +184,8 @@ class FlagsController extends AbstractController
         // TODO move this logic to service
         // OMG rewrite this poop asap
         foreach ($result as $key => $item) {
-            $shown = (int) $item['times_shown'];
-            $result[$key]['times_shown'] = (int) $item['times_shown'];
+            $shown = (int) $item['times'];
+            $result[$key]['times_shown'] = $shown;
             $result[$key]['times_guessed'] = 0;
             $result[$key]['flag'] = $this->flagsGenerator->getEmojiFlag($item['flagCode'], CodeSet::EXTENDED);
             $result[$key]['country'] = $this->getCountryName(strtoupper($item['flagCode']));
