@@ -56,3 +56,29 @@ services:
 
     Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface:
       alias: App\Flags\Security\JwksJwtEncoder
+
+
+    ### REDIS START ###
+    # 1. Define the Redis connection service
+    # This represents the physical connection to your Redis container/server
+    Redis:
+      class: Redis
+      calls:
+        - method: connect
+          arguments:
+            - '%env(REDIS_HOST)%'
+            - '%env(int:REDIS_PORT)%' # 'int:' ensures the port is passed as an integer
+
+        # Uncomment if you added a password to your Redis K8s/Docker setup
+        # - method: auth
+        #   arguments:
+        #       - '%env(REDIS_PASSWORD)%'
+
+    # 2. Register the Session Handler
+    # This tells Symfony how to use the Redis service above for sessions
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler:
+      arguments:
+        - '@Redis'
+        # Optional: Add a prefix to avoid collisions with other apps using the same Redis
+        - { prefix: 'flags_sess_', ttl: 3600 }
+   ### REDIS END ###

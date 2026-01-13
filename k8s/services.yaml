@@ -55,3 +55,15 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: caddy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: flags-api
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: redis
