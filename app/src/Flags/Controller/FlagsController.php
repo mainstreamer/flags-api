@@ -24,7 +24,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use function PhpCsFixer\Fixer\PhpUnit\configurePostNormalisation;
 
 #[Route('/api/flags')]
 class FlagsController extends AbstractController
@@ -185,7 +184,6 @@ class FlagsController extends AbstractController
         // TODO move this logic to service
         // OMG rewrite this poop asap
         foreach ($result as $key => $item) {
-
             if (!$item['flagCode']) {
                 $result[$key] = null;
 

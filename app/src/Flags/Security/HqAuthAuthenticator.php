@@ -19,7 +19,7 @@ class HqAuthAuthenticator extends OAuth2Authenticator
 {
     public function __construct(
         private readonly ClientRegistry $clientRegistry,
-//        private RouterInterface $router,
+        //        private RouterInterface $router,
         private readonly UserRepository $userRepository,
     ) {
     }
@@ -31,14 +31,12 @@ class HqAuthAuthenticator extends OAuth2Authenticator
 
     public function authenticate(Request $request): Passport
     {
+        //         DEBUG: See what session ID we are using
+        //        dump("Session ID: " . $request->getSession()->getId());
 
-//         DEBUG: See what session ID we are using
-//        dump("Session ID: " . $request->getSession()->getId());
-
-//         DEBUG: See what state is in the URL vs the Session
-//        dump("URL State: " . $request->query->get('state'));
-//        dd("Session State: " . $request->getSession()->get('oauth2state'));
-
+        //         DEBUG: See what state is in the URL vs the Session
+        //        dump("URL State: " . $request->query->get('state'));
+        //        dd("Session State: " . $request->getSession()->get('oauth2state'));
 
         // Here a callback from oauth server hits with "code" and "state" url params
         // after user has successfully authenticated with oauth and granted access
@@ -50,18 +48,18 @@ class HqAuthAuthenticator extends OAuth2Authenticator
         // The Comparison: If they don't match, it throws the InvalidStateException
         $accessToken = $this->fetchAccessToken($client);
         // A. The Redis Connection (DSN) Changed
-        //If your .env change updated REDIS_DSN, your "Trip 1" saved the state in one Redis instance (or database index), but your "Trip 2" is looking for it in another. If Redis is empty or the key is missing, Symfony assumes a CSRF attack and says "Invalid State."
-        //B. The APP_SECRET Changed
+        // If your .env change updated REDIS_DSN, your "Trip 1" saved the state in one Redis instance (or database index), but your "Trip 2" is looking for it in another. If Redis is empty or the key is missing, Symfony assumes a CSRF attack and says "Invalid State."
+        // B. The APP_SECRET Changed
         //
-        //Symfony uses the APP_SECRET (from your backend .env) to sign the session cookie.
+        // Symfony uses the APP_SECRET (from your backend .env) to sign the session cookie.
         //
         //    If you changed the APP_SECRET, the session cookie in your browser becomes invalid.
         //
         //    When you come back from the OAuth server, Symfony can't decrypt your session cookie, creates a new empty session, and finds no state inside it.
         //
-        //C. stateless: true vs false
+        // C. stateless: true vs false
         //
-        //Notice that your api firewall is stateless: true, but your oauth firewall is stateless: false. If your React app tries to start the login via an /api/... route instead of the /login route, the session will never be saved, and the state check will always fail.
+        // Notice that your api firewall is stateless: true, but your oauth firewall is stateless: false. If your React app tries to start the login via an /api/... route instead of the /login route, the session will never be saved, and the state check will always fail.
         //        // Optional: parse & verify JWT locally
         //        $jwt = $accessToken->getToken();
         //        $token = $this->jwtParser->parse($jwt); // e.g., lcobucci/jwt
