@@ -56,12 +56,14 @@ echo "Applying configmap..."
 kubectl apply -f configmap.yaml
 
 # Apply storage
-echo "Applying persistent volume claim..."
+echo "Applying persistent volume claims..."
 kubectl apply -f mysql-pvc.yaml
+kubectl apply -f redis-pvc.yaml
 
 # Apply deployments
 echo "Applying deployments..."
 kubectl apply -f mysql-deployment.yaml
+kubectl apply -f redis-deployment.yaml
 kubectl apply -f php-deployment.yaml
 kubectl apply -f caddy-deployment.yaml
 
@@ -81,6 +83,7 @@ kubectl apply -f ingress.yaml
 echo ""
 echo "Waiting for deployments to be ready..."
 wait_for_deployment mysql
+wait_for_deployment redis
 wait_for_deployment php
 wait_for_deployment caddy
 
