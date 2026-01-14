@@ -11,7 +11,6 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GenericResourceOwner;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Unit tests for HqAuthAuthenticator
@@ -20,19 +19,16 @@ use Symfony\Component\Routing\RouterInterface;
 class HqAuthAuthenticatorTest extends TestCase
 {
     private ClientRegistry $clientRegistry;
-    private RouterInterface $router;
     private UserRepository $userRepository;
     private HqAuthAuthenticator $authenticator;
 
     protected function setUp(): void
     {
         $this->clientRegistry = $this->createMock(ClientRegistry::class);
-        $this->router = $this->createMock(RouterInterface::class);
         $this->userRepository = $this->createMock(UserRepository::class);
 
         $this->authenticator = new HqAuthAuthenticator(
             $this->clientRegistry,
-            $this->router,
             $this->userRepository
         );
     }
