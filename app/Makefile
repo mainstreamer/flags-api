@@ -1,12 +1,14 @@
 include .env
 
-.PHONY: -- redis-sh
+.PHONY: -- redis-sh fixtures fixtures-dev
 
 CYAN := \033[0;36m
 RESET := \033[0m
 
 # Test environment uses isolated containers
-TEST_COMPOSE := docker compose -f docker-compose.test.yml -p flags-test
+TEST_COMPOSE := docker compose -f docker-compose.test.yml -p flags-api-test
+COMPOSE_DEV := docker compose
+COMPOSE_PROD_LOCAL := docker compose -f docker-compose.yml -p flags-api-prod
 
 # Default target
 help: ## Show this help message
@@ -14,14 +16,22 @@ help: ## Show this help message
 	@echo 'Targets:'
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-22s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort -f
 
-init: build up composer import-db ## Full dev setup
+init: build db up  ## Full dev setup
 run: up ## Start containers
 
 build: ## Build all containers
 	@docker compose build
-
 up: ## Start all containers
 	@docker compose up -d
+
+dev: build up
+
+prod-local: build-prod-local up-prod-local
+build-prod-local: ## Start all containers
+	@docker compose -f docker-compose.yml build
+up-prod-local: ## Start all containers
+	@docker compose -f docker-compose.yml up -d
+
 
 down: ## Stop all containers
 	@docker compose down
@@ -32,8 +42,18 @@ db: ## Create database and run migrations
 	@docker compose exec php bin/console d:d:c --if-not-exists
 	@docker compose exec php bin/console d:m:m -n
 
-import-db: ## Import flags database
-	@bin/console d:d:i flags.sql
+fixtures-dev:
+	@$(COMPOSE_DEV) exec php bin/console app:populate:users 1 -f Timo -l Maas
+	@$(COMPOSE_DEV) exec php bin/console app:populate:capitals --purge -n
+	@$(COMPOSE_DEV) exec php bin/console app:populate:flags --purge -n
+
+fixtures:
+	@$(COMPOSE) exec php bin/console app:populate:users test_user_1 -f FirstName -l LastName
+	@$(COMPOSE) exec php bin/console app:populate:capitals --purge -n
+	@$(COMPOSE) exec php bin/console app:populate:flags --purge -n
+
+#import-db: ## Import flags database
+	@#bin/console d:d:i flags.sql
 
 composer: ## Install PHP dependencies
 	@docker compose exec php composer install
@@ -173,5 +193,4 @@ t: ## Quick test filter (uses test containers): make t -- CorrectFlagEndpointTes
 cc: ## Delete all cache folders
 	rm -rf var/cache
 
-%:
-	@
+%: @
