@@ -13,6 +13,16 @@ knpu_oauth2_client:
       # Your OAuth2 server's base URL
       provider_options:
         domain: '%env(OAUTH_SERVER_URL)%'
-        urlAuthorize: '%env(OAUTH_SERVER_URL)%/oauth2/authorize'
-        urlAccessToken: '%env(OAUTH_SERVER_URL)%/oauth2/token'
-        urlResourceOwnerDetails: '%env(OAUTH_SERVER_URL)%/oauth2/me'
+        urlAuthorize: '%env(OAUTH_SERVER_URL)%/oauth2/authorize' # Browser-facing
+        urlAccessToken: '%env(OAUTH_SERVER_URL)%/oauth2/token' # Back-channel
+        urlResourceOwnerDetails: '%env(OAUTH_SERVER_URL)%/oauth2/userinfo'
+
+#      provider_options:
+#        domain: 'http://localhost:8547'
+        # BROWSER REALITY: The user's browser needs to hit your host port
+#        urlAuthorize: 'http://localhost:8547/oauth2/authorize'
+#        urlAuthorize: 'http://openid_caddy/oauth2/authorize'
+#         DOCKER REALITY: PHP container talks directly to the other Caddy container
+        # We use port 80 because openid_caddy is listening on 80 inside the network
+#        urlAccessToken: 'http://openid_caddy/oauth2/token'
+#        urlResourceOwnerDetails: 'http://openid_caddy/oauth2/me'

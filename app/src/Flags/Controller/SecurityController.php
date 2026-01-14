@@ -12,7 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class SecurityController extends AbstractController
 {
     public function __construct(
-        private HttpClientInterface $httpClient,
+        private readonly HttpClientInterface $httpClient,
     ) {
     }
 
@@ -41,13 +41,13 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/oauth/check', name: 'oauth_check')]
-    public function check()
+    public function check(): void
     {
         // This route is handled by the authenticator
     }
 
     #[Route('/logout', name: 'app_logout')]
-    public function logout()
+    public function logout(): void
     {
         throw new \LogicException('This should never be reached');
     }

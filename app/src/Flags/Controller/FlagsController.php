@@ -184,6 +184,12 @@ class FlagsController extends AbstractController
         // TODO move this logic to service
         // OMG rewrite this poop asap
         foreach ($result as $key => $item) {
+            if (!$item['flagCode']) {
+                $result[$key] = null;
+
+                continue;
+            }
+
             $shown = (int) $item['times'];
             $result[$key]['times_shown'] = $shown;
             $result[$key]['times_guessed'] = 0;
@@ -205,6 +211,8 @@ class FlagsController extends AbstractController
                 $result[$key]['times'] = '0/' . $result[$key]['times'];
             }
         }
+
+        $result = array_filter($result);
 
         array_multisort(
             $result,
