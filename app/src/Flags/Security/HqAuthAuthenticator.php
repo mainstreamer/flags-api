@@ -129,12 +129,20 @@ class HqAuthAuthenticator extends OAuth2Authenticator
             )
         );
 
-        // Temporarily return error instead of redirect loop
-        return new JsonResponse([
+        $response = new JsonResponse([
             'error' => 'authentication_failed',
             'message' => $exception->getMessage(),
-            'previous' => $exception->getPrevious() ? $exception->getPrevious()->getMessage() : null,
+            'previous' => $exception->getPrevious()?->getMessage(),
         ], 401);
+
+        // Add CORS headers for error visibility in browser console
+        $origin = $request->headers->get('Origin');
+        if ($origin && preg_match('/^https:\/\/(flags|capitals)\.izeebot\.top$/', $origin)) {
+            $response->headers->set('Access-Control-Allow-Origin', $origin);
+            $response->headers->set('Access-Control-Allow-Credentials', 'true');
+        }
+
+        return $response;
     }
 
     //    private function loadOrCreateUser($userInfo)
