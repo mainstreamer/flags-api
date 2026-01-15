@@ -1,5 +1,8 @@
 # Flags quiz api
 
+### Add localhost 
+echo "127.0.0.1 host.docker.internal" | sudo tee -a /etc/hosts
+
 ### development environment:
 original .env of simply github secret env is required as pre-requisite 
 
