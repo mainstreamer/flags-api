@@ -1,0 +1,226 @@
+<?php
+
+namespace App\Flags\Entity;
+
+use App\Flags\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
+
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User implements UserInterface
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private int $id;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $firstName;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $lastName;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $telegramUsername;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $telegramPhotoUrl;
+
+    #[ORM\Column(type: 'integer')]
+    private int $highScore = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private int $gamesTotal = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private int $bestTime = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private int $timeTotal = 0;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $sub = null;  // OAuth2 subject identifier
+
+    #[ORM\OneToMany(targetEntity: 'Answer', mappedBy: 'user', cascade: ['persist'])]
+    #[Ignore]
+    private ?Collection $answers;
+
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getTelegramUsername(): ?string
+    {
+        return $this->telegramUsername;
+    }
+
+    public function setTelegramUsername(?string $telegramUsername): self
+    {
+        $this->telegramUsername = $telegramUsername;
+
+        return $this;
+    }
+
+    public function getTelegramPhotoUrl(): ?string
+    {
+        return $this->telegramPhotoUrl;
+    }
+
+    public function setTelegramPhotoUrl(?string $telegramPhotoUrl): self
+    {
+        $this->telegramPhotoUrl = $telegramPhotoUrl;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getPassword()
+    {
+        // TODO: Implement getPassword() method.
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->sub ?? (string) $this->id;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getHighScore(): int
+    {
+        return $this->highScore;
+    }
+
+    public function setHighScore(int $score): void
+    {
+        $this->highScore = $score;
+    }
+
+    public function getGamesTotal(): int
+    {
+        return $this->gamesTotal;
+    }
+
+    public function setGamesTotal(int $gamesTotal): void
+    {
+        $this->gamesTotal = $gamesTotal;
+    }
+
+    public function getBestTime(): int
+    {
+        return $this->bestTime;
+    }
+
+    public function setBestTime(int $bestTime): void
+    {
+        $this->bestTime = $bestTime;
+    }
+
+    public function getTimeTotal(): int
+    {
+        return $this->timeTotal;
+    }
+
+    /**
+     * @param Answer[] $answers
+     */
+    public function finalizeGame(Score $score, array $answers): void
+    {
+        // TODO move to game entity
+        ++$this->gamesTotal;
+        $this->timeTotal += $score->getSessionTimer();
+        if ($this->highScore < $score->getScore()) {
+            $this->highScore = $score->getScore();
+            $this->bestTime = $score->getSessionTimer();
+        } elseif (
+            $this->highScore === $score->getScore()
+            && ($this->bestTime > $score->getSessionTimer())
+        ) {
+            $this->bestTime = $score->getSessionTimer();
+        }
+
+        foreach ($answers as $item) {
+            $this->addAnswer($item);
+        }
+    }
+
+    public function addAnswer(Answer $answer): void
+    {
+        $answer->user = $this;
+        $this->answers[] = $answer;
+    }
+
+    public function removeAnswer(Answer $answer): void
+    {
+        $answer->user = null;
+        $this->answers->removeElement($answer);
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getAnswers(): ?Collection
+    {
+        return $this->answers;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->sub ?? (string) $this->id;
+    }
+
+    public function getSub(): ?string
+    {
+        return $this->sub;
+    }
+
+    public function setSub(string $sub): void
+    {
+        $this->sub = $sub;
+    }
+}
