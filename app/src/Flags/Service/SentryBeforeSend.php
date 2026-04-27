@@ -29,19 +29,32 @@ final class SentryBeforeSend
 
     public function __invoke(Event $event, ?EventHint $hint): ?Event
     {
-        $url = $event->getRequest()?->getUrl() ?? '';
-        $path = '' !== $url ? (parse_url($url, PHP_URL_PATH) ?? '') : '';
+        try {
+            $request = $event->getRequest();
+            $url = \is_array($request) ? (string) ($request['url'] ?? '') : '';
+            $path = '' !== $url ? (parse_url($url, PHP_URL_PATH) ?? '') : '';
 
-        if ('' !== $path && preg_match(self::SCANNER_PATTERN, $path)) {
-            return null;
+            if ('' !== $path && preg_match(self::SCANNER_PATTERN, $path)) {
+                return null;
+            }
+
+            $exception = $hint?->exception;
+            $isRoutingMiss = $exception instanceof NotFoundHttpException || $exception instanceof MethodNotAllowedHttpException;
+            if ($isRoutingMiss && ('' === $path || !preg_match(self::APP_PATH_PATTERN, $path))) {
+                return null;
+            }
+
+            return $event;
+        } catch (\Throwable $e) {
+            // Never let a bug in this filter break the response or hide the original error.
+            error_log(sprintf(
+                '[SentryBeforeSend] filter failed: %s in %s:%d',
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine(),
+            ));
+
+            return $event;
         }
-
-        $exception = $hint?->exception;
-        $isRoutingMiss = $exception instanceof NotFoundHttpException || $exception instanceof MethodNotAllowedHttpException;
-        if ($isRoutingMiss && ('' === $path || !preg_match(self::APP_PATH_PATTERN, $path))) {
-            return null;
-        }
-
-        return $event;
     }
 }
