@@ -114,11 +114,16 @@ class CapitalsController extends AbstractController
     public function startGame(string $type, CapitalsGameService $service): JsonResponse
     {
         try {
-            $game = $service->startGame(GameType::from($type));
+            $gameType = GameType::tryFrom($type);
+            if (null === $gameType) {
+                throw new \InvalidArgumentException('Invalid game type');
+            }
+
+            $game = $service->startGame($gameType);
 
             return new JsonResponse(['gameId' => $game->getId()]);
-        } catch (\Throwable $e) {
-            return new JsonResponse($e->getMessage());
+        } catch (\InvalidArgumentException $e) {
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 

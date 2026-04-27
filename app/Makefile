@@ -16,7 +16,7 @@ help: ## Show this help message
 	@echo 'Targets:'
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-22s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort -f
 
-init: build db up  ## Full dev setup
+init: network build db up  ## Full dev setup - prepare everything and make it ready for make up
 run: up ## Start containers
 
 build: ## Build all containers

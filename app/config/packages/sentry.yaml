@@ -4,3 +4,4 @@ when@prod:
         options:
             release: '%env(default::SENTRY_RELEASE)%'
             environment: 'production'
+            before_send: App\Flags\Service\SentryBeforeSend
