@@ -10,6 +10,7 @@ Flags Quiz API - A Symfony 6.x REST API for a multiplayer flags and capitals qui
 
 All commands run from the `app/` directory via the makefile:
 
+
 ```bash
 # Full initialization (build, start containers, composer install, run API)
 make init
