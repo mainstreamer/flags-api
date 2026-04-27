@@ -15,6 +15,16 @@
     </projectFiles>
 
     <issueHandlers>
+        <!-- Workaround for psalm 6.14 bug on PHP 8.4.19+ where attributes on
+             methods are misreported as being on a function. See psalm.dev/242. -->
+        <InvalidAttribute>
+            <errorLevel type="suppress">
+                <directory name="src/Flags/Controller" />
+                <directory name="src/Flags/Security" />
+                <directory name="src/Flags/ConsoleCommand" />
+            </errorLevel>
+        </InvalidAttribute>
+
         <UnusedClass>
             <errorLevel type="suppress">
                 <directory name="src/Flags/Controller" />

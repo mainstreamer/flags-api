@@ -111,7 +111,7 @@ jobs:
 
       - name: Execute psalm
         working-directory: app
-        run: vendor/bin/psalm
+        run: vendor/bin/psalm --threads=1
 
       - name: Create Database and Run Migrations
         working-directory: app
