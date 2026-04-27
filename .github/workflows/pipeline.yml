@@ -82,7 +82,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: pdo_mysql, intl, gd, xml, mbstring, zip
+          extensions: pdo_mysql, intl, gd, xml, mbstring, zip, :opcache
           coverage: none
 
       - name: Setup test environment
@@ -111,7 +111,7 @@ jobs:
 
       - name: Execute psalm
         working-directory: app
-        run: vendor/bin/psalm --threads=1
+        run: vendor/bin/psalm
 
       - name: Create Database and Run Migrations
         working-directory: app

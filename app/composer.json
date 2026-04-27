@@ -86,6 +86,6 @@
         "symfony/contracts": "*",
         "symfony/css-selector": "6.*",
         "symfony/phpunit-bridge": "^6.3",
-        "vimeo/psalm": "^6.0"
+        "vimeo/psalm": "^6.16"
     }
 }
