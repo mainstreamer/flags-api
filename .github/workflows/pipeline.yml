@@ -82,8 +82,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: pdo_mysql, intl, gd, xml, mbstring, zip
-          ini-values: opcache.enable_cli=0
+          extensions: pdo_mysql, intl, gd, xml, mbstring, zip, :opcache
           coverage: none
 
       - name: Setup test environment
